@@ -15,6 +15,7 @@ import {
   Radio,
   Button,
   Divider,
+  Stack,
 } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { OncologyPatient } from '../../types/oncology';
@@ -30,85 +31,100 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
       {/* Global Patient Context Bar */}
       <PatientContextBar patient={patient} />
 
-      <Container maxWidth="xl" sx={{ mt: 3, mb: 4 }}>
-        <Typography variant="h4" sx={{ mb: 3, fontWeight: 600, color: 'primary.main' }}>
+      <Container maxWidth="xl" sx={{ mt: 4, mb: 5 }}>
+        <Typography
+          variant="h4"
+          sx={{ mb: 3, fontWeight: 700, color: 'primary.main', letterSpacing: 0.3 }}
+        >
           Treatment Planning
         </Typography>
 
         <Grid container spacing={3}>
           {/* Left Column - Confirmed Diagnosis & Patient Fitness */}
           <Grid item xs={12} md={4}>
-            <Paper sx={{ p: 3, border: '2px solid', borderColor: 'success.main' }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: 'success.dark' }}>
+            <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
+              <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 700, color: 'success.dark' }}>
                 ✓ Confirmed Diagnosis
               </Typography>
               <Table size="small">
                 <TableBody>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Final Histopathology</TableCell>
-                    <TableCell>{patient.histology}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Tumor Subtype</TableCell>
+                    <TableCell sx={{ width: '45%' }}>
+                      <Typography variant="body2" sx={{ fontWeight: 700 }}>Final Histopathology</Typography>
+                    </TableCell>
                     <TableCell>
-                      {patient.cancerSite === 'Breast'
-                        ? 'ER+, PR+, HER2-'
-                        : patient.cancerSite === 'Lung'
-                        ? 'EGFR Wild Type'
-                        : 'Standard'}
+                      <Typography variant="body2" color="text.primary">{patient.histology}</Typography>
                     </TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Final TNM Stage</TableCell>
                     <TableCell>
-                      <Chip label={patient.tnmStage || 'Pending'} size="small" color="error" />
+                      <Typography variant="body2" sx={{ fontWeight: 700 }}>Tumor Subtype</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2" color="text.primary">
+                        {patient.cancerSite === 'Breast'
+                          ? 'ER+, PR+, HER2-'
+                          : patient.cancerSite === 'Lung'
+                          ? 'EGFR Wild Type'
+                          : 'Standard'}
+                      </Typography>
                     </TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Clinical Stage</TableCell>
                     <TableCell>
-                      <Chip label={`Stage ${patient.stage}`} size="small" color="error" />
+                      <Typography variant="body2" sx={{ fontWeight: 700 }}>Final TNM Stage</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Chip label={patient.tnmStage || 'Pending'} size="small" color="secondary" />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>
+                      <Typography variant="body2" sx={{ fontWeight: 700 }}>Clinical Stage</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Chip label={`Stage ${patient.stage}`} size="small" color="secondary" />
                     </TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
             </Paper>
 
-            <Paper sx={{ p: 3, mt: 2 }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: 'primary.main' }}>
+            <Paper elevation={1} sx={{ p: 3, mt: 2, borderRadius: 2 }}>
+              <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 700, color: 'primary.main' }}>
                 Patient Fitness Snapshot
               </Typography>
               <Table size="small">
                 <TableBody>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>ECOG Performance</TableCell>
+                    <TableCell>
+                      <Typography variant="body2" sx={{ fontWeight: 700 }}>ECOG Performance</Typography>
+                    </TableCell>
                     <TableCell>
                       <Chip label={patient.ecogStatus} size="small" color="primary" />
                     </TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Major Comorbidities</TableCell>
                     <TableCell>
-                      {patient.comorbidities?.diabetes && (
-                        <Chip label="Diabetes" size="small" sx={{ mr: 0.5, mb: 0.5 }} />
-                      )}
-                      {patient.comorbidities?.cardiacDisease && (
-                        <Chip label="Cardiac" size="small" sx={{ mr: 0.5, mb: 0.5 }} />
-                      )}
-                      {patient.comorbidities?.renalDisease && (
-                        <Chip label="Renal" size="small" sx={{ mr: 0.5, mb: 0.5 }} />
-                      )}
-                      {!patient.comorbidities?.diabetes &&
-                        !patient.comorbidities?.cardiacDisease &&
-                        !patient.comorbidities?.renalDisease && (
-                          <Typography variant="body2" color="success.main">
-                            None
-                          </Typography>
-                        )}
+                      <Typography variant="body2" sx={{ fontWeight: 700 }}>Major Comorbidities</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }}>
+                        {patient.comorbidities?.diabetes && <Chip label="Diabetes" size="small" />}
+                        {patient.comorbidities?.cardiacDisease && <Chip label="Cardiac" size="small" />}
+                        {patient.comorbidities?.renalDisease && <Chip label="Renal" size="small" />}
+                        {!patient.comorbidities?.diabetes &&
+                          !patient.comorbidities?.cardiacDisease &&
+                          !patient.comorbidities?.renalDisease && (
+                            <Typography variant="body2" color="success.main">None</Typography>
+                          )}
+                      </Stack>
                     </TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Organ Function</TableCell>
+                    <TableCell>
+                      <Typography variant="body2" sx={{ fontWeight: 700 }}>Organ Function</Typography>
+                    </TableCell>
                     <TableCell>
                       <Chip label="Normal" size="small" color="success" />
                     </TableCell>
@@ -119,14 +135,16 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
 
             {/* MDT Decision Summary */}
             {patient.mdtDecision && (
-              <Paper sx={{ p: 3, mt: 2, bgcolor: 'info.light', border: '1px solid', borderColor: 'info.main' }}>
-                <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: 'info.dark' }}>
+              <Paper elevation={1} sx={{ p: 3, mt: 2, borderRadius: 2, bgcolor: 'background.paper' }}>
+                <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 700, color: 'info.dark' }}>
                   MDT Decision Summary
                 </Typography>
                 <Table size="small">
                   <TableBody>
                     <TableRow>
-                      <TableCell sx={{ fontWeight: 600 }}>MDT Status</TableCell>
+                      <TableCell>
+                        <Typography variant="body2" sx={{ fontWeight: 700 }}>MDT Status</Typography>
+                      </TableCell>
                       <TableCell>
                         <Chip
                           label={patient.mdtDecision.status}
@@ -137,22 +155,32 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell sx={{ fontWeight: 600 }}>Date of Discussion</TableCell>
-                      <TableCell>{patient.mdtDecision.date}</TableCell>
+                      <TableCell>
+                        <Typography variant="body2" sx={{ fontWeight: 700 }}>Date of Discussion</Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="body2">{patient.mdtDecision.date}</Typography>
+                      </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell sx={{ fontWeight: 600, verticalAlign: 'top' }}>Decision Summary</TableCell>
-                      <TableCell>{patient.mdtDecision.summary}</TableCell>
+                      <TableCell sx={{ verticalAlign: 'top' }}>
+                        <Typography variant="body2" sx={{ fontWeight: 700 }}>Decision Summary</Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="body2">{patient.mdtDecision.summary}</Typography>
+                      </TableCell>
                     </TableRow>
                     {patient.mdtDecision.participants && (
                       <TableRow>
-                        <TableCell sx={{ fontWeight: 600, verticalAlign: 'top' }}>Participants</TableCell>
+                        <TableCell sx={{ verticalAlign: 'top' }}>
+                          <Typography variant="body2" sx={{ fontWeight: 700 }}>Participants</Typography>
+                        </TableCell>
                         <TableCell>
-                          {patient.mdtDecision.participants.map((p, i) => (
-                            <Typography key={i} variant="body2">
-                              • {p}
-                            </Typography>
-                          ))}
+                          <Stack spacing={0.5}>
+                            {patient.mdtDecision.participants.map((p, i) => (
+                              <Typography key={i} variant="body2">• {p}</Typography>
+                            ))}
+                          </Stack>
                         </TableCell>
                       </TableRow>
                     )}
