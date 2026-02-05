@@ -61,11 +61,11 @@ export default function OncoPatientsList() {
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'grey.50', py: 4 }}>
       <Container maxWidth="xl">
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h3" sx={{ fontWeight: 700, color: 'primary.main', mb: 1 }}>
+        <Box sx={{ mb: 3 }}>
+          <Typography variant="h4" sx={{ fontWeight: 600, color: 'primary.main', mb: 0.5 }}>
             Oncology EMR
           </Typography>
-          <Typography variant="h6" color="text.secondary">
+          <Typography variant="body1" color="text.secondary">
             Select a patient to view their oncology journey
           </Typography>
         </Box>
@@ -74,78 +74,93 @@ export default function OncoPatientsList() {
           {patients.map((patient) => (
             <Grid item xs={12} key={patient.id}>
               <Paper
+                elevation={0}
                 sx={{
-                  p: 3,
+                  p: 2.5,
+                  border: '1px solid',
+                  borderColor: 'divider',
                   '&:hover': {
-                    boxShadow: 6,
-                    transform: 'translateY(-2px)',
-                    transition: 'all 0.3s',
+                    borderColor: 'primary.main',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                    transition: 'all 0.2s',
                   },
                 }}
               >
                 <Grid container spacing={2} alignItems="center">
                   {/* Patient Info */}
                   <Grid item xs={12} md={3}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                      <PersonIcon sx={{ color: 'primary.main' }} />
-                      <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+                      <PersonIcon sx={{ color: 'primary.main', fontSize: 20 }} />
+                      <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
                         {patient.name}
                       </Typography>
                     </Box>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.875rem' }}>
                       {patient.age} years • {patient.gender}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="caption" color="text.secondary">
                       MRN: {patient.mrn}
                     </Typography>
                   </Grid>
 
                   {/* Cancer Details */}
                   <Grid item xs={12} md={3}>
-                    <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.5 }}>
+                    <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.5, fontSize: '0.875rem' }}>
                       {patient.cancerSite} Cancer
                     </Typography>
                     {patient.histology && (
-                      <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+                      <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5, fontSize: '0.813rem' }}>
                         {patient.histology}
                       </Typography>
                     )}
                     {patient.stage && (
-                      <Chip label={`Stage ${patient.stage}`} size="small" color="error" sx={{ mt: 0.5 }} />
+                      <Chip 
+                        label={`Stage ${patient.stage}`} 
+                        size="small" 
+                        variant="outlined"
+                        sx={{ 
+                          mt: 0.5,
+                          borderColor: 'error.main',
+                          color: 'error.main',
+                          fontWeight: 500,
+                          fontSize: '0.75rem'
+                        }} 
+                      />
                     )}
                   </Grid>
 
                   {/* Status */}
                   <Grid item xs={12} md={2}>
-                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>
+                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5, fontSize: '0.75rem', textTransform: 'uppercase', fontWeight: 500 }}>
                       OncoStatus
                     </Typography>
                     <Chip
                       label={patient.oncoStatus}
                       color={getStatusColor(patient.oncoStatus)}
-                      sx={{ fontWeight: 600 }}
+                      size="small"
+                      sx={{ fontWeight: 500, fontSize: '0.75rem' }}
                     />
                   </Grid>
 
                   {/* Intent */}
                   <Grid item xs={12} md={2}>
-                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>
+                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5, fontSize: '0.75rem', textTransform: 'uppercase', fontWeight: 500 }}>
                       Treatment Intent
                     </Typography>
                     {patient.treatmentIntent ? (
                       <Chip
                         label={patient.treatmentIntent}
                         size="small"
-                        color={
-                          patient.treatmentIntent === 'Curative'
-                            ? 'success'
-                            : patient.treatmentIntent === 'Palliative'
-                            ? 'info'
-                            : 'warning'
-                        }
+                        variant="outlined"
+                        sx={{
+                          borderColor: patient.treatmentIntent === 'Curative' ? 'success.main' : patient.treatmentIntent === 'Palliative' ? 'info.main' : 'warning.main',
+                          color: patient.treatmentIntent === 'Curative' ? 'success.main' : patient.treatmentIntent === 'Palliative' ? 'info.main' : 'warning.main',
+                          fontWeight: 500,
+                          fontSize: '0.75rem'
+                        }}
                       />
                     ) : (
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.813rem' }}>
                         Not Set
                       </Typography>
                     )}
@@ -155,9 +170,10 @@ export default function OncoPatientsList() {
                   <Grid item xs={12} md={2} sx={{ textAlign: 'right' }}>
                     <Button
                       variant="contained"
-                      endIcon={<ArrowForwardIcon />}
+                      endIcon={<ArrowForwardIcon sx={{ fontSize: 18 }} />}
                       onClick={() => navigate(getRouteForPatient(patient))}
-                      sx={{ fontWeight: 600 }}
+                      size="small"
+                      sx={{ fontWeight: 500, fontSize: '0.875rem', textTransform: 'none' }}
                     >
                       Open
                     </Button>
@@ -168,33 +184,6 @@ export default function OncoPatientsList() {
           ))}
         </Grid>
 
-        {/* Info Box */}
-        <Paper sx={{ mt: 4, p: 3, bgcolor: 'info.light', border: '2px solid', borderColor: 'info.main' }}>
-          <Typography variant="h6" sx={{ fontWeight: 600, color: 'info.dark', mb: 2 }}>
-            📋 Demo Patient Overview
-          </Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
-              <Typography variant="body2">
-                • <strong>{mockOncoPatient1.name}:</strong> Diagnostic Evaluation stage
-              </Typography>
-              <Typography variant="body2">
-                • <strong>{mockOncoPatient2.name}:</strong> Treatment Planning stage
-              </Typography>
-              <Typography variant="body2">
-                • <strong>{mockOncoPatient3.name}:</strong> Active chemotherapy (Induction)
-              </Typography>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Typography variant="body2">
-                • <strong>{mockOncoPatient4.name}:</strong> Palliative care with chemo
-              </Typography>
-              <Typography variant="body2">
-                • <strong>{mockOncoPatient5.name}:</strong> Maintenance therapy
-              </Typography>
-            </Grid>
-          </Grid>
-        </Paper>
       </Container>
     </Box>
   );
