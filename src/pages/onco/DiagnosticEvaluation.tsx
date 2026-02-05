@@ -2,9 +2,12 @@ import {
   Box,
   Container,
   Grid,
-  Paper,
+  Card,
+  CardHeader,
+  CardContent,
   Typography,
   Chip,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -13,7 +16,10 @@ import {
   List,
   ListItem,
   ListItemText,
+  ListItemIcon,
   Divider,
+  Avatar,
+  Tooltip,
 } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PendingIcon from '@mui/icons-material/Pending';
@@ -74,291 +80,231 @@ export default function DiagnosticEvaluation({
         <Grid container spacing={3}>
           {/* Patient Snapshot */}
           <Grid item xs={12} md={4}>
-            <Paper sx={{ p: 3 }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: 'primary.main' }}>
-                Patient Snapshot
-              </Typography>
-              <Table size="small">
-                <TableBody>
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Name / MRN</TableCell>
-                    <TableCell>
-                      {patient.name} / {patient.mrn}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Age / Gender</TableCell>
-                    <TableCell>
-                      {patient.age} / {patient.gender}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Suspected Site</TableCell>
-                    <TableCell>{patient.cancerSite}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>ECOG Status</TableCell>
-                    <TableCell>
-                      <Chip label={patient.ecogStatus} size="small" color="primary" />
-                    </TableCell>
-                  </TableRow>
+            <Card sx={{ p: 0, borderRadius: 2 }} elevation={1}>
+              <CardHeader
+                title={
+                  <Typography variant="h6" sx={{ fontWeight: 700, color: 'primary.main' }}>
+                    Patient Snapshot
+                  </Typography>
+                }
+              />
+              <CardContent>
+                <Stack spacing={1} divider={<Divider />}>
+                  <Stack direction="row" justifyContent="space-between">
+                    <Typography sx={{ fontWeight: 600 }}>Name / MRN</Typography>
+                    <Typography color="text.secondary">{patient.name} / {patient.mrn}</Typography>
+                  </Stack>
+                  <Stack direction="row" justifyContent="space-between">
+                    <Typography sx={{ fontWeight: 600 }}>Age / Gender</Typography>
+                    <Typography color="text.secondary">{patient.age} / {patient.gender}</Typography>
+                  </Stack>
+                  <Stack direction="row" justifyContent="space-between">
+                    <Typography sx={{ fontWeight: 600 }}>Suspected Site</Typography>
+                    <Typography color="text.secondary">{patient.cancerSite}</Typography>
+                  </Stack>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Typography sx={{ fontWeight: 600 }}>ECOG Status</Typography>
+                    <Chip label={patient.ecogStatus} size="small" color="primary" />
+                  </Stack>
                   {patient.urgencyFlag && (
-                    <TableRow>
-                      <TableCell sx={{ fontWeight: 600 }}>Urgency Flag</TableCell>
-                      <TableCell>
-                        <Chip label="URGENT" size="small" color="error" icon={<WarningIcon />} />
-                      </TableCell>
-                    </TableRow>
+                    <Stack direction="row" justifyContent="space-between" alignItems="center">
+                      <Typography sx={{ fontWeight: 600 }}>Urgency Flag</Typography>
+                      <Chip label="URGENT" size="small" color="error" icon={<WarningIcon />} />
+                    </Stack>
                   )}
-                </TableBody>
-              </Table>
-            </Paper>
+                </Stack>
+              </CardContent>
+            </Card>
 
             {/* Problem Summary */}
-            <Paper sx={{ p: 3, mt: 2 }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: 'primary.main' }}>
-                Problem Summary
-              </Typography>
-              <Table size="small">
-                <TableBody>
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Chief Complaint</TableCell>
-                    <TableCell>{patient.chiefComplaint}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Duration</TableCell>
-                    <TableCell>{patient.symptomDuration}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Alarm Symptoms</TableCell>
-                    <TableCell>
-                      <Chip
-                        label={patient.alarmSymptoms ? 'Yes' : 'No'}
-                        size="small"
-                        color={patient.alarmSymptoms ? 'error' : 'success'}
-                      />
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </Paper>
+            <Card sx={{ mt: 2, borderRadius: 2 }} elevation={1}>
+              <CardHeader
+                title={
+                  <Typography variant="h6" sx={{ fontWeight: 700, color: 'primary.main' }}>
+                    Problem Summary
+                  </Typography>
+                }
+              />
+              <CardContent>
+                <Stack spacing={1} divider={<Divider />}>
+                  <Stack direction="row" justifyContent="space-between">
+                    <Typography sx={{ fontWeight: 600 }}>Chief Complaint</Typography>
+                    <Typography color="text.secondary">{patient.chiefComplaint}</Typography>
+                  </Stack>
+                  <Stack direction="row" justifyContent="space-between">
+                    <Typography sx={{ fontWeight: 600 }}>Duration</Typography>
+                    <Typography color="text.secondary">{patient.symptomDuration}</Typography>
+                  </Stack>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Typography sx={{ fontWeight: 600 }}>Alarm Symptoms</Typography>
+                    <Chip label={patient.alarmSymptoms ? 'Yes' : 'No'} size="small" color={patient.alarmSymptoms ? 'error' : 'success'} />
+                  </Stack>
+                </Stack>
+              </CardContent>
+            </Card>
           </Grid>
 
           {/* Diagnostic Status Tracker - CORE SECTION */}
           <Grid item xs={12} md={4}>
-            <Paper sx={{ p: 3, border: '2px solid', borderColor: 'primary.main' }}>
-              <Typography
-                variant="h6"
-                sx={{ mb: 2, fontWeight: 600, color: 'primary.main', textAlign: 'center' }}
-              >
-                🎯 Diagnostic Status Tracker
-              </Typography>
-              <Typography variant="caption" sx={{ display: 'block', mb: 2, textAlign: 'center', color: 'text.secondary' }}>
-                (Core Section)
-              </Typography>
+            <Card sx={{ p: 0, borderRadius: 2, border: '2px solid', borderColor: 'primary.main' }} elevation={0}>
+              <CardHeader
+                title={
+                  <Typography sx={{ fontWeight: 800, color: 'primary.main', textAlign: 'center' }}>
+                    Diagnostic Status Tracker
+                  </Typography>
+                }
+                subheader={<Typography variant="caption" color="text.secondary" sx={{ display: 'block', textAlign: 'center' }}>(Core Section)</Typography>}
+              />
+              <CardContent>
+                {patient.diagnosticTracker && (
+                  <Stack spacing={1}>
+                    {Object.entries(patient.diagnosticTracker).map(([key, status]) => (
+                      <Stack key={key} direction="row" justifyContent="space-between" alignItems="center" sx={{ py: 0.8 }}>
+                        <Typography sx={{ textTransform: 'capitalize', fontWeight: 600 }}>{key.replace(/([A-Z])/g, ' $1').trim()}</Typography>
+                        <Stack direction="row" spacing={1} alignItems="center">
+                          <ListItemIcon sx={{ minWidth: 28 }}>{getStatusIcon(status)}</ListItemIcon>
+                          <Chip label={status} size="small" color={getStatusColor(status)} />
+                        </Stack>
+                      </Stack>
+                    ))}
+                  </Stack>
+                )}
 
-              {patient.diagnosticTracker && (
-                <Box>
-                  {Object.entries(patient.diagnosticTracker).map(([key, status]) => (
-                    <Box
-                      key={key}
-                      sx={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        py: 1.5,
-                        borderBottom: '1px solid',
-                        borderColor: 'divider',
-                      }}
-                    >
-                      <Typography sx={{ textTransform: 'capitalize', fontWeight: 500 }}>
-                        {key.replace(/([A-Z])/g, ' $1').trim()}
-                      </Typography>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        {getStatusIcon(status)}
-                        <Chip label={status} size="small" color={getStatusColor(status)} />
-                      </Box>
-                    </Box>
-                  ))}
-                </Box>
-              )}
-
-              <Box sx={{ mt: 3, display: 'flex', gap: 1, flexWrap: 'wrap', justifyContent: 'center' }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                  <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: 'success.main' }} />
-                  <Typography variant="caption">Done</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                  <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: 'warning.main' }} />
-                  <Typography variant="caption">Pending</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                  <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: 'error.main' }} />
-                  <Typography variant="caption">Not Started</Typography>
-                </Box>
-              </Box>
-            </Paper>
+                <Stack direction="row" spacing={2} justifyContent="center" sx={{ mt: 3 }}>
+                  <Stack direction="row" spacing={0.5} alignItems="center">
+                    <Avatar sx={{ width: 12, height: 12, bgcolor: 'success.main' }} />
+                    <Typography variant="caption">Done</Typography>
+                  </Stack>
+                  <Stack direction="row" spacing={0.5} alignItems="center">
+                    <Avatar sx={{ width: 12, height: 12, bgcolor: 'warning.main' }} />
+                    <Typography variant="caption">Pending</Typography>
+                  </Stack>
+                  <Stack direction="row" spacing={0.5} alignItems="center">
+                    <Avatar sx={{ width: 12, height: 12, bgcolor: 'error.main' }} />
+                    <Typography variant="caption">Not Started</Typography>
+                  </Stack>
+                </Stack>
+              </CardContent>
+            </Card>
 
             {/* Diagnostic Events Timeline */}
-            <Paper sx={{ p: 3, mt: 2 }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: 'primary.main' }}>
-                Diagnostic Events Timeline
-              </Typography>
-              <List dense>
-                {diagnosticEvents.map((event, index) => (
-                  <Box key={index}>
-                    <ListItem sx={{ px: 0 }}>
-                      <Box sx={{ mr: 1 }}>{getStatusIcon(event.status)}</Box>
-                      <ListItemText
-                        primary={event.type}
-                        secondary={
-                          <>
-                            <Typography component="span" variant="body2" color="text.secondary">
-                              {event.date}
-                            </Typography>
-                            {event.result && (
-                              <>
-                                <br />
-                                <Typography component="span" variant="body2" sx={{ fontWeight: 500 }}>
-                                  {event.result}
-                                </Typography>
-                              </>
-                            )}
-                          </>
-                        }
-                      />
-                    </ListItem>
-                    {index < diagnosticEvents.length - 1 && <Divider />}
-                  </Box>
-                ))}
-              </List>
-            </Paper>
+            <Card sx={{ p: 0, mt: 2 }} elevation={1}>
+              <CardHeader
+                title={<Typography variant="h6" sx={{ fontWeight: 700, color: 'primary.main' }}>Diagnostic Events Timeline</Typography>}
+              />
+              <CardContent>
+                <List dense>
+                  {diagnosticEvents.map((event, index) => (
+                    <Box key={index}>
+                      <ListItem sx={{ px: 0 }}>
+                        <ListItemIcon sx={{ minWidth: 36 }}>{getStatusIcon(event.status)}</ListItemIcon>
+                        <ListItemText
+                          primary={<Typography sx={{ fontWeight: 600 }}>{event.type}</Typography>}
+                          secondary={
+                            <>
+                              <Typography component="span" variant="body2" color="text.secondary">{event.date}</Typography>
+                              {event.result && (
+                                <>
+                                  <br />
+                                  <Typography component="span" variant="body2" sx={{ fontWeight: 500 }}>{event.result}</Typography>
+                                </>
+                              )}
+                            </>
+                          }
+                        />
+                      </ListItem>
+                      {index < diagnosticEvents.length - 1 && <Divider />}
+                    </Box>
+                  ))}
+                </List>
+              </CardContent>
+            </Card>
           </Grid>
 
           {/* Right Column */}
           <Grid item xs={12} md={4}>
             {/* Clinical Findings Snapshot */}
-            <Paper sx={{ p: 3 }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: 'primary.main' }}>
-                Clinical Findings
-              </Typography>
-              {patient.clinicalFindings && (
-                <Table size="small">
-                  <TableBody>
-                    <TableRow>
-                      <TableCell sx={{ fontWeight: 600 }}>Primary Lesion</TableCell>
-                      <TableCell>{patient.clinicalFindings.primaryLesion}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell sx={{ fontWeight: 600 }}>Nodes</TableCell>
-                      <TableCell>
-                        <Chip
-                          label={patient.clinicalFindings.nodes}
-                          size="small"
-                          color={patient.clinicalFindings.nodes === 'Present' ? 'error' : 'success'}
-                        />
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell sx={{ fontWeight: 600 }}>Suspected Metastasis</TableCell>
-                      <TableCell>
-                        <Chip
-                          label={patient.clinicalFindings.suspectedMetastasis ? 'Yes' : 'No'}
-                          size="small"
-                          color={patient.clinicalFindings.suspectedMetastasis ? 'error' : 'success'}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              )}
-            </Paper>
+            <Card sx={{ p: 0 }} elevation={1}>
+              <CardHeader title={<Typography variant="h6" sx={{ fontWeight: 700, color: 'primary.main' }}>Clinical Findings</Typography>} />
+              <CardContent>
+                {patient.clinicalFindings && (
+                  <Stack spacing={1} divider={<Divider />}>
+                    <Stack direction="row" justifyContent="space-between">
+                      <Typography sx={{ fontWeight: 600 }}>Primary Lesion</Typography>
+                      <Typography color="text.secondary">{patient.clinicalFindings.primaryLesion}</Typography>
+                    </Stack>
+                    <Stack direction="row" justifyContent="space-between" alignItems="center">
+                      <Typography sx={{ fontWeight: 600 }}>Nodes</Typography>
+                      <Chip label={patient.clinicalFindings.nodes} size="small" color={patient.clinicalFindings.nodes === 'Present' ? 'error' : 'success'} />
+                    </Stack>
+                    <Stack direction="row" justifyContent="space-between" alignItems="center">
+                      <Typography sx={{ fontWeight: 600 }}>Suspected Metastasis</Typography>
+                      <Chip label={patient.clinicalFindings.suspectedMetastasis ? 'Yes' : 'No'} size="small" color={patient.clinicalFindings.suspectedMetastasis ? 'error' : 'success'} />
+                    </Stack>
+                  </Stack>
+                )}
+              </CardContent>
+            </Card>
 
             {/* Provisional Assessment */}
-            <Paper sx={{ p: 3, mt: 2, bgcolor: 'info.light', border: '1px solid', borderColor: 'info.main' }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: 'info.dark' }}>
-                Provisional Assessment
-              </Typography>
-              {patient.provisionalAssessment && (
-                <Table size="small">
-                  <TableBody>
-                    <TableRow>
-                      <TableCell sx={{ fontWeight: 600 }}>Probable Diagnosis</TableCell>
-                      <TableCell>{patient.provisionalAssessment.probableDiagnosis}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell sx={{ fontWeight: 600 }}>Tentative Stage</TableCell>
-                      <TableCell>{patient.provisionalAssessment.tentativeStage}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell sx={{ fontWeight: 600 }}>Resectable?</TableCell>
-                      <TableCell>
-                        <Chip
-                          label={patient.provisionalAssessment.resectable}
-                          size="small"
-                          color={
-                            patient.provisionalAssessment.resectable === 'Yes'
-                              ? 'success'
-                              : patient.provisionalAssessment.resectable === 'No'
-                              ? 'error'
-                              : 'warning'
-                          }
-                        />
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              )}
-            </Paper>
+            <Card sx={{ p: 0, mt: 2, bgcolor: 'info.light', border: '1px solid', borderColor: 'info.main' }} elevation={0}>
+              <CardHeader title={<Typography variant="h6" sx={{ fontWeight: 700, color: 'info.dark' }}>Provisional Assessment</Typography>} />
+              <CardContent>
+                {patient.provisionalAssessment && (
+                  <Stack spacing={1} divider={<Divider />}>
+                    <Stack direction="row" justifyContent="space-between">
+                      <Typography sx={{ fontWeight: 600 }}>Probable Diagnosis</Typography>
+                      <Typography color="text.secondary">{patient.provisionalAssessment.probableDiagnosis}</Typography>
+                    </Stack>
+                    <Stack direction="row" justifyContent="space-between">
+                      <Typography sx={{ fontWeight: 600 }}>Tentative Stage</Typography>
+                      <Typography color="text.secondary">{patient.provisionalAssessment.tentativeStage}</Typography>
+                    </Stack>
+                    <Stack direction="row" justifyContent="space-between" alignItems="center">
+                      <Typography sx={{ fontWeight: 600 }}>Resectable?</Typography>
+                      <Chip label={patient.provisionalAssessment.resectable} size="small" color={patient.provisionalAssessment.resectable === 'Yes' ? 'success' : patient.provisionalAssessment.resectable === 'No' ? 'error' : 'warning'} />
+                    </Stack>
+                  </Stack>
+                )}
+              </CardContent>
+            </Card>
 
             {/* Comorbidity Risk */}
             {patient.comorbidities && (
-              <Paper sx={{ p: 3, mt: 2 }}>
-                <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: 'primary.main' }}>
-                  Comorbidity Risk
-                </Typography>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                  {patient.comorbidities.diabetes && <Chip label="Diabetes" size="small" color="warning" />}
-                  {patient.comorbidities.cardiacDisease && (
-                    <Chip label="Cardiac Disease" size="small" color="warning" />
-                  )}
-                  {patient.comorbidities.renalDisease && (
-                    <Chip label="Renal Disease" size="small" color="warning" />
-                  )}
-                  {patient.comorbidities.priorCancer && (
-                    <Chip label="Prior Cancer" size="small" color="warning" />
-                  )}
-                  {!patient.comorbidities.diabetes &&
-                    !patient.comorbidities.cardiacDisease &&
-                    !patient.comorbidities.renalDisease &&
-                    !patient.comorbidities.priorCancer && (
-                      <Typography variant="body2" color="text.secondary">
-                        No major comorbidities
-                      </Typography>
+              <Card sx={{ p: 0, mt: 2 }} elevation={1}>
+                <CardHeader title={<Typography variant="h6" sx={{ fontWeight: 700, color: 'primary.main' }}>Comorbidity Risk</Typography>} />
+                <CardContent>
+                  <Stack direction="row" spacing={1} flexWrap="wrap">
+                    {patient.comorbidities.diabetes && <Chip label="Diabetes" size="small" color="warning" />}
+                    {patient.comorbidities.cardiacDisease && <Chip label="Cardiac Disease" size="small" color="warning" />}
+                    {patient.comorbidities.renalDisease && <Chip label="Renal Disease" size="small" color="warning" />}
+                    {patient.comorbidities.priorCancer && <Chip label="Prior Cancer" size="small" color="warning" />}
+                    {!patient.comorbidities.diabetes && !patient.comorbidities.cardiacDisease && !patient.comorbidities.renalDisease && !patient.comorbidities.priorCancer && (
+                      <Typography variant="body2" color="text.secondary">No major comorbidities</Typography>
                     )}
-                </Box>
-              </Paper>
+                  </Stack>
+                </CardContent>
+              </Card>
             )}
 
             {/* Pending Actions */}
-            <Paper sx={{ p: 3, mt: 2, bgcolor: 'warning.light' }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: 'warning.dark' }}>
-                Pending Actions
-              </Typography>
-              <List dense>
-                {pendingActions.map((action, index) => (
-                  <ListItem key={index} sx={{ px: 0 }}>
-                    <Chip
-                      label={action.priority}
-                      size="small"
-                      color={action.priority === 'High' ? 'error' : action.priority === 'Medium' ? 'warning' : 'default'}
-                      sx={{ mr: 1 }}
-                    />
-                    <ListItemText primary={action.action} />
-                  </ListItem>
-                ))}
-              </List>
-            </Paper>
+            <Card sx={{ p: 0, mt: 2, bgcolor: 'warning.light' }} elevation={0}>
+              <CardHeader title={<Typography variant="h6" sx={{ fontWeight: 700, color: 'warning.dark' }}>Pending Actions</Typography>} />
+              <CardContent>
+                <List dense>
+                  {pendingActions.map((action, index) => (
+                    <ListItem key={index} sx={{ px: 0 }}>
+                      <ListItemIcon sx={{ minWidth: 36 }}>
+                        <Tooltip title={action.priority}>
+                          <Avatar sx={{ width: 28, height: 28, bgcolor: action.priority === 'High' ? 'error.main' : action.priority === 'Medium' ? 'warning.main' : 'grey.400' }}>{action.priority[0]}</Avatar>
+                        </Tooltip>
+                      </ListItemIcon>
+                      <ListItemText primary={action.action} />
+                    </ListItem>
+                  ))}
+                </List>
+              </CardContent>
+            </Card>
           </Grid>
         </Grid>
 
