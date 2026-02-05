@@ -1,24 +1,16 @@
 import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, Divider } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
-import HomeIcon from '@mui/icons-material/Home';
-import PeopleIcon from '@mui/icons-material/People';
-import AssessmentIcon from '@mui/icons-material/Assessment';
 import PersonIcon from '@mui/icons-material/Person';
 import HotelIcon from '@mui/icons-material/Hotel';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import WarningIcon from '@mui/icons-material/Warning';
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
+import SearchIcon from '@mui/icons-material/Search';
 
 const DRAWER_WIDTH = 220;
 
 const menuSections = [
-  {
-    title: 'PATIENT MANAGEMENT',
-    items: [
-      { text: 'Patients', icon: <PeopleIcon />, path: '/patients' },
-    ],
-  },
   {
     title: 'VISITS',
     items: [
@@ -57,10 +49,11 @@ export default function Sidebar() {
           boxSizing: 'border-box',
           bgcolor: '#fafafa',
           borderRight: '1px solid #e0e0e0',
+          pt: 7,
         },
       }}
     >
-      <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+      <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
         <Box
           sx={{
             width: 40,
@@ -76,7 +69,8 @@ export default function Sidebar() {
         </Box>
       </Box>
 
-      <Box sx={{ px: 2, mb: 2 }}>
+      <Box sx={{ px: 2, mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+        <SearchIcon sx={{ fontSize: '1rem', color: 'text.secondary' }} />
         <Typography variant="caption" color="text.secondary">
           Search menu...
         </Typography>
@@ -124,15 +118,6 @@ export default function Sidebar() {
           </Box>
         ))}
       </List>
-
-      <Box sx={{ mt: 'auto', p: 2 }}>
-        <Typography variant="caption" color="text.secondary">
-          Accounts
-        </Typography>
-        <Typography variant="caption" color="text.secondary" display="block">
-          Reports
-        </Typography>
-      </Box>
     </Drawer>
   );
 }

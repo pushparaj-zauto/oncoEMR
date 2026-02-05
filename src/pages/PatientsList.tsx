@@ -54,18 +54,6 @@ export default function PatientsList() {
     handleMenuClose();
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'In Consultation':
-        return 'info';
-      case 'Scheduled':
-        return 'warning';
-      case 'Completed':
-        return 'success';
-      default:
-        return 'default';
-    }
-  };
 
   return (
     <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
