@@ -30,14 +30,20 @@ export default function Header() {
         boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
       }}
     >
-      <Toolbar sx={{ gap: 2 }}>
-        <IconButton edge="start" color="inherit">
-          <MenuIcon />
+      <Toolbar sx={{ gap: 1.5, minHeight: 56 }}>
+        <IconButton edge="start" color="inherit" size="small">
+          <MenuIcon fontSize="small" />
         </IconButton>
 
         <Button
-          startIcon={<HomeIcon />}
-          sx={{ color: 'primary.main', textTransform: 'none' }}
+          startIcon={<HomeIcon fontSize="small" />}
+          sx={{ 
+            color: 'primary.main', 
+            textTransform: 'none',
+            fontSize: '0.813rem',
+            fontWeight: 400,
+            px: 1
+          }}
         >
           Home
         </Button>
@@ -45,12 +51,18 @@ export default function Header() {
         <TextField
           placeholder="Search patient..."
           size="small"
-          sx={{ width: 200 }}
+          sx={{ 
+            width: 180,
+            '& .MuiInputBase-root': {
+              fontSize: '0.813rem',
+              height: 36
+            }
+          }}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton size="small" sx={{ bgcolor: 'primary.main', color: 'white', p: 0.5 }}>
-                  <SearchIcon fontSize="small" />
+                <IconButton size="small" sx={{ bgcolor: 'primary.main', color: 'white', p: 0.5, mr: -0.5 }}>
+                  <SearchIcon sx={{ fontSize: 16 }} />
                 </IconButton>
               </InputAdornment>
             ),
@@ -59,47 +71,62 @@ export default function Header() {
 
         <Button
           variant="contained"
-          startIcon={<PersonAddIcon />}
-          sx={{ textTransform: 'none' }}
+          startIcon={<PersonAddIcon sx={{ fontSize: 18 }} />}
+          sx={{ 
+            textTransform: 'none',
+            fontSize: '0.813rem',
+            fontWeight: 500,
+            px: 2,
+            py: 0.5,
+            boxShadow: 1
+          }}
         >
           Add Patient
         </Button>
 
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>
           Hospital
         </Typography>
 
         <TextField
           placeholder="Search orga"
           size="small"
-          sx={{ width: 150 }}
+          sx={{ 
+            width: 140,
+            '& .MuiInputBase-root': {
+              fontSize: '0.813rem',
+              height: 36
+            }
+          }}
         />
 
+        <Box sx={{ flexGrow: 1 }} />
+
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-          <AccountBalanceWalletIcon sx={{ fontSize: 20, color: 'primary.main' }} />
-          <Typography variant="body2" color="primary.main" fontWeight={600}>
+          <AccountBalanceWalletIcon sx={{ fontSize: 18, color: 'primary.main' }} />
+          <Typography variant="caption" color="primary.main" fontWeight={600}>
             Credits: 100,517
           </Typography>
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-          <Typography variant="body2">Admin</Typography>
+          <Typography variant="caption" fontSize="0.75rem">Admin</Typography>
           <Switch size="small" />
         </Box>
 
-        <IconButton>
-          <CalendarTodayIcon />
+        <IconButton size="small">
+          <CalendarTodayIcon fontSize="small" />
         </IconButton>
 
-        <IconButton>
-          <RefreshIcon />
+        <IconButton size="small">
+          <RefreshIcon fontSize="small" />
         </IconButton>
 
-        <IconButton>
-          <NotificationsIcon />
+        <IconButton size="small">
+          <NotificationsIcon fontSize="small" />
         </IconButton>
 
-        <Avatar sx={{ width: 32, height: 32, bgcolor: 'primary.main' }}>A</Avatar>
+        <Avatar sx={{ width: 28, height: 28, bgcolor: 'primary.main', fontSize: '0.875rem' }}>A</Avatar>
       </Toolbar>
     </AppBar>
   );
