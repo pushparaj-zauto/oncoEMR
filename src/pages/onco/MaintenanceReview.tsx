@@ -35,15 +35,15 @@ export default function MaintenanceReview({ patient }: MaintenanceReviewProps) {
       <PatientContextBar patient={patient} />
 
       <Container maxWidth="xl" sx={{ mt: 3, mb: 4 }}>
-        <Typography variant="h4" sx={{ mb: 3, fontWeight: 600, color: 'primary.main' }}>
+        <Typography variant="h4" sx={{ mb: 4, fontWeight: 700, color: 'text.primary', letterSpacing: '-0.5px' }}>
           Maintenance Overview
         </Typography>
 
         <Grid container spacing={3}>
           {/* Left Column - Active Therapy */}
           <Grid item xs={12} md={4}>
-            <Paper sx={{ p: 3, border: '2px solid', borderColor: 'success.main' }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: 'success.dark' }}>
+            <Paper elevation={2} sx={{ p: 3, borderRadius: 2 }}>
+              <Typography variant="h6" sx={{ mb: 3, fontWeight: 700, color: 'text.primary', letterSpacing: '-0.3px' }}>
                 Active Therapy
               </Typography>
               <Table size="small">
@@ -80,8 +80,8 @@ export default function MaintenanceReview({ patient }: MaintenanceReviewProps) {
               </Table>
             </Paper>
 
-            <Paper sx={{ p: 3, mt: 2 }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: 'primary.main' }}>
+            <Paper elevation={2} sx={{ p: 3, mt: 2, borderRadius: 2 }}>
+              <Typography variant="h6" sx={{ mb: 3, fontWeight: 700, color: 'text.primary', letterSpacing: '-0.3px' }}>
                 Compliance & Adherence
               </Typography>
               <Box sx={{ mb: 2 }}>
@@ -100,15 +100,15 @@ export default function MaintenanceReview({ patient }: MaintenanceReviewProps) {
               </Typography>
             </Paper>
 
-            <Paper sx={{ p: 3, mt: 2, bgcolor: 'info.light' }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: 'info.dark' }}>
+            <Paper elevation={2} sx={{ p: 3, mt: 2, bgcolor: 'grey.50', borderRadius: 2 }}>
+              <Typography variant="h6" sx={{ mb: 3, fontWeight: 700, color: 'text.primary', letterSpacing: '-0.3px' }}>
                 Treatment Duration
               </Typography>
               <Box sx={{ textAlign: 'center', py: 2 }}>
-                <Typography variant="h2" sx={{ fontWeight: 700, color: 'info.dark' }}>
+                <Typography variant="h2" sx={{ fontWeight: 800, color: 'primary.main', letterSpacing: '-1px' }}>
                   3.5
                 </Typography>
-                <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                <Typography variant="body1" sx={{ fontWeight: 500, color: 'text.secondary', mt: 0.5 }}>
                   Months on Therapy
                 </Typography>
               </Box>
@@ -117,8 +117,8 @@ export default function MaintenanceReview({ patient }: MaintenanceReviewProps) {
 
           {/* Middle Column - Last Review Outcome */}
           <Grid item xs={12} md={4}>
-            <Paper sx={{ p: 3, border: '2px solid', borderColor: 'primary.main' }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: 'primary.main' }}>
+            <Paper elevation={3} sx={{ p: 3, borderRadius: 2, borderLeft: '4px solid', borderLeftColor: 'primary.main' }}>
+              <Typography variant="h6" sx={{ mb: 3, fontWeight: 700, color: 'text.primary', letterSpacing: '-0.3px' }}>
                 Last Review Outcome
               </Typography>
               <Table size="small">
@@ -161,56 +161,56 @@ export default function MaintenanceReview({ patient }: MaintenanceReviewProps) {
 
             {/* QoL Summary */}
             {patient.qolMetrics && (
-              <Paper sx={{ p: 3, mt: 2, bgcolor: 'success.light' }}>
-                <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: 'success.dark' }}>
+              <Paper elevation={2} sx={{ p: 3, mt: 2, bgcolor: 'grey.50', borderRadius: 2 }}>
+                <Typography variant="h6" sx={{ mb: 3, fontWeight: 700, color: 'text.primary', letterSpacing: '-0.3px' }}>
                   Quality of Life Summary
                 </Typography>
                 <Grid container spacing={2}>
                   <Grid item xs={6}>
-                    <Box sx={{ textAlign: 'center', p: 1, bgcolor: 'white', borderRadius: 1 }}>
-                      <Typography variant="caption" color="text.secondary">
+                    <Box sx={{ textAlign: 'center', p: 2, bgcolor: 'white', borderRadius: 1.5, boxShadow: 1 }}>
+                      <Typography variant="caption" sx={{ fontWeight: 500, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: '0.5px', fontSize: '0.7rem' }}>
                         Pain Score
                       </Typography>
-                      <Typography variant="h4" sx={{ fontWeight: 700, color: 'success.main' }}>
+                      <Typography variant="h4" sx={{ fontWeight: 800, color: 'text.primary', mt: 0.5 }}>
                         {patient.qolMetrics.painScore}/10
                       </Typography>
                     </Box>
                   </Grid>
                   <Grid item xs={6}>
-                    <Box sx={{ textAlign: 'center', p: 1, bgcolor: 'white', borderRadius: 1 }}>
-                      <Typography variant="caption" color="text.secondary">
+                    <Box sx={{ textAlign: 'center', p: 2, bgcolor: 'white', borderRadius: 1.5, boxShadow: 1 }}>
+                      <Typography variant="caption" sx={{ fontWeight: 500, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: '0.5px', fontSize: '0.7rem' }}>
                         Mobility
                       </Typography>
-                      <Typography variant="body1" sx={{ fontWeight: 700, color: 'success.main' }}>
+                      <Typography variant="body1" sx={{ fontWeight: 700, color: 'text.primary', mt: 0.5 }}>
                         {patient.qolMetrics.mobility}
                       </Typography>
                     </Box>
                   </Grid>
                   <Grid item xs={6}>
-                    <Box sx={{ textAlign: 'center', p: 1, bgcolor: 'white', borderRadius: 1 }}>
-                      <Typography variant="caption" color="text.secondary">
+                    <Box sx={{ textAlign: 'center', p: 2, bgcolor: 'white', borderRadius: 1.5, boxShadow: 1 }}>
+                      <Typography variant="caption" sx={{ fontWeight: 500, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: '0.5px', fontSize: '0.7rem' }}>
                         Sleep
                       </Typography>
-                      <Typography variant="body1" sx={{ fontWeight: 700, color: 'success.main' }}>
+                      <Typography variant="body1" sx={{ fontWeight: 700, color: 'text.primary', mt: 0.5 }}>
                         {patient.qolMetrics.sleep}
                       </Typography>
                     </Box>
                   </Grid>
                   <Grid item xs={6}>
-                    <Box sx={{ textAlign: 'center', p: 1, bgcolor: 'white', borderRadius: 1 }}>
-                      <Typography variant="caption" color="text.secondary">
+                    <Box sx={{ textAlign: 'center', p: 2, bgcolor: 'white', borderRadius: 1.5, boxShadow: 1 }}>
+                      <Typography variant="caption" sx={{ fontWeight: 500, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: '0.5px', fontSize: '0.7rem' }}>
                         Appetite
                       </Typography>
-                      <Typography variant="body1" sx={{ fontWeight: 700, color: 'success.main' }}>
+                      <Typography variant="body1" sx={{ fontWeight: 700, color: 'text.primary', mt: 0.5 }}>
                         {patient.qolMetrics.appetite}
                       </Typography>
                     </Box>
                   </Grid>
                 </Grid>
-                <Box sx={{ mt: 2, p: 1.5, bgcolor: 'white', borderRadius: 1 }}>
-                  <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <TrendingUpIcon sx={{ color: 'success.main' }} />
-                    <strong>Overall Trend:</strong> Improved appetite, reduced fatigue
+                <Box sx={{ mt: 2, p: 2, bgcolor: 'white', borderRadius: 1.5, boxShadow: 1 }}>
+                  <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'text.secondary' }}>
+                    <TrendingUpIcon sx={{ color: 'success.main', fontSize: 20 }} />
+                    <span style={{ fontWeight: 600, color: '#212121' }}>Overall Trend:</span> Improved appetite, reduced fatigue
                   </Typography>
                 </Box>
               </Paper>
@@ -219,8 +219,8 @@ export default function MaintenanceReview({ patient }: MaintenanceReviewProps) {
 
           {/* Right Column - Review History */}
           <Grid item xs={12} md={4}>
-            <Paper sx={{ p: 3 }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: 'primary.main' }}>
+            <Paper elevation={2} sx={{ p: 3, borderRadius: 2 }}>
+              <Typography variant="h6" sx={{ mb: 3, fontWeight: 700, color: 'text.primary', letterSpacing: '-0.3px' }}>
                 Review History
               </Typography>
               <Box>
@@ -228,37 +228,60 @@ export default function MaintenanceReview({ patient }: MaintenanceReviewProps) {
                   <Box
                     key={index}
                     sx={{
-                      p: 2,
+                      p: 2.5,
                       mb: 2,
-                      border: '1px solid',
-                      borderColor: index === 0 ? 'primary.main' : 'divider',
-                      borderRadius: 1,
-                      bgcolor: index === 0 ? 'primary.light' : 'white',
+                      borderRadius: 1.5,
+                      bgcolor: index === 0 ? 'primary.main' : 'grey.50',
+                      color: index === 0 ? 'white' : 'inherit',
+                      boxShadow: index === 0 ? 2 : 0,
+                      transition: 'all 0.2s',
+                      '&:hover': {
+                        boxShadow: 2,
+                      },
                     }}
                   >
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                      <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1.5 }}>
+                      <Typography variant="body2" sx={{ fontWeight: 700, color: index === 0 ? 'white' : 'text.primary' }}>
                         Review {4 - index}
                       </Typography>
-                      <Typography variant="caption" color="text.secondary">
+                      <Typography variant="caption" sx={{ fontWeight: 500, color: index === 0 ? 'rgba(255,255,255,0.8)' : 'text.secondary' }}>
                         {date}
                       </Typography>
                     </Box>
-                    <Chip label="Disease Stable" size="small" color="success" sx={{ mr: 0.5 }} />
-                    <Chip label="Continue Rx" size="small" color="info" />
+                    <Chip 
+                      label="Disease Stable" 
+                      size="small" 
+                      sx={{ 
+                        mr: 0.5, 
+                        bgcolor: index === 0 ? 'rgba(255,255,255,0.2)' : 'success.light',
+                        color: index === 0 ? 'white' : 'success.dark',
+                        fontWeight: 600,
+                        borderRadius: 1
+                      }} 
+                    />
+                    <Chip 
+                      label="Continue Rx" 
+                      size="small" 
+                      sx={{ 
+                        bgcolor: index === 0 ? 'rgba(255,255,255,0.2)' : 'info.light',
+                        color: index === 0 ? 'white' : 'info.dark',
+                        fontWeight: 600,
+                        borderRadius: 1
+                      }} 
+                    />
                   </Box>
                 ))}
               </Box>
             </Paper>
 
-            <Paper sx={{ p: 3, mt: 2, bgcolor: 'warning.light' }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: 'warning.dark' }}>
+            <Paper elevation={2} sx={{ p: 3, mt: 2, bgcolor: 'grey.50', borderRadius: 2, borderTop: '3px solid', borderTopColor: 'warning.main' }}>
+              <Typography variant="h6" sx={{ mb: 2.5, fontWeight: 700, color: 'text.primary', letterSpacing: '-0.3px' }}>
                 Monitoring Plan
               </Typography>
-              <Typography variant="body2" sx={{ mb: 1 }}>
-                <strong>Next Actions:</strong>
+              <Typography variant="body2" sx={{ mb: 1.5, fontWeight: 700, color: 'text.primary' }}>
+                Next Actions:
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.8 }}>  
                 • CT Chest scheduled for 05 Mar 2026
                 <br />
                 • Routine bloods every 4 weeks
@@ -272,7 +295,18 @@ export default function MaintenanceReview({ patient }: MaintenanceReviewProps) {
               variant="contained"
               size="large"
               fullWidth
-              sx={{ mt: 2, py: 1.5, fontWeight: 600 }}
+              sx={{ 
+                mt: 2, 
+                py: 1.5, 
+                fontWeight: 700, 
+                borderRadius: 1.5,
+                textTransform: 'none',
+                fontSize: '1rem',
+                boxShadow: 2,
+                '&:hover': {
+                  boxShadow: 4,
+                }
+              }}
             >
               Record New Review
             </Button>
