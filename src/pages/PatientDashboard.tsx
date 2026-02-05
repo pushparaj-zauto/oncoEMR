@@ -24,11 +24,44 @@ export default function PatientDashboard() {
     <Box sx={{ minHeight: 'calc(100vh - 64px)', pb: 10, overflow: 'hidden' }}>
       <Container maxWidth="xl" sx={{ pt: 2, px: 1 }}>
         <Grid container spacing={2}>
-          {/* Left Column */}
+          {/* Left Column - Combined Patient Info, Vitals & Allergies */}
           <Grid item xs={12} md={4}>
-            <PatientInfo patient={mockPatient} currentVisit={mockCurrentVisit} />
-            <Vitals />
-            <Allergies allergies={mockAllergies} />
+            <Box component="div" sx={{ 
+              border: '1px solid',
+              borderColor: 'divider',
+              borderRadius: 1,
+              bgcolor: 'background.paper',
+              overflow: 'hidden',
+              boxShadow: 1
+            }}>
+              {/* Patient Info - Fixed at top */}
+              <Box sx={{ p: 1.5, borderBottom: '1px solid', borderColor: 'divider' }}>
+                <PatientInfo patient={mockPatient} currentVisit={mockCurrentVisit} />
+              </Box>
+              
+              {/* Vitals & Allergies - Scrollable */}
+              <Box sx={{ 
+                maxHeight: 'calc(100vh - 420px)',
+                overflowY: 'auto',
+                p: 1.5,
+                '&::-webkit-scrollbar': {
+                  width: '6px',
+                },
+                '&::-webkit-scrollbar-track': {
+                  background: '#f1f1f1',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  background: '#888',
+                  borderRadius: '3px',
+                },
+                '&::-webkit-scrollbar-thumb:hover': {
+                  background: '#555',
+                },
+              }}>
+                <Vitals />
+                <Allergies allergies={mockAllergies} />
+              </Box>
+            </Box>
           </Grid>
 
           {/* Middle Column */}
@@ -54,7 +87,7 @@ export default function PatientDashboard() {
           bgcolor: 'background.paper',
           borderTop: '1px solid',
           borderColor: 'divider',
-          py: 1,
+          py: 0.75,
           px: 3,
           display: 'flex',
           justifyContent: 'space-between',
@@ -66,7 +99,7 @@ export default function PatientDashboard() {
         <Box />
 
         {/* Right side - Action buttons, Finish button and home icon */}
-        <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
           <Fab
             size="small"
             sx={{
@@ -74,10 +107,13 @@ export default function PatientDashboard() {
               border: '2px solid',
               borderColor: 'primary.main',
               color: 'primary.main',
+              width: 36,
+              height: 36,
+              minHeight: 36,
               '&:hover': { bgcolor: 'grey.50' },
             }}
           >
-            <MicIcon sx={{ fontSize: '1.2rem' }} />
+            <MicIcon sx={{ fontSize: '1rem' }} />
           </Fab>
           <Fab
             size="small"
@@ -86,13 +122,16 @@ export default function PatientDashboard() {
               border: '2px solid',
               borderColor: 'primary.main',
               color: 'primary.main',
+              width: 36,
+              height: 36,
+              minHeight: 36,
               '&:hover': { bgcolor: 'grey.50' },
             }}
           >
             <Box
               sx={{
                 fontWeight: 700,
-                fontSize: '0.85rem',
+                fontSize: '0.75rem',
               }}
             >
               Rx
@@ -105,10 +144,13 @@ export default function PatientDashboard() {
               border: '2px solid',
               borderColor: 'primary.main',
               color: 'primary.main',
+              width: 36,
+              height: 36,
+              minHeight: 36,
               '&:hover': { bgcolor: 'grey.50' },
             }}
           >
-            <LayersIcon sx={{ fontSize: '1.2rem' }} />
+            <LayersIcon sx={{ fontSize: '1rem' }} />
           </Fab>
           <Fab
             size="small"
@@ -117,10 +159,13 @@ export default function PatientDashboard() {
               border: '2px solid',
               borderColor: 'primary.main',
               color: 'primary.main',
+              width: 36,
+              height: 36,
+              minHeight: 36,
               '&:hover': { bgcolor: 'grey.50' },
             }}
           >
-            <ChatIcon sx={{ fontSize: '1.2rem' }} />
+            <ChatIcon sx={{ fontSize: '1rem' }} />
           </Fab>
           <Fab
             size="small"
@@ -129,22 +174,25 @@ export default function PatientDashboard() {
               border: '2px solid',
               borderColor: 'primary.main',
               color: 'primary.main',
+              width: 36,
+              height: 36,
+              minHeight: 36,
               '&:hover': { bgcolor: 'grey.50' },
             }}
           >
-            <MoreHorizIcon sx={{ fontSize: '1.2rem' }} />
+            <MoreHorizIcon sx={{ fontSize: '1rem' }} />
           </Fab>
           <Button
             variant="contained"
             color="primary"
-            size="medium"
-            startIcon={<Box component="span" sx={{ fontSize: '1rem' }}>✓</Box>}
-            sx={{ px: 2.5, py: 0.75, fontWeight: 600, borderRadius: 1.5, textTransform: 'none' }}
+            size="small"
+            startIcon={<Box component="span" sx={{ fontSize: '0.9rem' }}>✓</Box>}
+            sx={{ px: 2, py: 0.5, fontWeight: 600, borderRadius: 1.5, textTransform: 'none', fontSize: '0.8rem' }}
           >
             Finish and Next Patient
           </Button>
-          <Fab color="primary" size="small">
-            <HomeIcon sx={{ fontSize: '1.2rem' }} />
+          <Fab color="primary" size="small" sx={{ width: 36, height: 36, minHeight: 36 }}>
+            <HomeIcon sx={{ fontSize: '1rem' }} />
           </Fab>
         </Box>
       </Box>

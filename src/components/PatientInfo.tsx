@@ -1,4 +1,4 @@
-import { Box, Paper, Typography, Chip, Avatar, Divider, IconButton } from '@mui/material';
+import { Box, Typography, Chip, Avatar, Divider, IconButton } from '@mui/material';
 import { Patient, Visit } from '../types';
 import PersonIcon from '@mui/icons-material/Person';
 import PhoneIcon from '@mui/icons-material/Phone';
@@ -25,75 +25,75 @@ export default function PatientInfo({ patient, currentVisit }: PatientInfoProps)
   };
 
   return (
-    <Paper elevation={1} sx={{ p: 1.5, mb: 2 }}>
+    <Box>
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
-        <Avatar sx={{ width: 56, height: 56, bgcolor: 'primary.main', mr: 2 }}>
-          <PersonIcon fontSize="large" />
+        <Avatar sx={{ width: 52, height: 52, bgcolor: 'primary.main', mr: 1.5 }}>
+          <PersonIcon sx={{ fontSize: '1.5rem' }} />
         </Avatar>
         <Box sx={{ flexGrow: 1 }}>
-          <Typography variant="h5" sx={{ color: 'primary.main', fontWeight: 600 }}>
+          <Typography variant="h6" sx={{ color: 'primary.main', fontWeight: 600, fontSize: '1.25rem' }}>
             {patient.name}
           </Typography>
-          <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', mt: 0.5 }}>
-            <Typography variant="body2" color="text.secondary">
-              <PersonIcon sx={{ fontSize: 14, mr: 0.5, verticalAlign: 'middle' }} />
+          <Box sx={{ display: 'flex', gap: 0.75, alignItems: 'center', mt: 0.5 }}>
+            <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: 0.5 }}>
+              <PersonIcon sx={{ fontSize: 14 }} />
               {patient.mrn}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem' }}>
               • {patient.gender}, {patient.age}y
             </Typography>
           </Box>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-            <PhoneIcon sx={{ fontSize: 14, mr: 0.5, verticalAlign: 'middle' }} />
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5, fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            <PhoneIcon sx={{ fontSize: 14 }} />
             {patient.phone}
           </Typography>
         </Box>
-        <IconButton>
-          <MoreVertIcon />
+        <IconButton size="small">
+          <MoreVertIcon fontSize="small" />
         </IconButton>
       </Box>
 
-      <Divider sx={{ my: 2 }} />
+      <Divider sx={{ my: 1.5 }} />
 
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Box>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
-            <CalendarTodayIcon sx={{ fontSize: 14, mr: 0.5, verticalAlign: 'middle' }} />
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 1.5 }}>
+        <Box sx={{ flex: 1 }}>
+          <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: 0.5, mb: 0.5 }}>
+            <CalendarTodayIcon sx={{ fontSize: 12 }} />
             Date:
           </Typography>
-          <Typography variant="body1" fontWeight={500}>
+          <Typography variant="body2" fontWeight={500} sx={{ fontSize: '0.875rem' }}>
             {currentVisit.date}, {currentVisit.time}
           </Typography>
         </Box>
-        <Box>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+        <Box sx={{ flex: 1 }}>
+          <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.75rem', mb: 0.5 }}>
             Type:
           </Typography>
-          <Typography variant="body1" fontWeight={500}>
+          <Typography variant="body2" fontWeight={500} sx={{ fontSize: '0.875rem' }}>
             {currentVisit.type}
           </Typography>
         </Box>
-        <Box>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+        <Box sx={{ flex: 1 }}>
+          <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.75rem', mb: 0.5 }}>
             Provider:
           </Typography>
-          <Typography variant="body1" fontWeight={500}>
+          <Typography variant="body2" fontWeight={500} sx={{ fontSize: '0.875rem' }}>
             {currentVisit.provider}
           </Typography>
         </Box>
       </Box>
 
-      <Box sx={{ mt: 2 }}>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+      <Box sx={{ mt: 1.5 }}>
+        <Typography variant="caption" color="text.secondary" sx={{ mb: 0.75, fontSize: '0.75rem', display: 'block' }}>
           Status:
         </Typography>
         <Chip
           label={currentVisit.status}
           color={getStatusColor(currentVisit.status)}
           size="small"
-          sx={{ fontWeight: 500 }}
+          sx={{ fontWeight: 600, fontSize: '0.75rem', height: 24 }}
         />
       </Box>
-    </Paper>
+    </Box>
   );
 }

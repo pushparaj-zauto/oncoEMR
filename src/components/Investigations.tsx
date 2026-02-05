@@ -27,20 +27,20 @@ export default function Investigations({ investigations }: InvestigationsProps) 
   };
 
   return (
-    <Paper elevation={2} sx={{ p: 1.5 }}>
+    <Paper elevation={1} sx={{ p: 1.5 }}>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <ScienceIcon sx={{ color: 'primary.main' }} />
-          <Typography variant="h6" fontWeight={600}>
+          <ScienceIcon sx={{ color: 'primary.main', fontSize: '1.25rem' }} />
+          <Typography variant="subtitle2" fontWeight={600} sx={{ fontSize: '1rem', color: 'text.primary' }}>
             Investigations
           </Typography>
         </Box>
-        <Box sx={{ display: 'flex', gap: 1 }}>
+        <Box sx={{ display: 'flex', gap: 0.75 }}>
           <IconButton size="small" color="primary">
-            <MicIcon />
+            <MicIcon sx={{ fontSize: '1.2rem' }} />
           </IconButton>
           <IconButton size="small" color="primary">
-            <PrintIcon />
+            <PrintIcon sx={{ fontSize: '1.2rem' }} />
           </IconButton>
         </Box>
       </Box>
@@ -57,16 +57,18 @@ export default function Investigations({ investigations }: InvestigationsProps) 
             borderRadius: 1,
             border: '1px solid',
             borderColor: 'divider',
+            bgcolor: 'background.paper',
             '&:hover': {
               bgcolor: 'action.hover',
+              borderColor: 'primary.light',
             },
           }}
         >
           <Box sx={{ flexGrow: 1 }}>
-            <Typography variant="body1" fontWeight={600}>
+            <Typography variant="body1" fontWeight={600} sx={{ fontSize: '0.95rem', color: 'text.primary' }}>
               {inv.name}
             </Typography>
-            <Typography variant="caption" color="text.secondary">
+            <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.8rem' }}>
               Ordered: {inv.orderedDate}
             </Typography>
           </Box>
@@ -75,11 +77,12 @@ export default function Investigations({ investigations }: InvestigationsProps) 
               label={inv.status}
               color={getStatusColor(inv.status)}
               size="small"
+              sx={{ fontSize: '0.75rem', height: 24, fontWeight: 600 }}
               icon={
                 inv.status === 'Completed' ? (
-                  <CheckCircleIcon />
+                  <CheckCircleIcon sx={{ fontSize: '1rem' }} />
                 ) : inv.status === 'Cancelled' ? (
-                  <CancelIcon />
+                  <CancelIcon sx={{ fontSize: '1rem' }} />
                 ) : undefined
               }
             />
@@ -88,8 +91,8 @@ export default function Investigations({ investigations }: InvestigationsProps) 
       ))}
 
       {investigations.length === 0 && (
-        <Box sx={{ textAlign: 'center', py: 4 }}>
-          <Typography variant="body2" color="text.secondary">
+        <Box sx={{ textAlign: 'center', py: 3 }}>
+          <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.875rem' }}>
             No investigations ordered
           </Typography>
         </Box>

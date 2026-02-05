@@ -70,77 +70,86 @@ export default function PatientsList() {
   return (
     <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Main Content */}
-      <Box sx={{ flexGrow: 1, overflow: 'auto', p: 3 }}>
+      <Box sx={{ flexGrow: 1, overflow: 'auto', p: 2.5 }}>
         {/* Page Header */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
-          <CalendarTodayIcon sx={{ color: 'primary.main', fontSize: 28 }} />
-          <Typography variant="h5" fontWeight={600} sx={{ color: 'primary.main' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2.5 }}>
+          <CalendarTodayIcon sx={{ color: 'primary.main', fontSize: '1.5rem' }} />
+          <Typography variant="h6" fontWeight={600} sx={{ color: 'primary.main', fontSize: '1.1rem' }}>
             OUT PATIENT VISITS
           </Typography>
           <Chip
-            icon={<WarningIcon />}
+            icon={<WarningIcon sx={{ fontSize: '0.9rem' }} />}
             label="23 Incomplete"
             color="warning"
             size="small"
+            sx={{ height: 24, fontSize: '0.75rem', fontWeight: 600 }}
           />
 
-          <Box sx={{ ml: 'auto', display: 'flex', gap: 2, alignItems: 'center' }}>
-            <FormControl size="small" sx={{ minWidth: 120 }}>
-              <Select defaultValue="all" displayEmpty>
-                <MenuItem value="all">All</MenuItem>
-                <MenuItem value="scheduled">Scheduled</MenuItem>
-                <MenuItem value="consultation">In Consultation</MenuItem>
-                <MenuItem value="completed">Completed</MenuItem>
+          <Box sx={{ ml: 'auto', display: 'flex', gap: 1.5, alignItems: 'center' }}>
+            <FormControl size="small" sx={{ minWidth: 110 }}>
+              <Select defaultValue="all" displayEmpty sx={{ fontSize: '0.875rem', height: 36 }}>
+                <MenuItem value="all" sx={{ fontSize: '0.875rem' }}>All</MenuItem>
+                <MenuItem value="scheduled" sx={{ fontSize: '0.875rem' }}>Scheduled</MenuItem>
+                <MenuItem value="consultation" sx={{ fontSize: '0.875rem' }}>In Consultation</MenuItem>
+                <MenuItem value="completed" sx={{ fontSize: '0.875rem' }}>Completed</MenuItem>
               </Select>
             </FormControl>
 
-            <FormControl size="small" sx={{ minWidth: 150 }}>
-              <Select defaultValue="all" displayEmpty>
-                <MenuItem value="all">All Doctors</MenuItem>
-                <MenuItem value="jaganathan">Dr. Jaganathan</MenuItem>
-                <MenuItem value="gunasekar">Dr. Gunasekar</MenuItem>
-                <MenuItem value="ramesh">Dr. Ramesh</MenuItem>
+            <FormControl size="small" sx={{ minWidth: 140 }}>
+              <Select defaultValue="all" displayEmpty sx={{ fontSize: '0.875rem', height: 36 }}>
+                <MenuItem value="all" sx={{ fontSize: '0.875rem' }}>All Doctors</MenuItem>
+                <MenuItem value="jaganathan" sx={{ fontSize: '0.875rem' }}>Dr. Jaganathan</MenuItem>
+                <MenuItem value="gunasekar" sx={{ fontSize: '0.875rem' }}>Dr. Gunasekar</MenuItem>
+                <MenuItem value="ramesh" sx={{ fontSize: '0.875rem' }}>Dr. Ramesh</MenuItem>
               </Select>
             </FormControl>
 
             <FormControl size="small">
-              <Select defaultValue="today" displayEmpty>
-                <MenuItem value="today">Feb 5, 2026</MenuItem>
+              <Select defaultValue="today" displayEmpty sx={{ fontSize: '0.875rem', height: 36 }}>
+                <MenuItem value="today" sx={{ fontSize: '0.875rem' }}>Feb 5, 2026</MenuItem>
               </Select>
             </FormControl>
 
             <TextField
               placeholder="Search..."
               size="small"
-              sx={{ width: 180 }}
+              sx={{ 
+                width: 170,
+                '& .MuiInputBase-root': { height: 36, fontSize: '0.875rem' }
+              }}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <SearchIcon fontSize="small" />
+                    <SearchIcon sx={{ fontSize: '1rem' }} />
                   </InputAdornment>
                 ),
               }}
             />
 
-            <Button variant="outlined" size="small" startIcon={<RefreshIcon />}>
+            <Button 
+              variant="outlined" 
+              size="small" 
+              startIcon={<RefreshIcon sx={{ fontSize: '1rem' }} />}
+              sx={{ fontSize: '0.8rem', py: 0.75, px: 1.5 }}
+            >
               Reset
             </Button>
           </Box>
         </Box>
 
         {/* Table */}
-        <TableContainer component={Paper} elevation={2} sx={{ borderRadius: 2 }}>
-          <Table>
+        <TableContainer component={Paper} elevation={1} sx={{ borderRadius: 1, border: '1px solid', borderColor: 'divider' }}>
+          <Table size="small">
             <TableHead>
               <TableRow sx={{ bgcolor: 'primary.main' }}>
-                <TableCell sx={{ color: 'white', fontWeight: 600 }}>TOKEN</TableCell>
-                <TableCell sx={{ color: 'white', fontWeight: 600 }}>UHID</TableCell>
-                <TableCell sx={{ color: 'white', fontWeight: 600 }}>PATIENT</TableCell>
-                <TableCell sx={{ color: 'white', fontWeight: 600 }}>PHONE</TableCell>
-                <TableCell sx={{ color: 'white', fontWeight: 600 }}>DOCTOR</TableCell>
-                <TableCell sx={{ color: 'white', fontWeight: 600 }}>DATE & TIME</TableCell>
-                <TableCell sx={{ color: 'white', fontWeight: 600 }}>STATUS</TableCell>
-                <TableCell sx={{ color: 'white', fontWeight: 600 }}>ACTIONS</TableCell>
+                <TableCell sx={{ color: 'white', fontWeight: 600, fontSize: '0.8rem', py: 1.25 }}>TOKEN</TableCell>
+                <TableCell sx={{ color: 'white', fontWeight: 600, fontSize: '0.8rem', py: 1.25 }}>UHID</TableCell>
+                <TableCell sx={{ color: 'white', fontWeight: 600, fontSize: '0.8rem', py: 1.25 }}>PATIENT</TableCell>
+                <TableCell sx={{ color: 'white', fontWeight: 600, fontSize: '0.8rem', py: 1.25 }}>PHONE</TableCell>
+                <TableCell sx={{ color: 'white', fontWeight: 600, fontSize: '0.8rem', py: 1.25 }}>DOCTOR</TableCell>
+                <TableCell sx={{ color: 'white', fontWeight: 600, fontSize: '0.8rem', py: 1.25 }}>DATE & TIME</TableCell>
+                <TableCell sx={{ color: 'white', fontWeight: 600, fontSize: '0.8rem', py: 1.25 }}>STATUS</TableCell>
+                <TableCell sx={{ color: 'white', fontWeight: 600, fontSize: '0.8rem', py: 1.25 }}>ACTIONS</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -151,66 +160,83 @@ export default function PatientsList() {
                     '&:hover': { bgcolor: 'action.hover' },
                   }}
                 >
-                  <TableCell>
+                  <TableCell sx={{ py: 1.5 }}>
                     <Chip
                       label={item.token}
                       color="primary"
-                      sx={{ fontWeight: 600, minWidth: 40 }}
+                      sx={{ fontWeight: 600, minWidth: 32, height: 26, fontSize: '0.8rem' }}
                     />
                   </TableCell>
-                  <TableCell>{item.patient.mrn}</TableCell>
-                  <TableCell>
+                  <TableCell sx={{ py: 1.5, fontSize: '0.875rem' }}>{item.patient.mrn}</TableCell>
+                  <TableCell sx={{ py: 1.5 }}>
                     <Box>
-                      <Typography variant="body2" fontWeight={600}>
+                      <Typography variant="body2" fontWeight={600} sx={{ fontSize: '0.875rem', mb: 0.25 }}>
                         {item.patient.name}
                       </Typography>
-                      <Box sx={{ display: 'flex', gap: 0.5, alignItems: 'center', mt: 0.5 }}>
+                      <Box sx={{ display: 'flex', gap: 0.5, alignItems: 'center' }}>
                         <Chip
                           label={item.patient.gender}
                           size="small"
-                          color="info"
-                          sx={{ height: 20, fontSize: '0.7rem' }}
+                          sx={{ 
+                            height: 18, 
+                            fontSize: '0.7rem', 
+                            fontWeight: 500,
+                            bgcolor: item.patient.gender === 'Male' ? '#E3F2FD' : '#FCE4EC',
+                            color: item.patient.gender === 'Male' ? '#1976D2' : '#C2185B',
+                            border: `1px solid ${item.patient.gender === 'Male' ? '#90CAF9' : '#F8BBD0'}`,
+                          }}
                         />
-                        <Typography variant="caption" color="text.secondary">
+                        <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.75rem' }}>
                           {item.patient.age}yrs
                         </Typography>
                       </Box>
                     </Box>
                   </TableCell>
-                  <TableCell>{item.patient.phone}</TableCell>
-                  <TableCell>
-                    <Typography variant="body2" fontWeight={600}>
+                  <TableCell sx={{ py: 1.5, fontSize: '0.875rem' }}>{item.patient.phone}</TableCell>
+                  <TableCell sx={{ py: 1.5 }}>
+                    <Typography variant="body2" fontWeight={600} sx={{ fontSize: '0.875rem', mb: 0.25 }}>
                       {item.currentVisit.provider}
                     </Typography>
-                    <Typography variant="caption" color="text.secondary">
+                    <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.75rem' }}>
                       M.B.B.S.,M.D Pediatrics ACLP Consultant P...
                     </Typography>
                   </TableCell>
-                  <TableCell>
+                  <TableCell sx={{ py: 1.5, fontSize: '0.875rem' }}>
                     {item.currentVisit.date} {item.currentVisit.time}
                   </TableCell>
-                  <TableCell>
+                  <TableCell sx={{ py: 1.5 }}>
                     <Chip
                       label={item.currentVisit.status.toUpperCase()}
-                      color={getStatusColor(item.currentVisit.status)}
                       size="small"
-                      sx={{ fontWeight: 600 }}
+                      sx={{ 
+                        fontWeight: 600, 
+                        fontSize: '0.7rem', 
+                        height: 24,
+                        bgcolor: item.currentVisit.status === 'In Consultation' ? '#E3F2FD' : 
+                                item.currentVisit.status === 'Scheduled' ? '#FFF3E0' : '#E8F5E9',
+                        color: item.currentVisit.status === 'In Consultation' ? '#1976D2' : 
+                               item.currentVisit.status === 'Scheduled' ? '#F57C00' : '#388E3C',
+                        border: `1px solid ${item.currentVisit.status === 'In Consultation' ? '#90CAF9' : 
+                                             item.currentVisit.status === 'Scheduled' ? '#FFB74D' : '#81C784'}`,
+                      }}
                     />
                   </TableCell>
-                  <TableCell>
-                    <Box sx={{ display: 'flex', gap: 1 }}>
+                  <TableCell sx={{ py: 1.5 }}>
+                    <Box sx={{ display: 'flex', gap: 0.75 }}>
                       <Button
                         variant="outlined"
                         size="small"
                         onClick={() => navigate(`/patient/${item.patient.id}`)}
+                        sx={{ fontSize: '0.75rem', py: 0.5, px: 1.25, textTransform: 'none', fontWeight: 500 }}
                       >
                         Visit Details
                       </Button>
                       <IconButton
                         size="small"
                         onClick={(e) => handleMenuClick(e, item.patient.id)}
+                        sx={{ width: 32, height: 32 }}
                       >
-                        <MoreVertIcon />
+                        <MoreVertIcon sx={{ fontSize: '1.1rem' }} />
                       </IconButton>
                     </Box>
                   </TableCell>
@@ -222,24 +248,50 @@ export default function PatientsList() {
 
         {/* Pagination */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <Button variant="outlined" size="small" disabled>
+          <Box sx={{ display: 'flex', gap: 0.75 }}>
+            <Button 
+              variant="outlined" 
+              size="small" 
+              disabled 
+              sx={{ 
+                fontSize: '0.8rem', 
+                py: 0.5, 
+                minWidth: 70,
+                '&.Mui-disabled': {
+                  color: 'text.secondary',
+                  borderColor: 'divider',
+                }
+              }}
+            >
               Previous
             </Button>
-            <Button variant="contained" size="small">
+            <Button variant="contained" size="small" sx={{ fontSize: '0.8rem', py: 0.5, minWidth: 36 }}>
               1
             </Button>
-            <Button variant="outlined" size="small" disabled>
+            <Button 
+              variant="outlined" 
+              size="small" 
+              disabled 
+              sx={{ 
+                fontSize: '0.8rem', 
+                py: 0.5, 
+                minWidth: 60,
+                '&.Mui-disabled': {
+                  color: 'text.secondary',
+                  borderColor: 'divider',
+                }
+              }}
+            >
               Next
             </Button>
           </Box>
           <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-            <Typography variant="body2">Items per page:</Typography>
+            <Typography variant="body2" sx={{ fontSize: '0.875rem', color: 'primary.main', fontWeight: 500 }}>Items per page:</Typography>
             <FormControl size="small">
-              <Select value={20} sx={{ minWidth: 70 }}>
-                <MenuItem value={20}>20</MenuItem>
-                <MenuItem value={50}>50</MenuItem>
-                <MenuItem value={100}>100</MenuItem>
+              <Select value={20} sx={{ minWidth: 65, height: 32, fontSize: '0.875rem' }}>
+                <MenuItem value={20} sx={{ fontSize: '0.875rem' }}>20</MenuItem>
+                <MenuItem value={50} sx={{ fontSize: '0.875rem' }}>50</MenuItem>
+                <MenuItem value={100} sx={{ fontSize: '0.875rem' }}>100</MenuItem>
               </Select>
             </FormControl>
           </Box>
@@ -251,25 +303,32 @@ export default function PatientsList() {
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
+        PaperProps={{
+          sx: {
+            boxShadow: 3,
+            borderRadius: 1,
+            minWidth: 180,
+          }
+        }}
       >
-        <MenuItem onClick={handleVisitPad}>
-          <DescriptionIcon sx={{ mr: 1, color: 'primary.main' }} />
+        <MenuItem onClick={handleVisitPad} sx={{ py: 1, fontSize: '0.875rem' }}>
+          <DescriptionIcon sx={{ mr: 1.5, color: 'primary.main', fontSize: '1.2rem' }} />
           Visit Pad
         </MenuItem>
-        <MenuItem onClick={handleMenuClose}>
-          <VisibilityIcon sx={{ mr: 1, color: 'primary.main' }} />
+        <MenuItem onClick={handleMenuClose} sx={{ py: 1, fontSize: '0.875rem' }}>
+          <VisibilityIcon sx={{ mr: 1.5, color: 'primary.main', fontSize: '1.2rem' }} />
           View Visit
         </MenuItem>
-        <MenuItem onClick={handleMenuClose}>
-          <FeedbackIcon sx={{ mr: 1, color: 'primary.main' }} />
+        <MenuItem onClick={handleMenuClose} sx={{ py: 1, fontSize: '0.875rem' }}>
+          <FeedbackIcon sx={{ mr: 1.5, color: 'primary.main', fontSize: '1.2rem' }} />
           Feedback
         </MenuItem>
-        <MenuItem onClick={handleMenuClose}>
-          <PersonIcon sx={{ mr: 1, color: 'primary.main' }} />
+        <MenuItem onClick={handleMenuClose} sx={{ py: 1, fontSize: '0.875rem' }}>
+          <PersonIcon sx={{ mr: 1.5, color: 'primary.main', fontSize: '1.2rem' }} />
           Patient Case Taking
         </MenuItem>
-        <MenuItem onClick={handleMenuClose}>
-          <HistoryIcon sx={{ mr: 1, color: 'primary.main' }} />
+        <MenuItem onClick={handleMenuClose} sx={{ py: 1, fontSize: '0.875rem' }}>
+          <HistoryIcon sx={{ mr: 1.5, color: 'primary.main', fontSize: '1.2rem' }} />
           Status Logs
         </MenuItem>
       </Menu>
@@ -277,14 +336,14 @@ export default function PatientsList() {
       {/* Footer */}
       <Box
         sx={{
-          py: 1.5,
-          px: 3,
+          py: 1,
+          px: 2.5,
           borderTop: '1px solid',
           borderColor: 'divider',
           bgcolor: 'background.paper',
         }}
       >
-        <Typography variant="caption" color="text.secondary" align="center" display="block">
+        <Typography variant="caption" color="text.secondary" align="center" display="block" sx={{ fontSize: '0.75rem' }}>
           Copyright © 2023-2025 ZautoAI. All rights reserved.
         </Typography>
       </Box>
