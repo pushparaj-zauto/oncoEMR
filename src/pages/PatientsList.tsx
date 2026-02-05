@@ -17,6 +17,7 @@ import {
   FormControl,
   TextField,
   InputAdornment,
+  Alert,
 } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -30,6 +31,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import PersonIcon from '@mui/icons-material/Person';
 import HistoryIcon from '@mui/icons-material/History';
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import { mockPatientsList } from '../data/mockData';
 
 export default function PatientsList() {
@@ -59,6 +61,27 @@ export default function PatientsList() {
     <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Main Content */}
       <Box sx={{ flexGrow: 1, overflow: 'auto', p: 2.5 }}>
+        {/* Oncology EMR Alert */}
+        <Alert 
+          severity="info" 
+          icon={<LocalHospitalIcon />}
+          sx={{ mb: 2, cursor: 'pointer' }}
+          onClick={() => navigate('/onco')}
+          action={
+            <Button 
+              color="inherit" 
+              size="small"
+              sx={{ fontWeight: 600 }}
+            >
+              Open Oncology EMR →
+            </Button>
+          }
+        >
+          <Typography variant="body2" sx={{ fontWeight: 600 }}>
+            🎯 New: Oncology EMR is now available with specialized cancer care workflows!
+          </Typography>
+        </Alert>
+
         {/* Page Header */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2.5 }}>
           <CalendarTodayIcon sx={{ color: 'primary.main', fontSize: '1.5rem' }} />
