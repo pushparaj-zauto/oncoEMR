@@ -25,8 +25,8 @@ export default function PatientInfo({ patient, currentVisit }: PatientInfoProps)
   };
 
   return (
-    <Paper elevation={2} sx={{ p: 2, mb: 2 }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+    <Paper elevation={1} sx={{ p: 1.5, mb: 2 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
         <Avatar sx={{ width: 56, height: 56, bgcolor: 'primary.main', mr: 2 }}>
           <PersonIcon fontSize="large" />
         </Avatar>

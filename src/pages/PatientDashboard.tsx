@@ -21,9 +21,9 @@ import WarningIcon from '@mui/icons-material/Warning';
 
 export default function PatientDashboard() {
   return (
-    <Box sx={{ minHeight: 'calc(100vh - 64px)', pb: 10 }}>
-      <Container maxWidth="xl" sx={{ pt: 3 }}>
-        <Grid container spacing={3}>
+    <Box sx={{ minHeight: 'calc(100vh - 64px)', pb: 10, overflow: 'hidden' }}>
+      <Container maxWidth="xl" sx={{ pt: 2, px: 1 }}>
+        <Grid container spacing={2}>
           {/* Left Column */}
           <Grid item xs={12} md={4}>
             <PatientInfo patient={mockPatient} currentVisit={mockCurrentVisit} />
@@ -49,124 +49,104 @@ export default function PatientDashboard() {
         sx={{
           position: 'fixed',
           bottom: 0,
-          left: '220px',
+          left: 0,
           right: 0,
           bgcolor: 'background.paper',
           borderTop: '1px solid',
           borderColor: 'divider',
-          py: 1.5,
+          py: 1,
           px: 3,
           display: 'flex',
-          justifyContent: 'center',
+          justifyContent: 'space-between',
           alignItems: 'center',
-          gap: 2,
           zIndex: 1000,
         }}
       >
-        <Fab color="primary" size="medium">
-          <MicIcon />
-        </Fab>
-        <Fab
-          size="medium"
-          sx={{
-            bgcolor: 'white',
-            border: '2px solid',
-            borderColor: 'divider',
-            '&:hover': { bgcolor: 'grey.100' },
-          }}
-        >
-          <Box
+        {/* Empty left side or can add content later */}
+        <Box />
+
+        {/* Right side - Action buttons, Finish button and home icon */}
+        <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
+          <Fab
+            size="small"
             sx={{
-              width: 24,
-              height: 24,
-              bgcolor: 'primary.main',
-              borderRadius: 1,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'white',
-              fontWeight: 600,
-              fontSize: '0.75rem',
+              bgcolor: 'white',
+              border: '2px solid',
+              borderColor: 'primary.main',
+              color: 'primary.main',
+              '&:hover': { bgcolor: 'grey.50' },
             }}
           >
-            Rx
-          </Box>
-        </Fab>
-        <Fab
-          size="medium"
-          sx={{
-            bgcolor: 'white',
-            border: '2px solid',
-            borderColor: 'divider',
-            '&:hover': { bgcolor: 'grey.100' },
-          }}
-        >
-          <LayersIcon />
-        </Fab>
-        <Fab
-          size="medium"
-          sx={{
-            bgcolor: 'white',
-            border: '2px solid',
-            borderColor: 'divider',
-            '&:hover': { bgcolor: 'grey.100' },
-          }}
-        >
-          <ChatIcon />
-        </Fab>
-        <Fab
-          size="medium"
-          sx={{
-            bgcolor: 'orange',
-            color: 'white',
-            '&:hover': { bgcolor: 'darkorange' },
-            position: 'relative',
-          }}
-        >
-          <WarningIcon />
-          <Box
+            <MicIcon sx={{ fontSize: '1.2rem' }} />
+          </Fab>
+          <Fab
+            size="small"
             sx={{
-              position: 'absolute',
-              top: -4,
-              right: -4,
-              bgcolor: 'error.main',
-              color: 'white',
-              borderRadius: '50%',
-              width: 20,
-              height: 20,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '0.7rem',
-              fontWeight: 600,
+              bgcolor: 'white',
+              border: '2px solid',
+              borderColor: 'primary.main',
+              color: 'primary.main',
+              '&:hover': { bgcolor: 'grey.50' },
             }}
           >
-            3
-          </Box>
-        </Fab>
-        <Fab
-          size="medium"
-          sx={{
-            bgcolor: 'white',
-            border: '2px solid',
-            borderColor: 'divider',
-            '&:hover': { bgcolor: 'grey.100' },
-          }}
-        >
-          <MoreHorizIcon />
-        </Fab>
-        <Box sx={{ flexGrow: 1 }} />
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          sx={{ px: 4, py: 1.5, fontWeight: 600 }}
-        >
-          Finish and Next Patient
-        </Button>
-        <Fab color="primary" size="medium">
-          <HomeIcon />
-        </Fab>
+            <Box
+              sx={{
+                fontWeight: 700,
+                fontSize: '0.85rem',
+              }}
+            >
+              Rx
+            </Box>
+          </Fab>
+          <Fab
+            size="small"
+            sx={{
+              bgcolor: 'white',
+              border: '2px solid',
+              borderColor: 'primary.main',
+              color: 'primary.main',
+              '&:hover': { bgcolor: 'grey.50' },
+            }}
+          >
+            <LayersIcon sx={{ fontSize: '1.2rem' }} />
+          </Fab>
+          <Fab
+            size="small"
+            sx={{
+              bgcolor: 'white',
+              border: '2px solid',
+              borderColor: 'primary.main',
+              color: 'primary.main',
+              '&:hover': { bgcolor: 'grey.50' },
+            }}
+          >
+            <ChatIcon sx={{ fontSize: '1.2rem' }} />
+          </Fab>
+          <Fab
+            size="small"
+            sx={{
+              bgcolor: 'white',
+              border: '2px solid',
+              borderColor: 'primary.main',
+              color: 'primary.main',
+              '&:hover': { bgcolor: 'grey.50' },
+            }}
+          >
+            <MoreHorizIcon sx={{ fontSize: '1.2rem' }} />
+          </Fab>
+          <Button
+            variant="contained"
+            color="primary"
+            size="medium"
+            startIcon={<Box component="span" sx={{ fontSize: '1rem' }}>✓</Box>}
+            sx={{ px: 2.5, py: 0.75, fontWeight: 600, borderRadius: 1.5, textTransform: 'none' }}
+          >
+            Finish and Next Patient
+          </Button>
+          <Fab color="primary" size="small">
+            <HomeIcon sx={{ fontSize: '1.2rem' }} />
+          </Fab>
+        </Box>
       </Box>
     </Box>
   );

@@ -74,7 +74,6 @@ function App() {
             sx={{
               flexGrow: 1,
               mt: 8,
-              ml: '220px',
               bgcolor: '#f5f5f5',
             }}
           >

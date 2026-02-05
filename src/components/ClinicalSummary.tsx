@@ -3,8 +3,8 @@ import NoteAddIcon from '@mui/icons-material/NoteAdd';
 
 export default function ClinicalSummary() {
   return (
-    <Paper elevation={2} sx={{ p: 2, mb: 2, minHeight: 200 }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+    <Paper elevation={1} sx={{ p: 1.5, mb: 2, minHeight: 180 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
         <Typography variant="h6" fontWeight={600}>
           Clinical Summary
         </Typography>

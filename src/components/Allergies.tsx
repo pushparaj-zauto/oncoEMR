@@ -9,8 +9,8 @@ interface AllergiesProps {
 
 export default function Allergies({ allergies }: AllergiesProps) {
   return (
-    <Paper elevation={2} sx={{ p: 2, mb: 2 }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+    <Paper elevation={1} sx={{ p: 1.5, mb: 2 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <WarningAmberIcon sx={{ color: 'warning.main' }} />
           <Typography variant="h6" fontWeight={600}>
