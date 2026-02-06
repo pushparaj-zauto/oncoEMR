@@ -63,7 +63,7 @@ export default function OncoPatientLayout() {
                 fontWeight: 600
               }}
             >
-              {patient.name.charAt(0)}
+              {patient.name.replace(/^(Mr|Mrs|Ms|Dr|Miss|Master)\.?\s+/i, "").charAt(0)}
             </Avatar>
             
             <Box sx={{ flexGrow: 1 }}>
