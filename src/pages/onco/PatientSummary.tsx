@@ -1,4 +1,6 @@
-import { Box, Container, Grid, Paper, Typography, Divider, Chip } from '@mui/material';
+import { Box, Container, Grid, Paper, Typography, Divider, Chip, IconButton } from '@mui/material';
+import MicIcon from '@mui/icons-material/Mic';
+import { alpha } from '@mui/material/styles';
 import { OncologyPatient } from '../../types/oncology';
 import PatientContextBar from '../../components/onco/PatientContextBar';
 
@@ -6,6 +8,29 @@ interface PatientSummaryProps {
   patient: OncologyPatient;
   hideContextBar?: boolean;
 }
+
+const MicButton = () => (
+  <IconButton 
+    size="small" 
+    sx={{ 
+        ml: 1.5,
+        border: '1px solid',
+        borderColor: 'primary.main', 
+        borderRadius: 1, 
+        p: 0.5,
+        color: 'primary.main',
+        transition: 'all 0.2s',
+        '&:hover': {
+            bgcolor: (theme) => alpha(theme.palette.primary.main, 0.1),
+            borderColor: 'primary.dark',
+            transform: 'translateY(-1px)',
+            boxShadow: (theme) => `0 2px 8px ${alpha(theme.palette.primary.main, 0.2)}`
+        }
+    }}
+  >
+    <MicIcon sx={{ fontSize: 16 }} />
+  </IconButton>
+);
 
 export default function PatientSummary({ patient, hideContextBar }: PatientSummaryProps) {
   return (
@@ -17,9 +42,12 @@ export default function PatientSummary({ patient, hideContextBar }: PatientSumma
             {/* Vitals Section */}
             <Grid item xs={12}>
                 <Paper sx={{ p: 3, borderRadius: 2 }}>
-                    <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
-                        Patient Vitals
-                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Typography variant="overline" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2 }}>
+                            Patient Vitals
+                        </Typography>
+                        <MicButton />
+                    </Box>
                     <Grid container spacing={2}>
                         <Grid item xs={6} md={2}>
                             <Paper variant="outlined" sx={{ p: 2, textAlign: 'center', bgcolor: 'grey.50', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
@@ -77,7 +105,10 @@ export default function PatientSummary({ patient, hideContextBar }: PatientSumma
                     </Typography>
                     
                     <Box sx={{ mb: 3 }}>
-                        <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 0.5 }}>Chief Complaint</Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}>
+                            <Typography variant="subtitle2" color="text.secondary">Chief Complaint</Typography>
+                            <MicButton />
+                        </Box>
                          <Typography variant="body1" sx={{ fontWeight: 500 }}>
                             {patient.chiefComplaint || 'Not recorded'}
                         </Typography>
@@ -86,7 +117,10 @@ export default function PatientSummary({ patient, hideContextBar }: PatientSumma
                     <Divider sx={{ my: 2 }} />
 
                     <Box>
-                        <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>History of Present Illness</Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                            <Typography variant="subtitle2" color="text.secondary">History of Present Illness</Typography>
+                            <MicButton />
+                        </Box>
                         <Typography variant="body1" sx={{ lineHeight: 1.6, color: 'text.primary' }}>
                             {patient.historyOfPresentIllness || 'No detailed history recorded.'}
                         </Typography>
@@ -121,6 +155,7 @@ export default function PatientSummary({ patient, hideContextBar }: PatientSumma
                     <Box sx={{ mb: 3 }}>
                         <Typography variant="subtitle2" color="primary" sx={{ fontWeight: 600, mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
                             Medical History
+                            <MicButton />
                         </Typography>
                         {patient.patientHistory?.medical && patient.patientHistory.medical.length > 0 ? (
                             <ul style={{ margin: 0, paddingLeft: 20 }}>
@@ -140,6 +175,7 @@ export default function PatientSummary({ patient, hideContextBar }: PatientSumma
                      <Box sx={{ mb: 3 }}>
                         <Typography variant="subtitle2" color="primary" sx={{ fontWeight: 600, mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
                             Family History
+                            <MicButton />
                         </Typography>
                         {patient.patientHistory?.family && patient.patientHistory.family.length > 0 ? (
                             <ul style={{ margin: 0, paddingLeft: 20 }}>
@@ -159,6 +195,7 @@ export default function PatientSummary({ patient, hideContextBar }: PatientSumma
                      <Box>
                         <Typography variant="subtitle2" color="primary" sx={{ fontWeight: 600, mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
                             Social History
+                            <MicButton />
                         </Typography>
                         {patient.patientHistory?.social && patient.patientHistory.social.length > 0 ? (
                             <ul style={{ margin: 0, paddingLeft: 20 }}>
