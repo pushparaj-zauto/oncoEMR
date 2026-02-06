@@ -1,3 +1,4 @@
+import { useRef, useEffect } from 'react';
 import { Box, Typography, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Avatar, IconButton, Divider, Chip, Paper } from '@mui/material';
 import { Outlet, useNavigate, useLocation, useParams } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -14,6 +15,13 @@ export default function OncoPatientLayout() {
   const navigate = useNavigate();
   const location = useLocation();
   const { patientId } = useParams();
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = 0;
+    }
+  }, [location.pathname]);
   
   const patient = allPatients.find(p => p.id === patientId);
 
@@ -217,7 +225,7 @@ export default function OncoPatientLayout() {
       </Paper>
 
       {/* Main Content Area */}
-      <Box sx={{ flexGrow: 1, overflow: 'auto', p: 0, position: 'relative' }}>
+      <Box ref={scrollRef} sx={{ flexGrow: 1, overflow: 'auto', p: 0, position: 'relative' }}>
          {/* This Outlet renders the child routes (Diagnostic, Planning, etc.) */}
          <Outlet context={{ hideContextBar: true }} /> 
       </Box>
