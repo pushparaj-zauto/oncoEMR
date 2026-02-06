@@ -62,7 +62,7 @@ export default function OncoPatientsList() {
     <Box sx={{ minHeight: '100vh', bgcolor: 'grey.50', py: 4 }}>
       <Container maxWidth="xl">
         <Box sx={{ mb: 3 }}>
-          <Typography variant="h4" sx={{ fontWeight: 600, color: 'primary.main', mb: 0.5 }}>
+          <Typography variant="h5" sx={{ fontWeight: 600, color: 'primary.main', mb: 0.5 }}>
             Oncology EMR
           </Typography>
           <Typography variant="body1" color="text.secondary">
