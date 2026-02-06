@@ -1,10 +1,11 @@
-import { ThemeProvider, createTheme, CssBaseline, Box } from '@mui/material';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
+import { BrowserRouter, Routes, Route, Navigate, useParams } from 'react-router-dom';
 import PatientDashboard from './pages/PatientDashboard';
 import PatientsList from './pages/PatientsList';
-import Sidebar from './components/Sidebar';
-import Header from './components/Header';
-import ScrollToTop from './components/ScrollToTop';
+// Layouts
+import MainLayout from './layouts/MainLayout';
+import OncoPatientLayout from './layouts/OncoPatientLayout';
+
 // Oncology Pages
 import OncoPatientsList from './pages/onco/OncoPatientsList';
 import DiagnosticEvaluation from './pages/onco/DiagnosticEvaluation';
@@ -13,11 +14,7 @@ import ChemoProtocolWorkspace from './pages/onco/ChemoProtocolWorkspace';
 import MaintenanceReview from './pages/onco/MaintenanceReview';
 import PalliativeDashboard from './pages/onco/PalliativeDashboard';
 import {
-  mockOncoPatient1,
-  mockOncoPatient2,
-  mockOncoPatient3,
-  mockOncoPatient4,
-  mockOncoPatient5,
+  allPatients,
   mockDiagnosticEvents,
   mockPendingActions,
 } from './data/oncologyMockData';
@@ -88,63 +85,72 @@ const theme = createTheme({
   },
 });
 
+// Wrappers for Dynamic Patient Data
+const DiagnosticWrapper = () => {
+  const { patientId } = useParams();
+  const patient = allPatients.find(p => p.id === patientId);
+  if (!patient) return null;
+  return <DiagnosticEvaluation patient={patient} diagnosticEvents={mockDiagnosticEvents} pendingActions={mockPendingActions} hideContextBar />;
+};
+
+const PlanningWrapper = () => {
+  const { patientId } = useParams();
+  const patient = allPatients.find(p => p.id === patientId);
+  if (!patient) return null;
+  return <TreatmentPlanning patient={patient} hideContextBar />;
+};
+
+const ChemoWrapper = () => {
+  const { patientId } = useParams();
+  const patient = allPatients.find(p => p.id === patientId);
+  if (!patient) return null;
+  return <ChemoProtocolWorkspace patient={patient} hideContextBar />;
+};
+
+const MaintenanceWrapper = () => {
+  const { patientId } = useParams();
+  const patient = allPatients.find(p => p.id === patientId);
+  if (!patient) return null;
+  return <MaintenanceReview patient={patient} hideContextBar />;
+};
+
+const PalliativeWrapper = () => {
+  const { patientId } = useParams();
+  const patient = allPatients.find(p => p.id === patientId);
+  if (!patient) return null;
+  return <PalliativeDashboard patient={patient} hideContextBar />;
+};
+
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
-        <ScrollToTop />
-        <Box sx={{ display: 'flex' }}>
-          <Header />
-          <Sidebar />
-          <Box
-            component="main"
-            sx={{
-              flexGrow: 1,
-              mt: 8,
-              bgcolor: '#f5f5f5',
-            }}
-          >
-            <Routes>
-              {/* General EMR Routes */}
-              <Route path="/" element={<OncoPatientsList />} />
-              <Route path="/day-care" element={<Navigate to="/" replace />} />
-              <Route path="/in-patient" element={<Navigate to="/" replace />} />
-              <Route path="/emergency" element={<Navigate to="/" replace />} />
-              <Route path="/patients" element={<PatientsList />} />
-              <Route path="/patient/:patientId" element={<PatientDashboard />} />
-              
-              {/* Oncology EMR Routes */}
-              <Route path="/onco" element={<OncoPatientsList />} />
-              <Route 
-                path="/onco/diagnostic/:patientId" 
-                element={
-                  <DiagnosticEvaluation 
-                    patient={mockOncoPatient1} 
-                    diagnosticEvents={mockDiagnosticEvents}
-                    pendingActions={mockPendingActions}
-                  />
-                } 
-              />
-              <Route 
-                path="/onco/planning/:patientId" 
-                element={<TreatmentPlanning patient={mockOncoPatient2} />} 
-              />
-              <Route 
-                path="/onco/chemo/:patientId" 
-                element={<ChemoProtocolWorkspace patient={mockOncoPatient3} />} 
-              />
-              <Route 
-                path="/onco/maintenance/:patientId" 
-                element={<MaintenanceReview patient={mockOncoPatient5} />} 
-              />
-              <Route 
-                path="/onco/palliative/:patientId" 
-                element={<PalliativeDashboard patient={mockOncoPatient4} />} 
-              />
-            </Routes>
-          </Box>
-        </Box>
+        <Routes>
+          {/* Main App Layout Routes */}
+          <Route element={<MainLayout />}>
+             {/* General EMR Routes */}
+             <Route path="/" element={<OncoPatientsList />} />
+             <Route path="/day-care" element={<Navigate to="/" replace />} />
+             <Route path="/in-patient" element={<Navigate to="/" replace />} />
+             <Route path="/emergency" element={<Navigate to="/" replace />} />
+             <Route path="/patients" element={<PatientsList />} />
+             <Route path="/patient/:patientId" element={<PatientDashboard />} />
+             
+             {/* Oncology EMR Routes - List View */}
+             <Route path="/onco" element={<OncoPatientsList />} />
+          </Route>
+
+          {/* Full Screen Patient Journey Layout */}
+          <Route path="/onco/patient-view/:patientId" element={<OncoPatientLayout />}>
+             <Route index element={<Navigate to="diagnostic" replace />} />
+             <Route path="diagnostic" element={<DiagnosticWrapper />} />
+             <Route path="planning" element={<PlanningWrapper />} />
+             <Route path="chemo" element={<ChemoWrapper />} />
+             <Route path="maintenance" element={<MaintenanceWrapper />} />
+             <Route path="palliative" element={<PalliativeWrapper />} />
+          </Route>
+        </Routes>
       </BrowserRouter>
     </ThemeProvider>
   );

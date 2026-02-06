@@ -379,3 +379,11 @@ export const mockPendingActions: PendingAction[] = [
   { action: 'Baseline cardiac evaluation', priority: 'Medium' },
   { action: 'Genetic counseling referral', priority: 'Low' },
 ];
+
+export const allPatients: OncologyPatient[] = [
+  mockOncoPatient1,
+  mockOncoPatient2,
+  mockOncoPatient3,
+  mockOncoPatient4,
+  mockOncoPatient5,
+];

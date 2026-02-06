@@ -36,9 +36,10 @@ import PatientContextBar from '../../components/onco/PatientContextBar';
 
 interface PalliativeDashboardProps {
   patient: OncologyPatient;
+  hideContextBar?: boolean;
 }
 
-export default function PalliativeDashboard({ patient }: PalliativeDashboardProps) {
+export default function PalliativeDashboard({ patient, hideContextBar }: PalliativeDashboardProps) {
   const getPainColor = (score: number) => {
     if (score <= 3) return 'success';
     if (score <= 6) return 'warning';
@@ -51,7 +52,7 @@ export default function PalliativeDashboard({ patient }: PalliativeDashboardProp
   return (
     <Box sx={{ pb: 10 }}>
       {/* Global Patient Context Bar */}
-      <PatientContextBar patient={patient} />
+      {!hideContextBar && <PatientContextBar patient={patient} />}
 
       <Container maxWidth="xl" sx={{ mt: 4, mb: 5 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>

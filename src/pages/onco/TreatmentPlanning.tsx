@@ -30,9 +30,10 @@ import PatientContextBar from '../../components/onco/PatientContextBar';
 
 interface TreatmentPlanningProps {
   patient: OncologyPatient;
+  hideContextBar?: boolean;
 }
 
-export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
+export default function TreatmentPlanning({ patient, hideContextBar }: TreatmentPlanningProps) {
   const [intent, setIntent] = useState(patient.treatmentIntent || '');
 
   const handleIntentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,7 +50,7 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
   return (
     <Box sx={{ pb: 10 }}>
       {/* Global Patient Context Bar */}
-      <PatientContextBar patient={patient} />
+      {!hideContextBar && <PatientContextBar patient={patient} />}
 
       <Container maxWidth="xl" sx={{ mt: 4, mb: 5 }}>
         <Grid container spacing={3}>

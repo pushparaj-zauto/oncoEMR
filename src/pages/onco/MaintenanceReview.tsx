@@ -25,9 +25,10 @@ import PatientContextBar from '../../components/onco/PatientContextBar';
 
 interface MaintenanceReviewProps {
   patient: OncologyPatient;
+  hideContextBar?: boolean;
 }
 
-export default function MaintenanceReview({ patient }: MaintenanceReviewProps) {
+export default function MaintenanceReview({ patient, hideContextBar }: MaintenanceReviewProps) {
   const reviewDates = [
     '2025-11-15',
     '2025-12-15',
@@ -38,7 +39,7 @@ export default function MaintenanceReview({ patient }: MaintenanceReviewProps) {
   return (
     <Box sx={{ pb: 10 }}>
       {/* Global Patient Context Bar */}
-      <PatientContextBar patient={patient} />
+      {!hideContextBar && <PatientContextBar patient={patient} />}
 
       <Container maxWidth="xl" sx={{ mt: 4, mb: 5 }}>
 

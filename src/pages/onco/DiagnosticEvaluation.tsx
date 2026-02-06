@@ -37,12 +37,14 @@ interface DiagnosticEvaluationProps {
   patient: OncologyPatient;
   diagnosticEvents: DiagnosticEvent[];
   pendingActions: PendingAction[];
+  hideContextBar?: boolean;
 }
 
 export default function DiagnosticEvaluation({
   patient,
   diagnosticEvents,
   pendingActions,
+  hideContextBar,
 }: DiagnosticEvaluationProps) {
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -75,7 +77,7 @@ export default function DiagnosticEvaluation({
   return (
     <Box sx={{ pb: 10 }}>
       {/* Global Patient Context Bar */}
-      <PatientContextBar patient={patient} />
+      {!hideContextBar && <PatientContextBar patient={patient} />}
 
       <Container maxWidth="xl" sx={{ mt: 4, mb: 5 }}>
         <Grid container spacing={3}>

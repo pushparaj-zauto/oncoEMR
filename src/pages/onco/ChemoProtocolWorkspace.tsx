@@ -29,9 +29,10 @@ import PatientContextBar from '../../components/onco/PatientContextBar';
 
 interface ChemoProtocolWorkspaceProps {
   patient: OncologyPatient;
+  hideContextBar?: boolean;
 }
 
-export default function ChemoProtocolWorkspace({ patient }: ChemoProtocolWorkspaceProps) {
+export default function ChemoProtocolWorkspace({ patient, hideContextBar }: ChemoProtocolWorkspaceProps) {
   const [selectedCycle, setSelectedCycle] = useState(0);
 
   if (!patient.currentProtocol) {
@@ -44,7 +45,7 @@ export default function ChemoProtocolWorkspace({ patient }: ChemoProtocolWorkspa
   return (
     <Box sx={{ overflowX: 'hidden', width: '100%', pb: 10 }}>
       {/* Global Patient Context Bar */}
-      <PatientContextBar patient={patient} />
+      {!hideContextBar && <PatientContextBar patient={patient} />}
 
       <Container maxWidth="lg" sx={{ mt: 3, mb: 4 }}>
         {/* Protocol Header */}

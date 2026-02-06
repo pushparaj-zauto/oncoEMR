@@ -25,18 +25,18 @@ export default function OncoPatientsList() {
   const getRouteForPatient = (patient: OncologyPatient): string => {
     switch (patient.oncoStatus) {
       case 'Diagnostic Evaluation':
-        return `/onco/diagnostic/${patient.id}`;
+        return `/onco/patient-view/${patient.id}/diagnostic`;
       case 'Treatment Planning':
-        return `/onco/planning/${patient.id}`;
+        return `/onco/patient-view/${patient.id}/planning`;
       case 'Induction':
       case 'Consolidation':
-        return `/onco/chemo/${patient.id}`;
+        return `/onco/patient-view/${patient.id}/chemo`;
       case 'Maintenance':
-        return `/onco/maintenance/${patient.id}`;
+        return `/onco/patient-view/${patient.id}/maintenance`;
       case 'Palliative':
-        return `/onco/palliative/${patient.id}`;
+        return `/onco/patient-view/${patient.id}/palliative`;
       default:
-        return `/onco/diagnostic/${patient.id}`;
+        return `/onco/patient-view/${patient.id}/diagnostic`;
     }
   };
 
