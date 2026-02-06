@@ -1,6 +1,6 @@
 // Oncology-specific type definitions
 
-export type TreatmentIntent = 'Curative' | 'Disease Control' | 'Palliative';
+export type TreatmentIntent = 'Curative' | 'Disease Control' | 'Palliative' | 'None';
 
 export type OncoStatus = 
   | 'Diagnostic Evaluation'
@@ -9,9 +9,10 @@ export type OncoStatus =
   | 'Consolidation'
   | 'Maintenance'
   | 'Palliative'
-  | 'Observation';
+  | 'Observation'
+  | 'Discharged';
 
-export type DiagnosticStatus = 'Not done' | 'Done' | 'Pending' | 'Confirmed';
+export type DiagnosticStatus = 'Not done' | 'Done' | 'Pending' | 'Confirmed' | 'Confirmed Benign' | 'Not Indicated' | 'Normal';
 
 export type ECOGPerformanceStatus = 0 | 1 | 2 | 3 | 4;
 
@@ -19,7 +20,7 @@ export type MDTStatus = 'Pending' | 'Approved' | 'Modified';
 
 export type TreatmentModality = 'Surgery' | 'Chemotherapy' | 'Radiation' | 'Immunotherapy' | 'Supportive Care';
 
-export type ResponseType = 'Complete Response' | 'Partial Response' | 'Stable Disease' | 'Progressive Disease';
+export type ResponseType = 'Complete Response' | 'Partial Response' | 'Stable Disease' | 'Progressive Disease' | 'N/A' | 'N/A (Adjuvant)';
 
 export type ToxicityGrade = 'Grade 1' | 'Grade 2' | 'Grade 3' | 'Grade 4';
 
@@ -34,14 +35,14 @@ export interface DiagnosticTracker {
 
 export interface ClinicalFindings {
   primaryLesion: string;
-  nodes: 'Present' | 'Absent';
+  nodes: string;
   suspectedMetastasis: boolean;
 }
 
 export interface ProvisionalAssessment {
   probableDiagnosis: string;
   tentativeStage: string;
-  resectable: 'Yes' | 'No' | 'Unclear';
+  resectable: string;
 }
 
 export interface Comorbidity {
@@ -53,7 +54,7 @@ export interface Comorbidity {
 }
 
 export interface Alert {
-  type: 'Suspected Advanced Disease' | 'Poor Performance Status' | 'Severe Symptoms' | 'Emergency';
+  type: 'Suspected Advanced Disease' | 'Poor Performance Status' | 'Severe Symptoms' | 'Emergency' | 'Urgent Action';
   message: string;
 }
 
@@ -84,7 +85,7 @@ export interface ChemoDrug {
   doseBasis: 'AUC' | 'BSA' | 'Fixed';
   dose: string;
   day: string;
-  status?: 'Given' | 'Held' | 'Pending';
+  status?: 'Given' | 'Held' | 'Pending' | string;
 }
 
 export interface CycleOutcome {
@@ -107,7 +108,7 @@ export interface QoLMetrics {
     breathlessness: boolean;
     anxiety: boolean;
   };
-  mobility: 'Independent' | 'Partially Independent' | 'Dependent';
+  mobility: 'Independent' | 'Partially Independent' | 'Dependent' | 'Requires Assistance';
   sleep: 'Good' | 'Fair' | 'Poor';
   dailyActivity: 'Independent' | 'Partially Independent' | 'Dependent';
   appetite: 'Good' | 'Fair' | 'Poor';

@@ -119,6 +119,60 @@ export default function OncoPatientLayout() {
           </Typography>
           {menuItems.map((item) => {
              const isActive = location.pathname.includes(item.path);
+
+             // Logic to determine if this step is accessible for this patient
+             let isAccessible = true;
+             
+             // Base foundation (always available)
+             if (item.path === 'summary' || item.path === 'diagnostic') {
+               isAccessible = true;
+             }
+             
+             // Palliative View (Mutually exclusive mostly)
+             else if (patient.oncoStatus === 'Palliative') {
+                isAccessible = item.path === 'palliative';
+             }
+             
+             // Standard Curative/Control Journey
+             else {
+               // Hide Palliative tab for non-palliative patients
+               if (item.path === 'palliative') return null;
+
+               // Progressive Unlocking
+               switch (patient.oncoStatus) {
+                 case 'Discharged':
+                 case 'Diagnostic Evaluation':
+                   // Only Summary & Diagnostic allowed
+                   isAccessible = false; // logic handled by base foundation check above
+                   break;
+                   
+                 case 'Treatment Planning':
+                   isAccessible = item.path === 'planning';
+                   break;
+                   
+                 case 'Induction':
+                 case 'Consolidation':
+                   // Can see Planning & Chemo
+                   isAccessible = item.path === 'planning' || item.path === 'chemo';
+                   break;
+                   
+                 case 'Maintenance':
+                   // Can see everything including Maintenance (e.g. Oral Chemo)
+                   isAccessible = true;
+                   break;
+
+                 case 'Observation':
+                   // Survivorship/Remission - Block Planning/Chemo, show Maintenance(Surveillance)
+                   isAccessible = item.path === 'maintenance';
+                   break;
+                   
+                 default:
+                   isAccessible = false;
+               }
+             }
+
+             if (!isAccessible) return null;
+
              return (
               <ListItem key={item.path} disablePadding sx={{ mb: 1 }}>
                 <ListItemButton 
@@ -139,7 +193,7 @@ export default function OncoPatientLayout() {
                     }
                   }}
                 >
-                  <ListItemIcon sx={{ minWidth: 40, color: isActive ? item.color : 'text.disabled' }}>
+                  <ListItemIcon sx={{ minWidth: 40, color: isActive ? item.color : 'text.secondary' }}>
                     {item.icon}
                   </ListItemIcon>
                   <ListItemText 

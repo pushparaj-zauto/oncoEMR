@@ -2,25 +2,13 @@ import { Box, Container, Typography, Grid, Paper, Chip, Button } from '@mui/mate
 import { useNavigate } from 'react-router-dom';
 import PersonIcon from '@mui/icons-material/Person';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import {
-  mockOncoPatient1,
-  mockOncoPatient2,
-  mockOncoPatient3,
-  mockOncoPatient4,
-  mockOncoPatient5,
-} from '../../data/oncologyMockData';
+import { allPatients } from '../../data/oncologyMockData';
 import { OncologyPatient } from '../../types/oncology';
 
 export default function OncoPatientsList() {
   const navigate = useNavigate();
 
-  const patients: OncologyPatient[] = [
-    mockOncoPatient1,
-    mockOncoPatient2,
-    mockOncoPatient3,
-    mockOncoPatient4,
-    mockOncoPatient5,
-  ];
+  const patients: OncologyPatient[] = allPatients;
 
   const getRouteForPatient = (patient: OncologyPatient): string => {
     switch (patient.oncoStatus) {
@@ -35,6 +23,8 @@ export default function OncoPatientsList() {
         return `/onco/patient-view/${patient.id}/maintenance`;
       case 'Palliative':
         return `/onco/patient-view/${patient.id}/palliative`;
+      case 'Discharged':
+        return `/onco/patient-view/${patient.id}/diagnostic`; // Or a specific discharge summary page if it exists, otherwise diagnostic/summary default
       default:
         return `/onco/patient-view/${patient.id}/diagnostic`;
     }
@@ -53,6 +43,8 @@ export default function OncoPatientsList() {
         return 'success';
       case 'Palliative':
         return 'secondary';
+      case 'Discharged':
+        return 'default';
       default:
         return 'default';
     }
