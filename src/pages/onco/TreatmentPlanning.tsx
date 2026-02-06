@@ -264,7 +264,7 @@ export default function TreatmentPlanning({ patient, hideContextBar }: Treatment
                         control={<Radio onClick={() => handleRadioClick('Curative')} />}
                         label={
                         <Box>
-                            <Typography variant="body1" fontWeight={600}>
+                            <Typography variant="body1" fontWeight={500}>
                             Curative
                             </Typography>
                             <Typography variant="caption" color="text.secondary">
@@ -278,7 +278,7 @@ export default function TreatmentPlanning({ patient, hideContextBar }: Treatment
                         control={<Radio onClick={() => handleRadioClick('Disease Control')} />}
                         label={
                         <Box>
-                            <Typography variant="body1" fontWeight={600}>
+                            <Typography variant="body1" fontWeight={500}>
                             Disease Control
                             </Typography>
                             <Typography variant="caption" color="text.secondary">
@@ -292,7 +292,7 @@ export default function TreatmentPlanning({ patient, hideContextBar }: Treatment
                         control={<Radio onClick={() => handleRadioClick('Palliative')} />}
                         label={
                         <Box>
-                            <Typography variant="body1" fontWeight={600}>
+                            <Typography variant="body1" fontWeight={500}>
                             Palliative
                             </Typography>
                             <Typography variant="caption" color="text.secondary">
