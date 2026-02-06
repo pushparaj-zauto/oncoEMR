@@ -300,6 +300,25 @@ export const mockOncoPatient5: OncologyPatient = {
   historyOfPresentIllness: 'Metastatic EGFR+ Lung Ca. On Osimertinib 80mg OD for 14 months. Last scan showed Stable Disease. Complains of mild dry skin.',
   symptomDuration: 'N/A',
 
+  diagnosticTracker: {
+    biopsy: 'Confirmed',
+    imaging: 'Done',
+    metastaticWorkup: 'Done',
+    tumorMarkers: 'Done',
+  },
+  
+  clinicalFindings: {
+    primaryLesion: '3.5 cm in RLL',
+    nodes: 'Mediastinal LN',
+    suspectedMetastasis: true,
+  },
+  
+  provisionalAssessment: {
+    probableDiagnosis: 'Lung Adenocarcinoma',
+    tentativeStage: 'Stage IV',
+    resectable: 'No',
+  },
+
   currentProtocol: {
     name: 'Osimertinib Maintenance',
     cycles: 14,
