@@ -4,6 +4,7 @@ import PatientDashboard from './pages/PatientDashboard';
 import PatientsList from './pages/PatientsList';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
+import ScrollToTop from './components/ScrollToTop';
 // Oncology Pages
 import OncoPatientsList from './pages/onco/OncoPatientsList';
 import DiagnosticEvaluation from './pages/onco/DiagnosticEvaluation';
@@ -92,6 +93,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
+        <ScrollToTop />
         <Box sx={{ display: 'flex' }}>
           <Header />
           <Sidebar />
