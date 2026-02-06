@@ -78,13 +78,6 @@ export default function DiagnosticEvaluation({
       <PatientContextBar patient={patient} />
 
       <Container maxWidth="xl" sx={{ mt: 4, mb: 5 }}>
-        <Typography
-          variant="h5"
-          sx={{ mb: 3, fontWeight: 600, color: 'primary.main', letterSpacing: 0.3 }}
-        >
-          Diagnostic Evaluation
-        </Typography>
-
         <Grid container spacing={3}>
           {/* Left Column - Patient Snapshot & Problem Summary */}
           <Grid item xs={12} md={4}>
