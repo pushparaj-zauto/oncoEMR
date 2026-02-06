@@ -7,7 +7,7 @@ import {
 // 1. Diagnostic Evaluation - Suspected Lung Cancer
 export const mockOncoPatient1: OncologyPatient = {
   id: 'ONC-001',
-  name: 'Arjun Nair',
+  name: 'Mr. Selvaraj',
   mrn: '240101',
   age: 62,
   gender: 'Male',
@@ -35,9 +35,9 @@ export const mockOncoPatient1: OncologyPatient = {
   },
 
   patientHistory: {
-    medical: ['Hypertension', 'COPD (GOLD Stage II)'],
-    family: ['No history of lung cancer'],
-    social: ['Current smoker', 'Retired railway clerk']
+    medical: ['Hypertension', 'COPD (GOLD Stage II)', 'Allergy: Penicillin'],
+    family: ['No history of lung cancer', 'Father: MI at 55'],
+    social: ['Current smoker', 'Retired railway clerk', 'Lives with spouse']
   },
   
   diagnosticTracker: {
@@ -64,6 +64,7 @@ export const mockOncoPatient1: OncologyPatient = {
     cardiacDisease: true,
     renalDisease: false,
     priorCancer: false,
+    other: ['COPD'],
   },
   
   alerts: [
@@ -71,6 +72,10 @@ export const mockOncoPatient1: OncologyPatient = {
       type: 'Urgent Action',
       message: 'Pleural fluid cytology pending - required for staging',
     },
+    {
+      type: 'Suspected Advanced Disease',
+      message: 'Clinical features suggest metastatic disease (Pleural Effusion)'
+    }
   ],
   
   diagnosisDate: '2026-02-01',
@@ -79,7 +84,7 @@ export const mockOncoPatient1: OncologyPatient = {
 // 2. Treatment Planning - Breast Cancer
 export const mockOncoPatient2: OncologyPatient = {
   id: 'ONC-002',
-  name: 'Priya Sharma',
+  name: 'Mrs. Kavitha',
   mrn: '240102',
   age: 45,
   gender: 'Female',
@@ -107,9 +112,9 @@ export const mockOncoPatient2: OncologyPatient = {
   },
 
   patientHistory: {
-    medical: ['None'],
+    medical: ['None', 'NKA'],
     family: ['Maternal aunt - Breast Ca at 50'],
-    social: ['School teacher', 'Non-smoker']
+    social: ['School teacher', 'Non-smoker', 'Married, 2 children']
   },
   
   diagnosticTracker: {
@@ -145,13 +150,27 @@ export const mockOncoPatient2: OncologyPatient = {
     sequence: 'Neoadjuvant Chemo',
   },
   
+  comorbidities: {
+    diabetes: false,
+    cardiacDisease: false,
+    renalDisease: false,
+    priorCancer: false,
+  },
+
+  alerts: [
+    {
+      type: 'Urgent Action',
+      message: 'Counseling for Fertility Preservation before Chemo start'
+    }
+  ],
+
   diagnosisDate: '2026-01-25',
 };
 
 // 3. Active Treatment (Induction) - Colon Cancer
 export const mockOncoPatient3: OncologyPatient = {
   id: 'ONC-003',
-  name: 'Suresh Patel',
+  name: 'Mr. Kishore',
   mrn: '240103',
   age: 58,
   gender: 'Male',
@@ -179,11 +198,44 @@ export const mockOncoPatient3: OncologyPatient = {
   },
 
   patientHistory: {
-    medical: ['Diabetes Type 2', 'Hyperlipidemia'],
+    medical: ['Diabetes Type 2', 'Hyperlipidemia', 'Allergy: Sulfa drugs'],
     family: ['No history of CRC'],
     social: ['Businessman', 'Occasional alcohol']
   },
   
+  diagnosticTracker: {
+      biopsy: 'Confirmed',
+      imaging: 'Done',
+      metastaticWorkup: 'Done',
+      tumorMarkers: 'Done'
+  },
+
+  clinicalFindings: {
+      primaryLesion: 'Resected Sigmoid Mass',
+      nodes: '3/15 Positive',
+      suspectedMetastasis: false
+  },
+
+  provisionalAssessment: {
+    probableDiagnosis: 'Colon Adenocarcinoma',
+    tentativeStage: 'Stage III',
+    resectable: 'Yes (Resected)',
+  },
+
+  mdtDecision: {
+    status: 'Approved',
+    date: '2025-12-15',
+    summary: 'Upfront Surgery (Done) -> Adjuvant FOLFOX x6 months -> Surveillance',
+    participants: ['Dr. Rao (Med Onco)', 'Dr. Sarah (Surg Onco)', 'Dr. Pathak (Pathology)']
+  },
+  
+  treatmentStrategy: {
+    surgery: true,
+    systemicTherapy: true,
+    radiation: false,
+    sequence: 'Surgery -> Adjuvant Chemo',
+  },
+
   currentProtocol: {
     name: 'mFOLFOX6',
     cycles: 12,
@@ -217,6 +269,20 @@ export const mockOncoPatient3: OncologyPatient = {
       qolImpact: 'Stable',
     }
   ],
+
+  comorbidities: {
+      diabetes: true,
+      cardiacDisease: false,
+      renalDisease: false,
+      priorCancer: false
+  },
+  
+  alerts: [
+      {
+          type: 'Urgent Action',
+          message: 'Monitor blood glucose during steroid administration'
+      }
+  ],
   
   diagnosisDate: '2025-12-10',
   treatmentStartDate: '2026-01-10',
@@ -225,7 +291,7 @@ export const mockOncoPatient3: OncologyPatient = {
 // 4. Palliative Care - Pancreatic Cancer
 export const mockOncoPatient4: OncologyPatient = {
   id: 'ONC-004',
-  name: 'Anjali Desai',
+  name: 'Mrs. Lakshmi',
   mrn: '240104',
   age: 68,
   gender: 'Female',
@@ -253,6 +319,38 @@ export const mockOncoPatient4: OncologyPatient = {
     bmi: 19.9
   },
 
+  patientHistory: {
+      medical: ['Hypothyroidism', 'Osteoporosis'],
+      family: ['Unknown'],
+      social: ['Widow', 'Lives with daughter']
+  },
+
+  diagnosticTracker: {
+    biopsy: 'Confirmed',
+    imaging: 'Done',
+    metastaticWorkup: 'Done',
+    tumorMarkers: 'Done',
+  },
+
+  clinicalFindings: {
+    primaryLesion: 'Pancreatic Head Mass (Stented)',
+    nodes: 'Retroperitoneal LN',
+    suspectedMetastasis: true,
+  },
+  
+  provisionalAssessment: {
+    probableDiagnosis: 'Metastatic Pancreatic Adenocarcinoma',
+    tentativeStage: 'Stage IV',
+    resectable: 'No (Unresectable)',
+  },
+
+  mdtDecision: {
+    status: 'Approved',
+    date: '2025-10-20',
+    summary: 'Palliative Chemotherapy + Best Supportive Care. Monitor Pain.',
+    participants: ['Dr. Rao (Med Onco)', 'Dr. Palliative']
+  },
+
   qolMetrics: {
     painScore: 7,
     symptoms: {
@@ -277,6 +375,32 @@ export const mockOncoPatient4: OncologyPatient = {
       { name: 'Gemcitabine', doseBasis: 'BSA', dose: '1000 mg/m²', day: 'D1, D8, D15', status: 'Pending D15' },
     ],
   },
+
+  treatmentStrategy: {
+      surgery: false,
+      systemicTherapy: true,
+      radiation: false,
+      sequence: 'Palliative Chemotherapy + Best Supportive Care'
+  },
+
+  comorbidities: {
+      diabetes: false,
+      cardiacDisease: false,
+      renalDisease: false,
+      priorCancer: false,
+      other: ['Cachexia']
+  },
+
+  alerts: [
+      {
+          type: 'Severe Symptoms',
+          message: 'Pain poorly controlled - Palliative team review required'
+      },
+      {
+          type: 'Poor Performance Status',
+          message: 'ECOG 2 - Caution with chemo toxicity'
+      }
+  ],
   
   diagnosisDate: '2025-10-15',
 };
@@ -284,7 +408,7 @@ export const mockOncoPatient4: OncologyPatient = {
 // 5. Maintenance - Lung Cancer (Targeted Therapy)
 export const mockOncoPatient5: OncologyPatient = {
   id: 'ONC-005',
-  name: 'Vikram Singh',
+  name: 'Mr. Selvam',
   mrn: '240105',
   age: 55,
   gender: 'Male',
@@ -340,6 +464,12 @@ export const mockOncoPatient5: OncologyPatient = {
     bmi: 24.0
   },
   
+  patientHistory: {
+      medical: ['Ex-smoker (Quit 10 years ago)'],
+      family: ['No significant history'],
+      social: ['IT Professional', 'Married']
+  },
+
   treatmentStrategy: {
     surgery: false,
     systemicTherapy: true,
@@ -347,6 +477,32 @@ export const mockOncoPatient5: OncologyPatient = {
     sequence: 'Maintenance TKI',
   },
   
+  cycleOutcomes: [
+      {
+          cycleNumber: 14,
+          response: 'Stable Disease',
+          decision: 'Continue',
+          date: '2026-01-15',
+          toxicity: 'Grade 1',
+          toxicityDescription: 'Dry skin, Paronychia',
+          qolImpact: 'Stable'
+      }
+  ],
+
+  comorbidities: {
+      diabetes: false,
+      cardiacDisease: false,
+      renalDisease: false,
+      priorCancer: false
+  },
+
+  alerts: [
+      {
+          type: 'Urgent Action',
+          message: 'Dermatology referral for paronychia management'
+      }
+  ],
+
   diagnosisDate: '2024-11-20',
   treatmentStartDate: '2024-12-05',
   lastReviewDate: '2026-01-15',
@@ -355,7 +511,7 @@ export const mockOncoPatient5: OncologyPatient = {
 // 6. Survivorship - Hodgkin Lymphoma
 export const mockOncoPatient6: OncologyPatient = {
   id: 'ONC-006',
-  name: 'Meera Reddy',
+  name: 'Ms. Lakshana',
   mrn: '240106',
   age: 26,
   gender: 'Female',
@@ -382,6 +538,53 @@ export const mockOncoPatient6: OncologyPatient = {
     bmi: 21.9
   },
 
+  patientHistory: {
+      medical: ['None'],
+      family: ['No history of lymphoma'],
+      social: ['Graduate Student', 'Single']
+  },
+
+  diagnosticTracker: {
+      biopsy: 'Confirmed',
+      imaging: 'Done',
+      metastaticWorkup: 'Done',
+      tumorMarkers: 'Normal'
+  },
+
+  clinicalFindings: {
+      primaryLesion: 'Resolved',
+      nodes: 'Non-palpable',
+      suspectedMetastasis: false
+  },
+  
+  provisionalAssessment: {
+    probableDiagnosis: 'Hodgkin Lymphoma (In Remission)',
+    tentativeStage: 'Remission (Prev Stage IIA)',
+    resectable: 'N/A',
+  },
+
+  // Historical context for survivorship
+  treatmentStrategy: {
+      surgery: false,
+      systemicTherapy: true,
+      radiation: false,
+      sequence: 'Completed ABVD x4'
+  },
+
+  comorbidities: {
+      diabetes: false,
+      cardiacDisease: false,
+      renalDisease: false,
+      priorCancer: false
+  },
+
+  alerts: [
+      {
+          type: 'Urgent Action',
+          message: 'Schedule Annual Echocardiogram (Doxorubicin exposure)'
+      }
+  ],
+
   diagnosisDate: '2024-02-10',
   lastReviewDate: '2026-02-01',
 };
@@ -389,7 +592,7 @@ export const mockOncoPatient6: OncologyPatient = {
 // 7. Generic EMR - Non-Oncology / Discharged
 export const mockOncoPatient7: OncologyPatient = {
   id: 'GEN-001',
-  name: 'Rajesh Gupta',
+  name: 'Mr. Krishnan',
   mrn: '240107',
   age: 34,
   gender: 'Male',
@@ -415,6 +618,12 @@ export const mockOncoPatient7: OncologyPatient = {
     weight: 80,
     bmi: 25.2
   },
+  
+  patientHistory: {
+      medical: ['None'],
+      family: ['None'],
+      social: ['Banker']
+  },
 
   diagnosticTracker: {
     biopsy: 'Confirmed Benign',
@@ -427,6 +636,13 @@ export const mockOncoPatient7: OncologyPatient = {
     primaryLesion: 'Enlarged cervical LN',
     nodes: 'Reactive features',
     suspectedMetastasis: false,
+  },
+  
+  comorbidities: {
+      diabetes: false,
+      cardiacDisease: false,
+      renalDisease: false,
+      priorCancer: false
   },
 
   mdtDecision: {
