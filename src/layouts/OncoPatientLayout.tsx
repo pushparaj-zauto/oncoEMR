@@ -22,6 +22,7 @@ export default function OncoPatientLayout() {
   }
 
   const menuItems = [
+    { label: 'Patient Summary', icon: <MonitorHeartIcon />, path: 'summary', color: '#e91e63' },
     { label: 'Diagnostic Findings', icon: <ScienceIcon />, path: 'diagnostic', color: '#ff9800' },
     { label: 'Treatment Planning', icon: <AssignmentIcon />, path: 'planning', color: '#2196f3' },
     { label: 'Chemo Protocol', icon: <MedicationLiquidIcon />, path: 'chemo', color: '#7c4dff' },
@@ -46,34 +47,68 @@ export default function OncoPatientLayout() {
         }}
       >
         {/* Back Button & Header */}
-        <Box sx={{ p: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
-          <IconButton onClick={() => navigate('/onco')} sx={{ mb: 1, color: 'text.secondary' }}>
-            <ArrowBackIcon />
+        <Box sx={{ p: 2.5, borderBottom: '1px solid', borderColor: 'divider' }}>
+          <IconButton onClick={() => navigate('/onco')} size="small" sx={{ mb: 2, color: 'text.secondary', ml: -1 }}>
+              <ArrowBackIcon fontSize="small" />
           </IconButton>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1 }}>
-            <Avatar sx={{ bgcolor: 'primary.main', width: 48, height: 48 }}>
+          
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            <Avatar 
+              sx={{ 
+                bgcolor: 'primary.main', 
+                width: 52, 
+                height: 52, 
+                fontSize: '1.25rem', 
+                boxShadow: 3,
+                fontWeight: 600
+              }}
+            >
               {patient.name.charAt(0)}
             </Avatar>
-            <Box>
-              <Typography variant="subtitle1" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
+            
+            <Box sx={{ flexGrow: 1 }}>
+              <Typography variant="h6" sx={{ fontWeight: 700, lineHeight: 1.1, mb: 0.5, fontSize: '1rem' }}>
                 {patient.name}
               </Typography>
-              <Typography variant="caption" color="text.secondary">
-                {patient.age}y • {patient.gender}
+              
+              <Box sx={{ mb: 0.5 }}>
+                 <Box sx={{ 
+                  bgcolor: 'grey.50', 
+                  px: 0.75, 
+                  py: 0, 
+                  borderRadius: 0.5, 
+                  border: '1px solid', 
+                  borderColor: 'grey.200',
+                  display: 'inline-block'
+                }}>
+                   <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500, fontSize: '0.65rem' }}>
+                      ID {patient.mrn}
+                   </Typography>
+                </Box>
+              </Box>
+
+              <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 400, display: 'block', mb: 0.5 }}>
+                  {patient.age}y • {patient.gender}
               </Typography>
+
+              <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
+                 <Typography variant="body2" sx={{ fontWeight: 600, color: 'primary.main', fontSize: '0.8rem' }}>
+                  {patient.cancerSite}
+                </Typography>
+                <Chip 
+                  label={`Stage ${patient.stage}`} 
+                  size="small" 
+                  sx={{ 
+                    height: 18, 
+                    fontSize: '0.6rem', 
+                    fontWeight: 600,
+                    bgcolor: 'error.lighter',
+                    color: 'error.main',
+                    borderRadius: 1
+                  }} 
+                />
+              </Box>
             </Box>
-          </Box>
-          <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-            <Chip 
-              label={`Stage ${patient.stage}`} 
-              size="small" 
-              sx={{ bgcolor: 'error.lighter', color: 'error.main', fontWeight: 600, fontSize: '0.7rem', height: 20 }} 
-            />
-            <Chip 
-              label={patient.cancerSite} 
-              size="small" 
-              sx={{ bgcolor: 'primary.lighter', color: 'primary.main', fontWeight: 600, fontSize: '0.7rem', height: 20 }} 
-            />
           </Box>
         </Box>
 

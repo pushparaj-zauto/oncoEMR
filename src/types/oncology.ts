@@ -113,6 +113,23 @@ export interface QoLMetrics {
   appetite: 'Good' | 'Fair' | 'Poor';
 }
 
+export interface Vitals {
+  bp: string;
+  hr: number;
+  temp: number;
+  resp: number;
+  spo2: number;
+  height: number; // cm
+  weight: number; // kg
+  bmi: number;
+}
+
+export interface PatientHistory {
+  medical: string[];
+  family: string[];
+  social: string[];
+}
+
 export interface OncologyPatient {
   // Basic demographics
   id: string;
@@ -133,9 +150,16 @@ export interface OncologyPatient {
   
   // Clinical data
   chiefComplaint?: string;
+  historyOfPresentIllness?: string;
   symptomDuration?: string;
   alarmSymptoms?: boolean;
   
+  // Vitals
+  vitals?: Vitals;
+  
+  // Patient History
+  patientHistory?: PatientHistory;
+
   // Diagnostic
   diagnosticTracker?: DiagnosticTracker;
   clinicalFindings?: ClinicalFindings;

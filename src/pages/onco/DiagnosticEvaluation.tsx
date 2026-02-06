@@ -83,59 +83,8 @@ export default function DiagnosticEvaluation({
         <Grid container spacing={3}>
           {/* Left Column - Patient Snapshot & Problem Summary */}
           <Grid item xs={12} md={4}>
-            <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
-              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
-                Patient Snapshot
-              </Typography>
-              <Table size="small">
-                <TableBody>
-                  <TableRow>
-                    <TableCell sx={{ width: '40%' }}>
-                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Name / MRN</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2" color="text.primary">{patient.name} / {patient.mrn}</Typography>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Age / Gender</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2" color="text.primary">{patient.age} / {patient.gender}</Typography>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Suspected Site</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2" color="text.primary">{patient.cancerSite}</Typography>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>ECOG Status</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Chip label={patient.ecogStatus} size="small" color="primary" />
-                    </TableCell>
-                  </TableRow>
-                  {patient.urgencyFlag && (
-                    <TableRow>
-                      <TableCell>
-                        <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Urgency Flag</Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Chip label="URGENT" size="small" color="error" icon={<WarningIcon />} />
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </Paper>
-
-            <Paper elevation={1} sx={{ p: 3, mt: 2, borderRadius: 2 }}>
+            
+            <Paper elevation={1} sx={{ p: 3, borderRadius: 2 }}>
               <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
                 Problem Summary
               </Typography>

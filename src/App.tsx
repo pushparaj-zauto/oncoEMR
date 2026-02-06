@@ -9,6 +9,7 @@ import OncoPatientLayout from './layouts/OncoPatientLayout';
 // Oncology Pages
 import OncoPatientsList from './pages/onco/OncoPatientsList';
 import DiagnosticEvaluation from './pages/onco/DiagnosticEvaluation';
+import PatientSummary from './pages/onco/PatientSummary';
 import TreatmentPlanning from './pages/onco/TreatmentPlanning';
 import ChemoProtocolWorkspace from './pages/onco/ChemoProtocolWorkspace';
 import MaintenanceReview from './pages/onco/MaintenanceReview';
@@ -121,6 +122,13 @@ const PalliativeWrapper = () => {
   return <PalliativeDashboard patient={patient} hideContextBar />;
 };
 
+const SummaryWrapper = () => {
+  const { patientId } = useParams();
+  const patient = allPatients.find(p => p.id === patientId);
+  if (!patient) return null;
+  return <PatientSummary patient={patient} hideContextBar />;
+};
+
 function App() {
   return (
     <ThemeProvider theme={theme}>
@@ -143,7 +151,8 @@ function App() {
 
           {/* Full Screen Patient Journey Layout */}
           <Route path="/onco/patient-view/:patientId" element={<OncoPatientLayout />}>
-             <Route index element={<Navigate to="diagnostic" replace />} />
+             <Route index element={<Navigate to="summary" replace />} />
+             <Route path="summary" element={<SummaryWrapper />} />
              <Route path="diagnostic" element={<DiagnosticWrapper />} />
              <Route path="planning" element={<PlanningWrapper />} />
              <Route path="chemo" element={<ChemoWrapper />} />

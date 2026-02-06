@@ -19,8 +19,26 @@ export const mockOncoPatient1: OncologyPatient = {
   oncoStatus: 'Diagnostic Evaluation',
   urgencyFlag: true,
   chiefComplaint: 'Persistent cough with hemoptysis',
+  historyOfPresentIllness: '58-year-old male with a 3-month history of progressive dry cough, recently productive with blood-tinged sputum. Reports 10kg weight loss, night sweats, and fatigue. No history of fever or chest pain.',
   symptomDuration: '3 months',
   alarmSymptoms: true,
+  
+  vitals: {
+    bp: '138/88',
+    hr: 82,
+    temp: 36.8,
+    resp: 20,
+    spo2: 96,
+    height: 172,
+    weight: 65,
+    bmi: 22.0
+  },
+
+  patientHistory: {
+    medical: ['Hypertension (10 years)', 'Type 2 Diabetes (5 years)'],
+    family: ['Father died of lung cancer at 65', 'Mother has hypertension'],
+    social: ['Smoker (20 pack-years)', 'Social drinker', 'Factory worker']
+  },
   
   diagnosticTracker: {
     biopsy: 'Done',
@@ -76,6 +94,27 @@ export const mockOncoPatient2: OncologyPatient = {
   ecogStatus: 0,
   oncoStatus: 'Treatment Planning',
   urgencyFlag: false,
+
+  chiefComplaint: 'Painless lump in left breast',
+  historyOfPresentIllness: '45-year-old female noticed a lump in left breast during self-exam 2 months ago. No skin changes or nipple discharge. Reports mild tenderness.',
+  symptomDuration: '2 months',
+  
+  vitals: {
+    bp: '120/75',
+    hr: 74,
+    temp: 36.6,
+    resp: 16,
+    spo2: 99,
+    height: 160,
+    weight: 58,
+    bmi: 22.7
+  },
+
+  patientHistory: {
+    medical: ['Hypothyroidism', 'Migraines'],
+    family: ['Maternal aunt had breast cancer at 50'],
+    social: ['Non-smoker', 'Occasional alcohol', 'School teacher']
+  },
   
   diagnosticTracker: {
     biopsy: 'Confirmed',
@@ -135,6 +174,27 @@ export const mockOncoPatient3: OncologyPatient = {
   treatmentIntent: 'Curative',
   oncoStatus: 'Induction',
   urgencyFlag: false,
+
+  chiefComplaint: 'Blood in stool and abdominal pain',
+  historyOfPresentIllness: '62-year-old male with 4-month history of altered bowel habits and intermittent rectal bleeding. Colonoscopy confirmed mass in sigmoid colon.',
+  symptomDuration: '4 months',
+  
+  vitals: {
+    bp: '130/85',
+    hr: 78,
+    temp: 37.0,
+    resp: 18,
+    spo2: 97,
+    height: 175,
+    weight: 78,
+    bmi: 25.5
+  },
+
+  patientHistory: {
+    medical: ['Hyperlipidemia', 'Hemorrhoids'],
+    family: ['No history of CRC in first-degree relatives'],
+    social: ['Ex-smoker (quit 10 years ago)', 'Moderate alcohol intake']
+  },
   
   diagnosticTracker: {
     biopsy: 'Confirmed',
@@ -218,6 +278,27 @@ export const mockOncoPatient4: OncologyPatient = {
   treatmentIntent: 'Palliative',
   oncoStatus: 'Palliative',
   urgencyFlag: false,
+  
+  chiefComplaint: 'Severe shortness of breath and chest pain',
+  historyOfPresentIllness: '58-year-old female with known metastatic lung cancer, presenting with worsening dyspnea and pleuritic chest pain. CT shows pleural effusion.',
+  symptomDuration: 'Worsening over 2 weeks',
+
+  vitals: {
+    bp: '110/70',
+    hr: 105,
+    temp: 37.2,
+    resp: 28,
+    spo2: 92,
+    height: 155,
+    weight: 48,
+    bmi: 20.0
+  },
+
+  patientHistory: {
+    medical: ['COPD', 'Hypertension', 'T2DM'],
+    family: ['No significant history'],
+    social: ['Lives alone', 'Supported by daughter']
+  },
   
   diagnosticTracker: {
     biopsy: 'Confirmed',
@@ -316,6 +397,27 @@ export const mockOncoPatient5: OncologyPatient = {
   treatmentIntent: 'Disease Control',
   oncoStatus: 'Maintenance',
   urgencyFlag: false,
+
+  chiefComplaint: 'Routine follow-up',
+  historyOfPresentIllness: '55-year-old male on maintenance Osimertinib. Asymptomatic at present. Tolerating therapy well.',
+  symptomDuration: 'N/A',
+
+  vitals: {
+    bp: '124/80',
+    hr: 70,
+    temp: 36.5,
+    resp: 16,
+    spo2: 98,
+    height: 170,
+    weight: 70,
+    bmi: 24.2
+  },
+
+  patientHistory: {
+    medical: ['None significant'],
+    family: ['Father died of MI at 60'],
+    social: ['Non-smoker', 'Non-drinker', 'Yoga instructor']
+  },
   
   diagnosticTracker: {
     biopsy: 'Confirmed',
