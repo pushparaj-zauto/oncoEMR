@@ -17,6 +17,7 @@ import {
   Divider,
   Stack,
   Fab,
+  IconButton,
 } from '@mui/material';
 import MicIcon from '@mui/icons-material/Mic';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -27,11 +28,35 @@ import { useState } from 'react';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { OncologyPatient } from '../../types/oncology';
 import PatientContextBar from '../../components/onco/PatientContextBar';
+import { alpha } from '@mui/material/styles';
 
 interface TreatmentPlanningProps {
   patient: OncologyPatient;
   hideContextBar?: boolean;
 }
+
+const MicButton = () => (
+    <IconButton 
+      size="small" 
+      sx={{ 
+          ml: 1.5,
+          border: '1px solid',
+          borderColor: 'primary.main', 
+          borderRadius: 1, 
+          p: 0.5,
+          color: 'primary.main',
+          transition: 'all 0.2s',
+          '&:hover': {
+              bgcolor: (theme) => alpha(theme.palette.primary.main, 0.1),
+              borderColor: 'primary.dark',
+              transform: 'translateY(-1px)',
+              boxShadow: (theme) => `0 2px 8px ${alpha(theme.palette.primary.main, 0.2)}`
+          }
+      }}
+    >
+      <MicIcon sx={{ fontSize: 16 }} />
+    </IconButton>
+  );
 
 export default function TreatmentPlanning({ patient, hideContextBar }: TreatmentPlanningProps) {
   const [intent, setIntent] = useState(patient.treatmentIntent || '');
@@ -53,383 +78,424 @@ export default function TreatmentPlanning({ patient, hideContextBar }: Treatment
       {!hideContextBar && <PatientContextBar patient={patient} />}
 
       <Container maxWidth="xl" sx={{ mt: 4, mb: 5 }}>
-        <Grid container spacing={3}>
+        <Grid container spacing={4}>
           {/* Left Column - Confirmed Diagnosis & Patient Fitness */}
           <Grid item xs={12} md={4}>
-            <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
-              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'success.dark', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
-                Confirmed Diagnosis
-              </Typography>
-              <Table size="small">
-                <TableBody>
-                  <TableRow>
-                    <TableCell sx={{ width: '45%' }}>
-                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Final Histopathology</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2" color="text.primary">{patient.histology}</Typography>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Tumor Subtype</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2" color="text.primary">
-                        {patient.cancerSite === 'Breast'
-                          ? 'ER+, PR+, HER2-'
-                          : patient.cancerSite === 'Lung'
-                          ? 'EGFR Wild Type'
-                          : 'Standard'}
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Final TNM Stage</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Chip label={patient.tnmStage || 'Pending'} size="small" color="secondary" />
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Clinical Stage</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Chip label={`Stage ${patient.stage}`} size="small" color="secondary" />
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </Paper>
+            <Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    <Typography variant="overline" sx={{ fontWeight: 700, color: 'success.dark', fontSize: '0.85rem', letterSpacing: 1.2 }}>
+                        Confirmed Diagnosis
+                    </Typography>
+                    <MicButton />
+                </Box>
+                <Paper variant="outlined" sx={{ p: 3, borderRadius: 2 }}>
+                <Table size="small">
+                    <TableBody>
+                    <TableRow>
+                        <TableCell sx={{ width: '45%', borderBottom: 'none', pl: 0 }}>
+                        <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Final Histopathology</Typography>
+                        </TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>
+                        <Typography variant="body2" color="text.primary">{patient.histology}</Typography>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ borderBottom: 'none', pl: 0 }}>
+                        <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Tumor Subtype</Typography>
+                        </TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>
+                        <Typography variant="body2" color="text.primary">
+                            {patient.cancerSite === 'Breast'
+                            ? 'ER+, PR+, HER2-'
+                            : patient.cancerSite === 'Lung'
+                            ? 'EGFR Wild Type'
+                            : 'Standard'}
+                        </Typography>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ borderBottom: 'none', pl: 0 }}>
+                        <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Final TNM Stage</Typography>
+                        </TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>
+                        <Chip label={patient.tnmStage || 'Pending'} size="small" color="secondary" />
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ borderBottom: 'none', pl: 0 }}>
+                        <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Clinical Stage</Typography>
+                        </TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>
+                        <Chip label={`Stage ${patient.stage}`} size="small" color="secondary" />
+                        </TableCell>
+                    </TableRow>
+                    </TableBody>
+                </Table>
+                </Paper>
+            </Box>
 
-            <Paper elevation={1} sx={{ p: 3, mt: 2, borderRadius: 2 }}>
-              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
-                Patient Fitness Snapshot
-              </Typography>
-              <Table size="small">
-                <TableBody>
-                  <TableRow>
-                    <TableCell>
-                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>ECOG Performance</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Chip label={patient.ecogStatus} size="small" color="primary" />
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Major Comorbidities</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }}>
-                        {patient.comorbidities?.diabetes && <Chip label="Diabetes" size="small" />}
-                        {patient.comorbidities?.cardiacDisease && <Chip label="Cardiac" size="small" />}
-                        {patient.comorbidities?.renalDisease && <Chip label="Renal" size="small" />}
-                        {!patient.comorbidities?.diabetes &&
-                          !patient.comorbidities?.cardiacDisease &&
-                          !patient.comorbidities?.renalDisease && (
-                            <Typography variant="body2" color="success.main">None</Typography>
-                          )}
-                      </Stack>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Organ Function</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Chip label="Normal" size="small" color="success" />
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </Paper>
+            <Box sx={{ mt: 4 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    <Typography variant="overline" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2 }}>
+                        Patient Fitness Snapshot
+                    </Typography>
+                    <MicButton />
+                </Box>
+                <Paper variant="outlined" sx={{ p: 3, borderRadius: 2 }}>
+                <Table size="small">
+                    <TableBody>
+                    <TableRow>
+                        <TableCell sx={{ borderBottom: 'none', pl: 0 }}>
+                        <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>ECOG Performance</Typography>
+                        </TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>
+                        <Chip label={patient.ecogStatus} size="small" color="primary" />
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ borderBottom: 'none', pl: 0 }}>
+                        <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Major Comorbidities</Typography>
+                        </TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>
+                        <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }}>
+                            {patient.comorbidities?.diabetes && <Chip label="Diabetes" size="small" variant="outlined" />}
+                            {patient.comorbidities?.cardiacDisease && <Chip label="Cardiac" size="small" variant="outlined" />}
+                            {patient.comorbidities?.renalDisease && <Chip label="Renal" size="small" variant="outlined" />}
+                            {!patient.comorbidities?.diabetes &&
+                            !patient.comorbidities?.cardiacDisease &&
+                            !patient.comorbidities?.renalDisease && (
+                                <Typography variant="body2" color="success.main">None</Typography>
+                            )}
+                        </Stack>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ borderBottom: 'none', pl: 0 }}>
+                        <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Organ Function</Typography>
+                        </TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>
+                        <Chip label="Normal" size="small" color="success" variant="outlined" />
+                        </TableCell>
+                    </TableRow>
+                    </TableBody>
+                </Table>
+                </Paper>
+            </Box>
 
             {/* MDT Decision Summary */}
             {patient.mdtDecision && (
-              <Paper elevation={1} sx={{ p: 3, mt: 2, borderRadius: 2, bgcolor: 'background.paper' }}>
-                <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'info.dark', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
-                  MDT Decision Summary
-                </Typography>
-                <Table size="small">
-                  <TableBody>
-                    <TableRow>
-                      <TableCell>
-                        <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>MDT Status</Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Chip
-                          label={patient.mdtDecision.status}
-                          size="small"
-                          color={patient.mdtDecision.status === 'Approved' ? 'success' : 'warning'}
-                          icon={patient.mdtDecision.status === 'Approved' ? <CheckCircleIcon /> : undefined}
-                        />
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Date of Discussion</Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="body2">{patient.mdtDecision.date}</Typography>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell sx={{ verticalAlign: 'top' }}>
-                        <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Decision Summary</Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="body2">{patient.mdtDecision.summary}</Typography>
-                      </TableCell>
-                    </TableRow>
-                    {patient.mdtDecision.participants && (
-                      <TableRow>
-                        <TableCell sx={{ verticalAlign: 'top' }}>
-                          <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Participants</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Stack spacing={0.5}>
-                            {patient.mdtDecision.participants.map((p, i) => (
-                              <Typography key={i} variant="body2">• {p}</Typography>
-                            ))}
-                          </Stack>
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </Paper>
+                <Box sx={{ mt: 4 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Typography variant="overline" sx={{ fontWeight: 700, color: 'info.dark', fontSize: '0.85rem', letterSpacing: 1.2 }}>
+                            MDT Decision Summary
+                        </Typography>
+                        <MicButton />
+                    </Box>
+                    <Paper variant="outlined" sx={{ p: 3, borderRadius: 2, bgcolor: (theme) => alpha(theme.palette.background.paper, 1) }}>
+                    <Table size="small">
+                        <TableBody>
+                        <TableRow>
+                            <TableCell sx={{ borderBottom: 'none', pl: 0 }}>
+                            <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>MDT Status</Typography>
+                            </TableCell>
+                            <TableCell sx={{ borderBottom: 'none' }}>
+                            <Chip
+                                label={patient.mdtDecision.status}
+                                size="small"
+                                color={patient.mdtDecision.status === 'Approved' ? 'success' : 'warning'}
+                                icon={patient.mdtDecision.status === 'Approved' ? <CheckCircleIcon /> : undefined}
+                            />
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell sx={{ borderBottom: 'none', pl: 0 }}>
+                            <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Date of Discussion</Typography>
+                            </TableCell>
+                            <TableCell sx={{ borderBottom: 'none' }}>
+                            <Typography variant="body2">{patient.mdtDecision.date}</Typography>
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell sx={{ verticalAlign: 'top', borderBottom: 'none', pl: 0 }}>
+                            <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Decision Summary</Typography>
+                            </TableCell>
+                            <TableCell sx={{ borderBottom: 'none' }}>
+                            <Typography variant="body2">{patient.mdtDecision.summary}</Typography>
+                            </TableCell>
+                        </TableRow>
+                        {patient.mdtDecision.participants && (
+                            <TableRow>
+                            <TableCell sx={{ verticalAlign: 'top', borderBottom: 'none', pl: 0 }}>
+                                <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Participants</Typography>
+                            </TableCell>
+                            <TableCell sx={{ borderBottom: 'none' }}>
+                                <Stack spacing={0.5}>
+                                {patient.mdtDecision.participants.map((p, i) => (
+                                    <Typography key={i} variant="body2">• {p}</Typography>
+                                ))}
+                                </Stack>
+                            </TableCell>
+                            </TableRow>
+                        )}
+                        </TableBody>
+                    </Table>
+                    </Paper>
+                </Box>
             )}
           </Grid>
 
           {/* Middle Column - Treatment Intent & Strategy */}
           <Grid item xs={12} md={4}>
-            <Paper sx={{ p: 3, border: '2px solid', borderColor: 'primary.main' }}>
-              <Typography
-                variant="overline"
-                sx={{ mb: 2, fontWeight: 700, color: 'primary.main', textAlign: 'center', display: 'block', fontSize: '0.9rem', letterSpacing: 1 }}
-              >
-                Treatment Intent (Critical)
-              </Typography>
-
-              <FormControl component="fieldset" fullWidth>
-                <RadioGroup value={intent} onChange={handleIntentChange}>
-                  <FormControlLabel
-                    value="Curative"
-                    control={<Radio onClick={() => handleRadioClick('Curative')} />}
-                    label={
-                      <Box>
-                        <Typography variant="body1" fontWeight={600}>
-                          Curative
-                        </Typography>
-                        <Typography variant="caption" color="text.secondary">
-                          Goal is cure
-                        </Typography>
-                      </Box>
-                    }
-                  />
-                  <FormControlLabel
-                    value="Disease Control"
-                    control={<Radio onClick={() => handleRadioClick('Disease Control')} />}
-                    label={
-                      <Box>
-                        <Typography variant="body1" fontWeight={600}>
-                          Disease Control
-                        </Typography>
-                        <Typography variant="caption" color="text.secondary">
-                          Long-term control
-                        </Typography>
-                      </Box>
-                    }
-                  />
-                  <FormControlLabel
-                    value="Palliative"
-                    control={<Radio onClick={() => handleRadioClick('Palliative')} />}
-                    label={
-                      <Box>
-                        <Typography variant="body1" fontWeight={600}>
-                          Palliative
-                        </Typography>
-                        <Typography variant="caption" color="text.secondary">
-                          Symptom relief
-                        </Typography>
-                      </Box>
-                    }
-                  />
-                </RadioGroup>
-              </FormControl>
-            </Paper>
-
-            <Paper sx={{ p: 3, mt: 2 }}>
-              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
-                Treatment Strategy Map
-              </Typography>
-
-              {patient.treatmentStrategy && (
-                <>
-                  <Box sx={{ mb: 2 }}>
-                    <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, mb: 1 }}>
-                      Planned Modalities:
-                    </Typography>
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                      {patient.treatmentStrategy.surgery && (
-                        <Chip label="Surgery" size="small" color="primary" />
-                      )}
-                      {patient.treatmentStrategy.systemicTherapy && (
-                        <Chip label="Chemotherapy" size="small" color="primary" />
-                      )}
-                      {patient.treatmentStrategy.radiation && (
-                        <Chip label="Radiation" size="small" color="primary" />
-                      )}
-                    </Box>
-                  </Box>
-
-                  <Divider sx={{ my: 2 }} />
-
-                  <Box>
-                    <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, mb: 1 }}>
-                      Treatment Sequence:
-                    </Typography>
-                    <Paper
-                      variant="outlined"
-                      sx={{ p: 2, bgcolor: 'grey.50', border: '2px dashed', borderColor: 'primary.main' }}
+            <Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, justifyContent: 'center' }}>
+                    <Typography
+                        variant="overline"
+                        sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.9rem', letterSpacing: 1 }}
                     >
-                      <Typography variant="body2" sx={{ fontWeight: 500, textAlign: 'center' }}>
-                        {patient.treatmentStrategy.sequence}
-                      </Typography>
-                    </Paper>
-                  </Box>
-                </>
-              )}
-            </Paper>
+                        Treatment Intent (Critical)
+                    </Typography>
+                    <MicButton />
+                </Box>
+                <Paper variant="outlined" sx={{ p: 3, borderColor: 'primary.main', borderWidth: 1, borderStyle: 'solid', borderRadius: 2 }}>
+                <FormControl component="fieldset" fullWidth>
+                    <RadioGroup value={intent} onChange={handleIntentChange}>
+                    <FormControlLabel
+                        value="Curative"
+                        control={<Radio onClick={() => handleRadioClick('Curative')} />}
+                        label={
+                        <Box>
+                            <Typography variant="body1" fontWeight={600}>
+                            Curative
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                            Goal is cure
+                            </Typography>
+                        </Box>
+                        }
+                    />
+                    <FormControlLabel
+                        value="Disease Control"
+                        control={<Radio onClick={() => handleRadioClick('Disease Control')} />}
+                        label={
+                        <Box>
+                            <Typography variant="body1" fontWeight={600}>
+                            Disease Control
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                            Long-term control
+                            </Typography>
+                        </Box>
+                        }
+                    />
+                    <FormControlLabel
+                        value="Palliative"
+                        control={<Radio onClick={() => handleRadioClick('Palliative')} />}
+                        label={
+                        <Box>
+                            <Typography variant="body1" fontWeight={600}>
+                            Palliative
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                            Symptom relief
+                            </Typography>
+                        </Box>
+                        }
+                    />
+                    </RadioGroup>
+                </FormControl>
+                </Paper>
+            </Box>
+
+            <Box sx={{ mt: 4 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    <Typography variant="overline" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2 }}>
+                        Treatment Strategy Map
+                    </Typography>
+                    <MicButton />
+                </Box>
+                <Paper variant="outlined" sx={{ p: 3, borderRadius: 2 }}>
+                {patient.treatmentStrategy && (
+                    <>
+                    <Box sx={{ mb: 2 }}>
+                        <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, mb: 1 }}>
+                        Planned Modalities:
+                        </Typography>
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                        {patient.treatmentStrategy.surgery && (
+                            <Chip label="Surgery" size="small" color="primary" variant="outlined" />
+                        )}
+                        {patient.treatmentStrategy.systemicTherapy && (
+                            <Chip label="Chemotherapy" size="small" color="primary" variant="outlined" />
+                        )}
+                        {patient.treatmentStrategy.radiation && (
+                            <Chip label="Radiation" size="small" color="primary" variant="outlined" />
+                        )}
+                        </Box>
+                    </Box>
+
+                    <Divider sx={{ my: 2 }} />
+
+                    <Box>
+                        <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, mb: 1 }}>
+                        Treatment Sequence:
+                        </Typography>
+                        <Paper
+                        variant="outlined"
+                        sx={{ p: 2, bgcolor: 'grey.50', border: '1px dashed', borderColor: 'primary.main' }}
+                        >
+                        <Typography variant="body2" sx={{ fontWeight: 500, textAlign: 'center' }}>
+                            {patient.treatmentStrategy.sequence}
+                        </Typography>
+                        </Paper>
+                    </Box>
+                    </>
+                )}
+                </Paper>
+            </Box>
 
             {/* Selected Protocol (if planning chemo) */}
             {patient.treatmentStrategy?.systemicTherapy && (
-              <Paper sx={{ p: 3, mt: 2, bgcolor: 'success.light' }}>
-                <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'success.dark', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
-                  Selected Primary Protocol
-                </Typography>
+              <Box sx={{ mt: 4 }}>
+                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    <Typography variant="overline" sx={{ fontWeight: 700, color: 'success.dark', fontSize: '0.85rem', letterSpacing: 1.2 }}>
+                        Selected Primary Protocol
+                    </Typography>
+                    <MicButton />
+                 </Box>
+                <Paper variant="outlined" sx={{ p: 3, borderRadius: 2, bgcolor: (theme) => alpha(theme.palette.success.main, 0.05), borderColor: (theme) => alpha(theme.palette.success.main, 0.2) }}>
                 <Table size="small">
-                  <TableBody>
+                    <TableBody>
                     <TableRow>
-                      <TableCell sx={{ color: 'text.secondary', fontWeight: 500 }}>Regimen Name</TableCell>
-                      <TableCell>
-                        {patient.cancerSite === 'Breast'
-                          ? 'AC-T (Doxorubicin + Cyclophosphamide → Paclitaxel)'
-                          : patient.cancerSite === 'Colon'
-                          ? 'FOLFOX'
-                          : 'Carboplatin + Paclitaxel'}
-                      </TableCell>
+                        <TableCell sx={{ color: 'text.secondary', fontWeight: 500, borderBottom: 'none', pl: 0 }}>Regimen Name</TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>
+                        <Typography variant="body2" fontWeight={600}>
+                            {patient.cancerSite === 'Breast'
+                            ? 'AC-T (Doxorubicin + Cyclophosphamide → Paclitaxel)'
+                            : patient.cancerSite === 'Colon'
+                            ? 'FOLFOX'
+                            : 'Carboplatin + Paclitaxel'}
+                        </Typography>
+                        </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell sx={{ color: 'text.secondary', fontWeight: 500 }}>Planned Cycles</TableCell>
-                      <TableCell>
+                        <TableCell sx={{ color: 'text.secondary', fontWeight: 500, borderBottom: 'none', pl: 0 }}>Planned Cycles</TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>
                         {patient.cancerSite === 'Breast' ? '8 cycles' : '6 cycles'}
-                      </TableCell>
+                        </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell sx={{ color: 'text.secondary', fontWeight: 500 }}>Cycle Frequency</TableCell>
-                      <TableCell>Every 21 days</TableCell>
+                        <TableCell sx={{ color: 'text.secondary', fontWeight: 500, borderBottom: 'none', pl: 0 }}>Cycle Frequency</TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>Every 21 days</TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell sx={{ color: 'text.secondary', fontWeight: 500 }}>Dose Intent</TableCell>
-                      <TableCell>
-                        <Chip label="Standard" size="small" color="success" />
-                      </TableCell>
+                        <TableCell sx={{ color: 'text.secondary', fontWeight: 500, borderBottom: 'none', pl: 0 }}>Dose Intent</TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>
+                        <Chip label="Standard" size="small" color="success" variant="outlined" />
+                        </TableCell>
                     </TableRow>
-                  </TableBody>
+                    </TableBody>
                 </Table>
-              </Paper>
+                </Paper>
+              </Box>
             )}
           </Grid>
 
           {/* Right Column - Baseline & Risks */}
           <Grid item xs={12} md={4}>
-            <Paper sx={{ p: 3 }}>
-              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
-                Baseline for Treatment Start
-              </Typography>
-              <Table size="small">
-                <TableBody>
-                  <TableRow>
-                    <TableCell sx={{ color: 'text.secondary', fontWeight: 500 }}>Baseline Labs</TableCell>
-                    <TableCell>
-                      <Chip label="Done" size="small" color="success" icon={<CheckCircleIcon />} />
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ color: 'text.secondary', fontWeight: 500 }}>Baseline Imaging</TableCell>
-                    <TableCell>
-                      <Chip label="Documented" size="small" color="success" icon={<CheckCircleIcon />} />
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ color: 'text.secondary', fontWeight: 500 }}>Fertility Counseling</TableCell>
-                    <TableCell>
-                      {patient.age < 50 && patient.gender === 'Female' ? (
-                        <Chip label="Done" size="small" color="success" icon={<CheckCircleIcon />} />
-                      ) : (
-                        <Typography variant="body2" color="text.secondary">
-                          N/A
-                        </Typography>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ color: 'text.secondary', fontWeight: 500 }}>Patient Consent</TableCell>
-                    <TableCell>
-                      <Chip label="Obtained" size="small" color="success" icon={<CheckCircleIcon />} />
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </Paper>
-
-            <Paper sx={{ p: 3, mt: 2, bgcolor: 'warning.light' }}>
-              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'warning.dark', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
-                Treatment Risks & Precautions
-              </Typography>
-              <Box>
-                <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, mb: 1 }}>
-                  High-Risk Toxicity Flags:
-                </Typography>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
-                  <Chip label="Myelosuppression" size="small" color="warning" />
-                  <Chip label="Neuropathy" size="small" color="warning" />
-                  {patient.comorbidities?.cardiacDisease && (
-                    <Chip label="Cardiotoxicity" size="small" color="error" />
-                  )}
+            <Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                     <Typography variant="overline" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2 }}>
+                        Baseline for Treatment Start
+                    </Typography>
+                    <MicButton />
                 </Box>
+                <Paper variant="outlined" sx={{ p: 3, borderRadius: 2 }}>
+                <Table size="small">
+                    <TableBody>
+                    <TableRow>
+                        <TableCell sx={{ color: 'text.secondary', fontWeight: 500, borderBottom: 'none', pl: 0 }}>Baseline Labs</TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>
+                        <Chip label="Done" size="small" color="success" icon={<CheckCircleIcon />} variant="outlined" />
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ color: 'text.secondary', fontWeight: 500, borderBottom: 'none', pl: 0 }}>Baseline Imaging</TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>
+                        <Chip label="Documented" size="small" color="success" icon={<CheckCircleIcon />} variant="outlined" />
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ color: 'text.secondary', fontWeight: 500, borderBottom: 'none', pl: 0 }}>Fertility Counseling</TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>
+                        {patient.age < 50 && patient.gender === 'Female' ? (
+                            <Chip label="Done" size="small" color="success" icon={<CheckCircleIcon />} variant="outlined" />
+                        ) : (
+                            <Typography variant="body2" color="text.secondary">
+                            N/A
+                            </Typography>
+                        )}
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ color: 'text.secondary', fontWeight: 500, borderBottom: 'none', pl: 0 }}>Patient Consent</TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>
+                        <Chip label="Obtained" size="small" color="success" icon={<CheckCircleIcon />} variant="outlined" />
+                        </TableCell>
+                    </TableRow>
+                    </TableBody>
+                </Table>
+                </Paper>
+            </Box>
 
-                <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, mb: 1 }}>
-                  Special Monitoring:
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  • CBC before each cycle
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  • Renal function monitoring
-                </Typography>
-                {patient.comorbidities?.cardiacDisease && (
-                  <Typography variant="body2" color="text.secondary">
-                    • ECHO every 3 cycles
-                  </Typography>
-                )}
-              </Box>
-            </Paper>
+            <Box sx={{ mt: 4 }}>
+                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    <Typography variant="overline" sx={{ fontWeight: 700, color: 'warning.dark', fontSize: '0.85rem', letterSpacing: 1.2 }}>
+                        Treatment Risks & Precautions
+                    </Typography>
+                    <MicButton />
+                 </Box>
+                <Paper variant="outlined" sx={{ p: 3, borderRadius: 2, bgcolor: (theme) => alpha(theme.palette.warning.main, 0.05), borderColor: (theme) => alpha(theme.palette.warning.main, 0.2) }}>
+                <Box>
+                    <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, mb: 1 }}>
+                    High-Risk Toxicity Flags:
+                    </Typography>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
+                    <Chip label="Myelosuppression" size="small" color="warning" variant="outlined" />
+                    <Chip label="Neuropathy" size="small" color="warning" variant="outlined" />
+                    {patient.comorbidities?.cardiacDisease && (
+                        <Chip label="Cardiotoxicity" size="small" color="error" variant="outlined" />
+                    )}
+                    </Box>
+
+                    <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, mb: 1 }}>
+                    Special Monitoring:
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                    • CBC before each cycle
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                    • Renal function monitoring
+                    </Typography>
+                    {patient.comorbidities?.cardiacDisease && (
+                    <Typography variant="body2" color="text.secondary">
+                        • ECHO every 3 cycles
+                    </Typography>
+                    )}
+                </Box>
+                </Paper>
+            </Box>
 
             <Paper
+              variant="outlined"
               sx={{
                 p: 3,
-                mt: 2,
-                bgcolor: patient.mdtDecision?.status === 'Approved' ? 'success.main' : 'grey.300',
-                color: 'white',
+                mt: 4,
+                bgcolor: patient.mdtDecision?.status === 'Approved' ? (theme) => alpha(theme.palette.success.main, 0.1) : (theme) => alpha(theme.palette.grey[300], 0.3),
                 textAlign: 'center',
+                borderColor: patient.mdtDecision?.status === 'Approved' ? 'success.main' : 'divider'
               }}
             >
-              <Typography variant="overline" sx={{ fontWeight: 700, mb: 1, display: 'block', fontSize: '0.85rem', letterSpacing: 1.2 }}>
+              <Typography variant="overline" sx={{ fontWeight: 700, mb: 1, display: 'block', fontSize: '0.85rem', letterSpacing: 1.2, color: 'text.primary' }}>
                 Plan Activation Status
               </Typography>
               <Chip
@@ -444,6 +510,8 @@ export default function TreatmentPlanning({ patient, hideContextBar }: Treatment
                   bgcolor: 'white',
                   color: patient.mdtDecision?.status === 'Approved' ? 'success.main' : 'grey.700',
                   fontWeight: 600,
+                  border: '1px solid',
+                  borderColor: patient.mdtDecision?.status === 'Approved' ? 'success.main' : 'grey.400'
                 }}
               />
 
@@ -453,10 +521,11 @@ export default function TreatmentPlanning({ patient, hideContextBar }: Treatment
                   size="large"
                   sx={{
                     mt: 2,
-                    bgcolor: 'white',
-                    color: 'success.main',
+                    bgcolor: 'success.main',
+                    color: 'white',
                     fontWeight: 600,
-                    '&:hover': { bgcolor: 'grey.100' },
+                    boxShadow: 2,
+                    '&:hover': { bgcolor: 'success.dark' },
                   }}
                 >
                   Activate Treatment Plan
