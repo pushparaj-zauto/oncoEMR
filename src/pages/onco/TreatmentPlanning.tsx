@@ -17,6 +17,7 @@ import {
   Divider,
   Stack,
 } from '@mui/material';
+import { useState } from 'react';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { OncologyPatient } from '../../types/oncology';
 import PatientContextBar from '../../components/onco/PatientContextBar';
@@ -26,6 +27,19 @@ interface TreatmentPlanningProps {
 }
 
 export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
+  const [intent, setIntent] = useState(patient.treatmentIntent || '');
+
+  const handleIntentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newVal = (event.target as HTMLInputElement).value;
+    setIntent((prev) => (prev === newVal ? '' : newVal));
+  };
+
+  const handleRadioClick = (value: string) => {
+    if (intent === value) {
+      setIntent('');
+    }
+  };
+
   return (
     <Box>
       {/* Global Patient Context Bar */}
@@ -33,8 +47,8 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
 
       <Container maxWidth="xl" sx={{ mt: 4, mb: 5 }}>
         <Typography
-          variant="h4"
-          sx={{ mb: 3, fontWeight: 700, color: 'primary.main', letterSpacing: 0.3 }}
+          variant="h5"
+          sx={{ mb: 3, fontWeight: 600, color: 'primary.main', letterSpacing: 0.3 }}
         >
           Treatment Planning
         </Typography>
@@ -43,14 +57,14 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
           {/* Left Column - Confirmed Diagnosis & Patient Fitness */}
           <Grid item xs={12} md={4}>
             <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
-              <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 700, color: 'success.dark' }}>
-                ✓ Confirmed Diagnosis
+              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'success.dark', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
+                Confirmed Diagnosis
               </Typography>
               <Table size="small">
                 <TableBody>
                   <TableRow>
                     <TableCell sx={{ width: '45%' }}>
-                      <Typography variant="body2" sx={{ fontWeight: 700 }}>Final Histopathology</Typography>
+                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Final Histopathology</Typography>
                     </TableCell>
                     <TableCell>
                       <Typography variant="body2" color="text.primary">{patient.histology}</Typography>
@@ -58,7 +72,7 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
                   </TableRow>
                   <TableRow>
                     <TableCell>
-                      <Typography variant="body2" sx={{ fontWeight: 700 }}>Tumor Subtype</Typography>
+                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Tumor Subtype</Typography>
                     </TableCell>
                     <TableCell>
                       <Typography variant="body2" color="text.primary">
@@ -72,7 +86,7 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
                   </TableRow>
                   <TableRow>
                     <TableCell>
-                      <Typography variant="body2" sx={{ fontWeight: 700 }}>Final TNM Stage</Typography>
+                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Final TNM Stage</Typography>
                     </TableCell>
                     <TableCell>
                       <Chip label={patient.tnmStage || 'Pending'} size="small" color="secondary" />
@@ -80,7 +94,7 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
                   </TableRow>
                   <TableRow>
                     <TableCell>
-                      <Typography variant="body2" sx={{ fontWeight: 700 }}>Clinical Stage</Typography>
+                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Clinical Stage</Typography>
                     </TableCell>
                     <TableCell>
                       <Chip label={`Stage ${patient.stage}`} size="small" color="secondary" />
@@ -91,14 +105,14 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
             </Paper>
 
             <Paper elevation={1} sx={{ p: 3, mt: 2, borderRadius: 2 }}>
-              <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 700, color: 'primary.main' }}>
+              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
                 Patient Fitness Snapshot
               </Typography>
               <Table size="small">
                 <TableBody>
                   <TableRow>
                     <TableCell>
-                      <Typography variant="body2" sx={{ fontWeight: 700 }}>ECOG Performance</Typography>
+                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>ECOG Performance</Typography>
                     </TableCell>
                     <TableCell>
                       <Chip label={patient.ecogStatus} size="small" color="primary" />
@@ -106,7 +120,7 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
                   </TableRow>
                   <TableRow>
                     <TableCell>
-                      <Typography variant="body2" sx={{ fontWeight: 700 }}>Major Comorbidities</Typography>
+                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Major Comorbidities</Typography>
                     </TableCell>
                     <TableCell>
                       <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }}>
@@ -123,7 +137,7 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
                   </TableRow>
                   <TableRow>
                     <TableCell>
-                      <Typography variant="body2" sx={{ fontWeight: 700 }}>Organ Function</Typography>
+                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Organ Function</Typography>
                     </TableCell>
                     <TableCell>
                       <Chip label="Normal" size="small" color="success" />
@@ -136,14 +150,14 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
             {/* MDT Decision Summary */}
             {patient.mdtDecision && (
               <Paper elevation={1} sx={{ p: 3, mt: 2, borderRadius: 2, bgcolor: 'background.paper' }}>
-                <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 700, color: 'info.dark' }}>
+                <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'info.dark', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
                   MDT Decision Summary
                 </Typography>
                 <Table size="small">
                   <TableBody>
                     <TableRow>
                       <TableCell>
-                        <Typography variant="body2" sx={{ fontWeight: 700 }}>MDT Status</Typography>
+                        <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>MDT Status</Typography>
                       </TableCell>
                       <TableCell>
                         <Chip
@@ -156,7 +170,7 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
                     </TableRow>
                     <TableRow>
                       <TableCell>
-                        <Typography variant="body2" sx={{ fontWeight: 700 }}>Date of Discussion</Typography>
+                        <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Date of Discussion</Typography>
                       </TableCell>
                       <TableCell>
                         <Typography variant="body2">{patient.mdtDecision.date}</Typography>
@@ -164,7 +178,7 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
                     </TableRow>
                     <TableRow>
                       <TableCell sx={{ verticalAlign: 'top' }}>
-                        <Typography variant="body2" sx={{ fontWeight: 700 }}>Decision Summary</Typography>
+                        <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Decision Summary</Typography>
                       </TableCell>
                       <TableCell>
                         <Typography variant="body2">{patient.mdtDecision.summary}</Typography>
@@ -173,7 +187,7 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
                     {patient.mdtDecision.participants && (
                       <TableRow>
                         <TableCell sx={{ verticalAlign: 'top' }}>
-                          <Typography variant="body2" sx={{ fontWeight: 700 }}>Participants</Typography>
+                          <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Participants</Typography>
                         </TableCell>
                         <TableCell>
                           <Stack spacing={0.5}>
@@ -194,17 +208,17 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
           <Grid item xs={12} md={4}>
             <Paper sx={{ p: 3, border: '2px solid', borderColor: 'primary.main' }}>
               <Typography
-                variant="h6"
-                sx={{ mb: 2, fontWeight: 600, color: 'primary.main', textAlign: 'center' }}
+                variant="overline"
+                sx={{ mb: 2, fontWeight: 700, color: 'primary.main', textAlign: 'center', display: 'block', fontSize: '0.9rem', letterSpacing: 1 }}
               >
-                🎯 Treatment Intent (Critical)
+                Treatment Intent (Critical)
               </Typography>
 
               <FormControl component="fieldset" fullWidth>
-                <RadioGroup value={patient.treatmentIntent || ''}>
+                <RadioGroup value={intent} onChange={handleIntentChange}>
                   <FormControlLabel
                     value="Curative"
-                    control={<Radio />}
+                    control={<Radio onClick={() => handleRadioClick('Curative')} />}
                     label={
                       <Box>
                         <Typography variant="body1" fontWeight={600}>
@@ -218,7 +232,7 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
                   />
                   <FormControlLabel
                     value="Disease Control"
-                    control={<Radio />}
+                    control={<Radio onClick={() => handleRadioClick('Disease Control')} />}
                     label={
                       <Box>
                         <Typography variant="body1" fontWeight={600}>
@@ -232,7 +246,7 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
                   />
                   <FormControlLabel
                     value="Palliative"
-                    control={<Radio />}
+                    control={<Radio onClick={() => handleRadioClick('Palliative')} />}
                     label={
                       <Box>
                         <Typography variant="body1" fontWeight={600}>
@@ -249,14 +263,14 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
             </Paper>
 
             <Paper sx={{ p: 3, mt: 2 }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: 'primary.main' }}>
+              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
                 Treatment Strategy Map
               </Typography>
 
               {patient.treatmentStrategy && (
                 <>
                   <Box sx={{ mb: 2 }}>
-                    <Typography variant="body2" sx={{ fontWeight: 600, mb: 1 }}>
+                    <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, mb: 1 }}>
                       Planned Modalities:
                     </Typography>
                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
@@ -275,7 +289,7 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
                   <Divider sx={{ my: 2 }} />
 
                   <Box>
-                    <Typography variant="body2" sx={{ fontWeight: 600, mb: 1 }}>
+                    <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, mb: 1 }}>
                       Treatment Sequence:
                     </Typography>
                     <Paper
@@ -294,13 +308,13 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
             {/* Selected Protocol (if planning chemo) */}
             {patient.treatmentStrategy?.systemicTherapy && (
               <Paper sx={{ p: 3, mt: 2, bgcolor: 'success.light' }}>
-                <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: 'success.dark' }}>
+                <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'success.dark', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
                   Selected Primary Protocol
                 </Typography>
                 <Table size="small">
                   <TableBody>
                     <TableRow>
-                      <TableCell sx={{ fontWeight: 600 }}>Regimen Name</TableCell>
+                      <TableCell sx={{ color: 'text.secondary', fontWeight: 500 }}>Regimen Name</TableCell>
                       <TableCell>
                         {patient.cancerSite === 'Breast'
                           ? 'AC-T (Doxorubicin + Cyclophosphamide → Paclitaxel)'
@@ -310,17 +324,17 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell sx={{ fontWeight: 600 }}>Planned Cycles</TableCell>
+                      <TableCell sx={{ color: 'text.secondary', fontWeight: 500 }}>Planned Cycles</TableCell>
                       <TableCell>
                         {patient.cancerSite === 'Breast' ? '8 cycles' : '6 cycles'}
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell sx={{ fontWeight: 600 }}>Cycle Frequency</TableCell>
+                      <TableCell sx={{ color: 'text.secondary', fontWeight: 500 }}>Cycle Frequency</TableCell>
                       <TableCell>Every 21 days</TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell sx={{ fontWeight: 600 }}>Dose Intent</TableCell>
+                      <TableCell sx={{ color: 'text.secondary', fontWeight: 500 }}>Dose Intent</TableCell>
                       <TableCell>
                         <Chip label="Standard" size="small" color="success" />
                       </TableCell>
@@ -334,25 +348,25 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
           {/* Right Column - Baseline & Risks */}
           <Grid item xs={12} md={4}>
             <Paper sx={{ p: 3 }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: 'primary.main' }}>
+              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
                 Baseline for Treatment Start
               </Typography>
               <Table size="small">
                 <TableBody>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Baseline Labs</TableCell>
+                    <TableCell sx={{ color: 'text.secondary', fontWeight: 500 }}>Baseline Labs</TableCell>
                     <TableCell>
                       <Chip label="Done" size="small" color="success" icon={<CheckCircleIcon />} />
                     </TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Baseline Imaging</TableCell>
+                    <TableCell sx={{ color: 'text.secondary', fontWeight: 500 }}>Baseline Imaging</TableCell>
                     <TableCell>
                       <Chip label="Documented" size="small" color="success" icon={<CheckCircleIcon />} />
                     </TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Fertility Counseling</TableCell>
+                    <TableCell sx={{ color: 'text.secondary', fontWeight: 500 }}>Fertility Counseling</TableCell>
                     <TableCell>
                       {patient.age < 50 && patient.gender === 'Female' ? (
                         <Chip label="Done" size="small" color="success" icon={<CheckCircleIcon />} />
@@ -364,7 +378,7 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
                     </TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Patient Consent</TableCell>
+                    <TableCell sx={{ color: 'text.secondary', fontWeight: 500 }}>Patient Consent</TableCell>
                     <TableCell>
                       <Chip label="Obtained" size="small" color="success" icon={<CheckCircleIcon />} />
                     </TableCell>
@@ -374,11 +388,11 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
             </Paper>
 
             <Paper sx={{ p: 3, mt: 2, bgcolor: 'warning.light' }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: 'warning.dark' }}>
+              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'warning.dark', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
                 Treatment Risks & Precautions
               </Typography>
               <Box>
-                <Typography variant="body2" sx={{ fontWeight: 600, mb: 1 }}>
+                <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, mb: 1 }}>
                   High-Risk Toxicity Flags:
                 </Typography>
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
@@ -389,7 +403,7 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
                   )}
                 </Box>
 
-                <Typography variant="body2" sx={{ fontWeight: 600, mb: 1 }}>
+                <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, mb: 1 }}>
                   Special Monitoring:
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
@@ -415,7 +429,7 @@ export default function TreatmentPlanning({ patient }: TreatmentPlanningProps) {
                 textAlign: 'center',
               }}
             >
-              <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+              <Typography variant="overline" sx={{ fontWeight: 700, mb: 1, display: 'block', fontSize: '0.85rem', letterSpacing: 1.2 }}>
                 Plan Activation Status
               </Typography>
               <Chip
