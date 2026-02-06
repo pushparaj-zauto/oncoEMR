@@ -12,6 +12,13 @@ import {
   Button,
   LinearProgress,
   Fab,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+  Stack,
+  Tooltip
 } from '@mui/material';
 import MicIcon from '@mui/icons-material/Mic';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -20,6 +27,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import HomeIcon from '@mui/icons-material/Home';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import { alpha } from '@mui/material/styles';
 import { OncologyPatient } from '../../types/oncology';
 import PatientContextBar from '../../components/onco/PatientContextBar';
 
@@ -27,6 +35,29 @@ interface MaintenanceReviewProps {
   patient: OncologyPatient;
   hideContextBar?: boolean;
 }
+
+const MicButton = () => (
+  <IconButton 
+    size="small" 
+    sx={{ 
+        ml: 1.5,
+        border: '1px solid',
+        borderColor: 'primary.main', 
+        borderRadius: 1, 
+        p: 0.5,
+        color: 'primary.main',
+        transition: 'all 0.2s',
+        '&:hover': {
+            bgcolor: (theme) => alpha(theme.palette.primary.main, 0.1),
+            borderColor: 'primary.dark',
+            transform: 'translateY(-1px)',
+            boxShadow: (theme) => `0 2px 8px ${alpha(theme.palette.primary.main, 0.2)}`
+        }
+    }}
+  >
+    <MicIcon sx={{ fontSize: 16 }} />
+  </IconButton>
+);
 
 export default function MaintenanceReview({ patient, hideContextBar }: MaintenanceReviewProps) {
   const reviewDates = [
@@ -43,89 +74,98 @@ export default function MaintenanceReview({ patient, hideContextBar }: Maintenan
 
       <Container maxWidth="xl" sx={{ mt: 4, mb: 5 }}>
 
-        <Grid container spacing={3}>
+        <Grid container spacing={4}>
           {/* Left Column - Active Therapy */}
           <Grid item xs={12} md={4}>
-            <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
-              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
-                Active Therapy
-              </Typography>
-              <Table size="small">
-                <TableBody>
-                  <TableRow>
-                    <TableCell sx={{ width: '40%' }}>
-                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Medication</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2" color="text.primary">Osimertinib (Tagrisso)</Typography>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Dose</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2" color="text.primary">80 mg once daily</Typography>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Route</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2" color="text.primary">Oral</Typography>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Start Date</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2" color="text.primary">{patient.treatmentStartDate || '2025-10-20'}</Typography>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Duration</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Chip label="Until Progression" size="small" color="info" />
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Review Interval</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2" color="text.primary">Every 4 weeks</Typography>
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </Paper>
-
-            <Paper elevation={1} sx={{ p: 3, mt: 2, borderRadius: 2 }}>
-              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'success.dark', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
-                Compliance & Adherence
-              </Typography>
-              <Box sx={{ mb: 2 }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
-                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                    Medication Adherence
-                  </Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 600, color: 'success.main' }}>
-                    98%
-                  </Typography>
+            
+            <Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    <Typography variant="overline" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2 }}>
+                        Active Therapy
+                    </Typography>
+                    <MicButton />
                 </Box>
-                <LinearProgress variant="determinate" value={98} color="success" sx={{ height: 8, borderRadius: 1 }} />
-              </Box>
-              <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic' }}>
-                "Patient reports excellent compliance with daily medication."
-              </Typography>
-            </Paper>
+                
+                <Paper variant="outlined" sx={{ p: 3, borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
+                <Table size="small">
+                    <TableBody>
+                    <TableRow>
+                        <TableCell sx={{ width: '40%', borderBottom: 'none', pl: 0 }}>
+                        <Typography variant="subtitle2" color="text.secondary">Medication</Typography>
+                        </TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>
+                        <Typography variant="body2" color="text.primary" fontWeight={600}>Osimertinib (Tagrisso)</Typography>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ borderBottom: 'none', pl: 0 }}>
+                        <Typography variant="subtitle2" color="text.secondary">Dose</Typography>
+                        </TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>
+                        <Typography variant="body2" color="text.primary">80 mg once daily</Typography>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ borderBottom: 'none', pl: 0 }}>
+                        <Typography variant="subtitle2" color="text.secondary">Route</Typography>
+                        </TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>
+                        <Typography variant="body2" color="text.primary">Oral</Typography>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ borderBottom: 'none', pl: 0 }}>
+                        <Typography variant="subtitle2" color="text.secondary">Start Date</Typography>
+                        </TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>
+                        <Typography variant="body2" color="text.primary">{patient.treatmentStartDate || '2025-10-20'}</Typography>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ borderBottom: 'none', pl: 0 }}>
+                        <Typography variant="subtitle2" color="text.secondary">Duration</Typography>
+                        </TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>
+                        <Chip label="Until Progression" size="small" color="info" variant="outlined" sx={{ height: 24 }} />
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ borderBottom: 'none', pl: 0 }}>
+                        <Typography variant="subtitle2" color="text.secondary">Review Interval</Typography>
+                        </TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>
+                        <Typography variant="body2" color="text.primary">Every 4 weeks</Typography>
+                        </TableCell>
+                    </TableRow>
+                    </TableBody>
+                </Table>
+                </Paper>
+            </Box>
 
-            <Paper elevation={1} sx={{ p: 3, mt: 2, bgcolor: 'primary.50', borderRadius: 2, border: '1px solid', borderColor: 'primary.100' }}>
-              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.dark', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
+            <Box sx={{ mt: 4 }}>
+                <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'success.dark', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
+                    Compliance & Adherence
+                </Typography>
+                <Paper variant="outlined" sx={{ p: 3, borderRadius: 2 }}>
+                <Box sx={{ mb: 2 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                        Medication Adherence
+                    </Typography>
+                    <Typography variant="body2" sx={{ fontWeight: 600, color: 'success.main' }}>
+                        98%
+                    </Typography>
+                    </Box>
+                    <LinearProgress variant="determinate" value={98} color="success" sx={{ height: 8, borderRadius: 1, bgcolor: alpha('#4caf50', 0.1) }} />
+                </Box>
+                <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic', bgcolor: 'grey.50', p: 1.5, borderRadius: 1, borderLeft: '3px solid', borderColor: 'success.main' }}>
+                    "Patient reports excellent compliance with daily medication."
+                </Typography>
+                </Paper>
+            </Box>
+
+            <Paper variant="outlined" sx={{ p: 3, mt: 4, bgcolor: (theme) => alpha(theme.palette.primary.main, 0.02), borderRadius: 2, borderColor:  (theme) => alpha(theme.palette.primary.main, 0.2) }}>
+              <Typography variant="overline" sx={{ mb: 1, fontWeight: 700, color: 'primary.dark', fontSize: '0.75rem', letterSpacing: 1.2, display: 'block' }}>
                 Treatment Duration
               </Typography>
               <Box sx={{ textAlign: 'center', py: 1 }}>
@@ -141,76 +181,84 @@ export default function MaintenanceReview({ patient, hideContextBar }: Maintenan
 
           {/* Middle Column - Last Review Outcome */}
           <Grid item xs={12} md={4}>
-            <Paper elevation={3} sx={{ p: 3, borderRadius: 2, borderTop: '4px solid', borderTopColor: 'primary.main', borderLeft: 0 }}>
-              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
-                Last Review Outcome
-              </Typography>
-              <Table size="small">
-                <TableBody>
-                  <TableRow>
-                    <TableCell>
-                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Review Date</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2" color="text.primary">{patient.lastReviewDate || '2026-02-01'}</Typography>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Disease Status</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Chip label="Stable" size="small" color="success" icon={<CheckCircleIcon />} />
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Imaging Findings</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2" color="text.primary">No new lesions, stable disease</Typography>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Tumor Markers</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Chip label="Within Normal Range" size="small" color="success" />
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Side Effects</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2" color="text.primary">Mild skin rash (Grade 1)</Typography>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ verticalAlign: 'top' }}>
-                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Next Review</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2" sx={{ fontWeight: 700, color: 'primary.main' }}>
-                        10 Jun 2026
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </Paper>
+            <Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    <Typography variant="overline" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2 }}>
+                        Last Review Outcome
+                    </Typography>
+                    <MicButton />
+                </Box>
+                
+                <Paper variant="outlined" sx={{ p: 3, borderRadius: 2, borderTop: '4px solid', borderTopColor: 'primary.main' }}>
+                <Table size="small">
+                    <TableBody>
+                    <TableRow>
+                        <TableCell sx={{ borderBottom: 'none', pl: 0 }}>
+                        <Typography variant="subtitle2" color="text.secondary">Review Date</Typography>
+                        </TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>
+                        <Typography variant="body2" color="text.primary">{patient.lastReviewDate || '2026-02-01'}</Typography>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ borderBottom: 'none', pl: 0 }}>
+                        <Typography variant="subtitle2" color="text.secondary">Disease Status</Typography>
+                        </TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>
+                        <Chip label="Stable" size="small" color="success" variant="filled" icon={<CheckCircleIcon />} sx={{ '& .MuiChip-label': { px: 1 } }} />
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ borderBottom: 'none', pl: 0 }}>
+                        <Typography variant="subtitle2" color="text.secondary">Imaging Findings</Typography>
+                        </TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>
+                        <Typography variant="body2" color="text.primary">No new lesions, stable disease</Typography>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ borderBottom: 'none', pl: 0 }}>
+                        <Typography variant="subtitle2" color="text.secondary">Tumor Markers</Typography>
+                        </TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>
+                        <Chip label="Normal Range" size="small" color="success" variant="outlined" sx={{ height: 24 }} />
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ borderBottom: 'none', pl: 0, verticalAlign: 'top', py: 1 }}>
+                        <Typography variant="subtitle2" color="text.secondary">Side Effects</Typography>
+                        </TableCell>
+                        <TableCell sx={{ borderBottom: 'none', py: 1 }}>
+                        <Typography variant="body2" color="text.primary">Mild skin rash (Grade 1)</Typography>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ borderBottom: 'none', pl: 0, verticalAlign: 'top', pt: 2 }}>
+                        <Typography variant="subtitle2" color="primary.main">Next Review</Typography>
+                        </TableCell>
+                        <TableCell sx={{ borderBottom: 'none', pt: 2 }}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: 'primary.main' }}>
+                            10 Jun 2026
+                        </Typography>
+                        </TableCell>
+                    </TableRow>
+                    </TableBody>
+                </Table>
+                </Paper>
+            </Box>
 
             {/* QoL Summary */}
             {patient.qolMetrics && (
-              <Paper elevation={1} sx={{ p: 3, mt: 2, bgcolor: 'background.paper', borderRadius: 2 }}>
+              <Box sx={{ mt: 4 }}>
                 <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'text.primary', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
                   Quality of Life Summary
                 </Typography>
+                <Paper variant="outlined" sx={{ p: 3, bgcolor: 'background.paper', borderRadius: 2 }}>
+                
                 <Grid container spacing={2}>
                   <Grid item xs={6}>
-                    <Box sx={{ textAlign: 'center', p: 2, bgcolor: 'white', borderRadius: 1.5, boxShadow: 1 }}>
-                      <Typography variant="caption" sx={{ fontWeight: 500, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: '0.5px', fontSize: '0.7rem' }}>
+                    <Box sx={{ textAlign: 'center', p: 2, bgcolor: (theme) => alpha(theme.palette.background.default, 0.5), borderRadius: 1.5, border: '1px solid', borderColor: 'divider' }}>
+                      <Typography variant="caption" sx={{ fontWeight: 600, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: '0.5px', fontSize: '0.7rem' }}>
                         Pain Score
                       </Typography>
                       <Typography variant="h4" sx={{ fontWeight: 800, color: 'text.primary', mt: 0.5 }}>
@@ -219,8 +267,8 @@ export default function MaintenanceReview({ patient, hideContextBar }: Maintenan
                     </Box>
                   </Grid>
                   <Grid item xs={6}>
-                    <Box sx={{ textAlign: 'center', p: 2, bgcolor: 'white', borderRadius: 1.5, boxShadow: 1 }}>
-                      <Typography variant="caption" sx={{ fontWeight: 500, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: '0.5px', fontSize: '0.7rem' }}>
+                    <Box sx={{ textAlign: 'center', p: 2, bgcolor: (theme) => alpha(theme.palette.background.default, 0.5), borderRadius: 1.5, border: '1px solid', borderColor: 'divider' }}>
+                      <Typography variant="caption" sx={{ fontWeight: 600, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: '0.5px', fontSize: '0.7rem' }}>
                         Mobility
                       </Typography>
                       <Typography variant="body1" sx={{ fontWeight: 700, color: 'text.primary', mt: 0.5 }}>
@@ -229,8 +277,8 @@ export default function MaintenanceReview({ patient, hideContextBar }: Maintenan
                     </Box>
                   </Grid>
                   <Grid item xs={6}>
-                    <Box sx={{ textAlign: 'center', p: 2, bgcolor: 'white', borderRadius: 1.5, boxShadow: 1 }}>
-                      <Typography variant="caption" sx={{ fontWeight: 500, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: '0.5px', fontSize: '0.7rem' }}>
+                    <Box sx={{ textAlign: 'center', p: 2, bgcolor: (theme) => alpha(theme.palette.background.default, 0.5), borderRadius: 1.5, border: '1px solid', borderColor: 'divider' }}>
+                      <Typography variant="caption" sx={{ fontWeight: 600, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: '0.5px', fontSize: '0.7rem' }}>
                         Sleep
                       </Typography>
                       <Typography variant="body1" sx={{ fontWeight: 700, color: 'text.primary', mt: 0.5 }}>
@@ -239,8 +287,8 @@ export default function MaintenanceReview({ patient, hideContextBar }: Maintenan
                     </Box>
                   </Grid>
                   <Grid item xs={6}>
-                    <Box sx={{ textAlign: 'center', p: 2, bgcolor: 'white', borderRadius: 1.5, boxShadow: 1 }}>
-                      <Typography variant="caption" sx={{ fontWeight: 500, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: '0.5px', fontSize: '0.7rem' }}>
+                    <Box sx={{ textAlign: 'center', p: 2, bgcolor: (theme) => alpha(theme.palette.background.default, 0.5), borderRadius: 1.5, border: '1px solid', borderColor: 'divider' }}>
+                      <Typography variant="caption" sx={{ fontWeight: 600, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: '0.5px', fontSize: '0.7rem' }}>
                         Appetite
                       </Typography>
                       <Typography variant="body1" sx={{ fontWeight: 700, color: 'text.primary', mt: 0.5 }}>
@@ -249,104 +297,120 @@ export default function MaintenanceReview({ patient, hideContextBar }: Maintenan
                     </Box>
                   </Grid>
                 </Grid>
-                <Box sx={{ mt: 2, p: 2, bgcolor: 'white', borderRadius: 1.5, boxShadow: 1 }}>
-                  <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'text.secondary' }}>
+                <Box sx={{ mt: 2, p: 2, bgcolor: (theme) => alpha(theme.palette.success.main, 0.05), borderRadius: 1.5, border: '1px solid', borderColor: alpha('#4caf50', 0.2) }}>
+                  <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'text.primary' }}>
                     <TrendingUpIcon sx={{ color: 'success.main', fontSize: 20 }} />
-                    <span style={{ fontWeight: 600, color: '#212121' }}>Overall Trend:</span> Improved appetite, reduced fatigue
+                    <span style={{ fontWeight: 600 }}>Overall Trend:</span> Improved appetite, reduced fatigue
                   </Typography>
                 </Box>
               </Paper>
+             </Box>
             )}
           </Grid>
 
           {/* Right Column - Review History */}
           <Grid item xs={12} md={4}>
-            <Paper elevation={1} sx={{ p: 3, borderRadius: 2 }}>
-              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
-                Review History
-              </Typography>
+             <Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    <Typography variant="overline" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2 }}>
+                        Review History
+                    </Typography>
+                    <MicButton />
+                </Box>
+
+            <Paper variant="outlined" sx={{ p: 0, borderRadius: 2 }}>
               <Box>
                 {reviewDates.reverse().map((date, index) => (
                   <Box
                     key={index}
                     sx={{
                       p: 2.5,
-                      mb: 2,
-                      borderRadius: 1.5,
-                      bgcolor: index === 0 ? 'primary.main' : 'grey.50',
-                      color: index === 0 ? 'white' : 'inherit',
-                      boxShadow: index === 0 ? 2 : 0,
-                      transition: 'all 0.2s',
+                      borderBottom: index !== reviewDates.length - 1 ? '1px solid' : 'none',
+                      borderColor: 'divider',
+                      bgcolor: index === 0 ? alpha('#1976d2', 0.04) : 'transparent',
                       '&:hover': {
-                        boxShadow: 2,
+                        bgcolor: 'action.hover',
                       },
                     }}
                   >
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1.5 }}>
-                      <Typography variant="body2" sx={{ fontWeight: 700, color: index === 0 ? 'white' : 'text.primary' }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 700, color: index === 0 ? 'primary.main' : 'text.primary' }}>
                         Review {4 - index}
                       </Typography>
-                      <Typography variant="caption" sx={{ fontWeight: 500, color: index === 0 ? 'rgba(255,255,255,0.8)' : 'text.secondary' }}>
+                      <Typography variant="caption" sx={{ fontWeight: 500, color: 'text.secondary' }}>
                         {date}
                       </Typography>
                     </Box>
-                    <Chip 
-                      label="Disease Stable" 
-                      size="small" 
-                      sx={{ 
-                        mr: 0.5, 
-                        bgcolor: index === 0 ? 'rgba(255,255,255,0.2)' : 'success.light',
-                        color: index === 0 ? 'white' : 'success.dark',
-                        fontWeight: 600,
-                        borderRadius: 1
-                      }} 
-                    />
-                    <Chip 
-                      label="Continue Rx" 
-                      size="small" 
-                      sx={{ 
-                        bgcolor: index === 0 ? 'rgba(255,255,255,0.2)' : 'info.light',
-                        color: index === 0 ? 'white' : 'info.dark',
-                        fontWeight: 600,
-                        borderRadius: 1
-                      }} 
-                    />
+                    <Stack direction="row" spacing={1}>
+                        <Chip 
+                        label="Stable" 
+                        size="small" 
+                        variant="outlined"
+                        color={index === 0 ? 'success' : 'default'}
+                        sx={{ 
+                            height: 20, 
+                            fontSize: '0.7rem',
+                            fontWeight: 500
+                        }} 
+                        />
+                        <Chip 
+                        label="Continue Rx" 
+                        size="small" 
+                        variant="outlined"
+                        color={index === 0 ? 'info' : 'default'}
+                        sx={{ 
+                            height: 20, 
+                            fontSize: '0.7rem',
+                            fontWeight: 500
+                        }} 
+                        />
+                    </Stack>
                   </Box>
                 ))}
               </Box>
             </Paper>
+            </Box>
 
-            <Paper elevation={1} sx={{ p: 3, mt: 2, bgcolor: 'warning.light', borderRadius: 2 }}>
-              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'warning.dark', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
-                Monitoring Plan
-              </Typography>
-              <Typography variant="body2" sx={{ mb: 1.5, fontWeight: 700, color: 'text.primary' }}>
-                Next Actions:
-              </Typography>
-              <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.8 }}>  
-                • CT Chest scheduled for 05 Mar 2026
-                <br />
-                • Routine bloods every 4 weeks
-                <br />
-                • Monitor for skin toxicity
-                <br />• Continue supportive care
-              </Typography>
-            </Paper>
+            <Box sx={{ mt: 4 }}>
+                <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'warning.dark', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
+                    Monitoring Plan
+                </Typography>
+                <Paper variant="outlined" sx={{ p: 3, bgcolor: (theme) => alpha(theme.palette.warning.main, 0.02), borderRadius: 2, borderColor: (theme) => alpha(theme.palette.warning.main, 0.3) }}>
+                <Typography variant="subtitle2" sx={{ mb: 1.5, fontWeight: 700, color: 'text.primary' }}>
+                    Next Actions:
+                </Typography>
+                <List dense disablePadding>
+                    {[
+                        'CT Chest scheduled for 05 Mar 2026',
+                        'Routine bloods every 4 weeks',
+                        'Monitor for skin toxicity',
+                        'Continue supportive care'
+                    ].map((item, idx) => (
+                         <ListItem key={idx} sx={{ px: 0, py: 0.5 }}>
+                             <Box component="span" sx={{ mr: 1.5, color: 'warning.main', fontSize: '1.2rem', lineHeight: 0 }}>•</Box>
+                             <ListItemText primary={<Typography variant="body2" color="text.primary">{item}</Typography>} />
+                         </ListItem>
+                    ))}
+                </List>
+                </Paper>
+            </Box>
 
             <Button
               variant="contained"
               size="large"
               fullWidth
               sx={{ 
-                mt: 2, 
+                mt: 4, 
                 py: 1.5, 
                 fontWeight: 700, 
-                borderRadius: 1.5,
+                borderRadius: 2,
                 textTransform: 'none',
                 fontSize: '1rem',
-                boxShadow: 2,
+                boxShadow: 'none',
+                border: '1px solid',
+                borderColor: 'primary.main',
                 '&:hover': {
-                  boxShadow: 4,
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
                 }
               }}
             >
