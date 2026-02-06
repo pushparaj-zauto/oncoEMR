@@ -15,6 +15,10 @@ import {
   TextField,
   TableHead,
   Fab,
+  Stack,
+  Divider,
+  alpha,
+  Tooltip,
 } from '@mui/material';
 import MicIcon from '@mui/icons-material/Mic';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -24,6 +28,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import { useState } from 'react';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PauseCircleIcon from '@mui/icons-material/PauseCircle';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import PendingIcon from '@mui/icons-material/Pending';
 import { OncologyPatient } from '../../types/oncology';
 import PatientContextBar from '../../components/onco/PatientContextBar';
 
@@ -31,6 +37,28 @@ interface ChemoProtocolWorkspaceProps {
   patient: OncologyPatient;
   hideContextBar?: boolean;
 }
+
+const MicButton = () => (
+  <Fab 
+    size="small" 
+    sx={{ 
+        boxShadow: 'none',
+        bgcolor: 'transparent',
+        border: '1px solid',
+        borderColor: 'primary.main', 
+        width: 32,
+        height: 32,
+        minHeight: 32,
+        color: 'primary.main',
+        '&:hover': {
+            bgcolor: (theme) => alpha(theme.palette.primary.main, 0.1),
+            transform: 'translateY(-1px)',
+        }
+    }}
+  >
+    <MicIcon sx={{ fontSize: 16 }} />
+  </Fab>
+);
 
 export default function ChemoProtocolWorkspace({ patient, hideContextBar }: ChemoProtocolWorkspaceProps) {
   const [selectedCycle, setSelectedCycle] = useState(0);
@@ -47,353 +75,376 @@ export default function ChemoProtocolWorkspace({ patient, hideContextBar }: Chem
       {/* Global Patient Context Bar */}
       {!hideContextBar && <PatientContextBar patient={patient} />}
 
-      <Container maxWidth="lg" sx={{ mt: 3, mb: 4 }}>
-        {/* Protocol Header */}
-        <Paper elevation={3} sx={{ mb: 3, p: 1.5, borderRadius: 2, bgcolor: 'primary.dark', color: 'white' }}>
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={8}>
-              <Typography variant="overline" sx={{ display: 'block', opacity: 0.8, letterSpacing: 1, lineHeight: 1, fontSize: '0.65rem' }}>
-                Active Protocol
-              </Typography>
-              <Typography variant="h6" sx={{ fontWeight: 700, mb: 0.5, mt: 0.25, fontSize: '1.1rem' }}>
-                {patient.currentProtocol.name}
-              </Typography>
-              <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
-                <Box>
-                  <Typography variant="caption" sx={{ display: 'block', opacity: 0.7, fontSize: '0.65rem' }}>CYCLE INTERVAL</Typography>
-                  <Typography variant="body2" fontWeight={600} sx={{ fontSize: '0.8rem' }}>{patient.currentProtocol.cycleFrequency} days</Typography>
-                </Box>
-                <Box>
-                  <Typography variant="caption" sx={{ display: 'block', opacity: 0.7, fontSize: '0.65rem' }}>TOTAL CYCLES</Typography>
-                  <Typography variant="body2" fontWeight={600} sx={{ fontSize: '0.8rem' }}>{patient.currentProtocol.cycles}</Typography>
-                </Box>
-                <Box>
-                  <Typography variant="caption" sx={{ display: 'block', opacity: 0.7, fontSize: '0.65rem' }}>START DATE</Typography>
-                  <Typography variant="body2" fontWeight={600} sx={{ fontSize: '0.8rem' }}>{patient.currentProtocol.startDate}</Typography>
-                </Box>
-              </Box>
+      <Container maxWidth="xl" sx={{ mt: 4, mb: 5 }}>
+        <Grid container spacing={4}>
+            {/* Header Section */}
+            <Grid item xs={12}>
+                <Paper variant="outlined" sx={{ p: 3, borderRadius: 2 }}>
+                    <Grid container spacing={3} alignItems="center">
+                        <Grid item xs={12} md={8}>
+                            <Typography variant="overline" sx={{ mb: 1, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
+                                Active Protocol
+                            </Typography>
+                             <Typography variant="h5" sx={{ fontWeight: 600, color: 'text.primary', mb: 0.5 }}>
+                                {patient.currentProtocol.name}
+                            </Typography>
+                            <Stack direction="row" spacing={4} sx={{ mt: 2 }}>
+                                <Box>
+                                    <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600, display: 'block', mb: 0.5 }}>CYCLE INTERVAL</Typography>
+                                    <Typography variant="body2" fontWeight={500}>{patient.currentProtocol.cycleFrequency} days</Typography>
+                                </Box>
+                                <Box>
+                                    <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600, display: 'block', mb: 0.5 }}>TOTAL CYCLES</Typography>
+                                    <Typography variant="body2" fontWeight={500}>{patient.currentProtocol.cycles}</Typography>
+                                </Box>
+                                <Box>
+                                    <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600, display: 'block', mb: 0.5 }}>START DATE</Typography>
+                                    <Typography variant="body2" fontWeight={500}>{patient.currentProtocol.startDate}</Typography>
+                                </Box>
+                            </Stack>
+                        </Grid>
+                        <Grid item xs={12} md={4} sx={{ textAlign: { xs: 'left', md: 'right' } }}>
+                             <Box sx={{ p: 2, bgcolor: 'primary.50', borderRadius: 2, display: 'inline-block', minWidth: 140, textAlign: 'center', border: '1px solid', borderColor: 'primary.100' }}>
+                                <Typography variant="caption" sx={{ display: 'block', mb: 0, color: 'primary.main', fontWeight: 700, letterSpacing: 0.5 }}>
+                                    PROGRESS
+                                </Typography>
+                                <Typography variant="h4" sx={{ fontWeight: 700, color: 'primary.dark' }}>
+                                    {patient.cycleOutcomes?.length || 0} <span style={{ fontSize: '1rem', color: '#666', fontWeight: 400 }}>/ {patient.currentProtocol.cycles}</span>
+                                </Typography>
+                                <Typography variant="caption" color="text.secondary">Cycles Completed</Typography>
+                            </Box>
+                        </Grid>
+                    </Grid>
+                </Paper>
             </Grid>
-            <Grid item xs={12} md={4} sx={{ textAlign: { xs: 'left', md: 'right' } }}>
-              <Box sx={{ bgcolor: 'rgba(255,255,255,0.1)', p: 1, px: 2, borderRadius: 2, display: 'inline-block', minWidth: 100, textAlign: 'center' }}>
-                <Typography variant="caption" sx={{ display: 'block', mb: 0, opacity: 0.9, fontSize: '0.65rem' }}>
-                  COMPLETED CYCLES
-                </Typography>
-                <Typography variant="h5" sx={{ fontWeight: 800 }}>
-                  {patient.cycleOutcomes?.length || 0} / {patient.currentProtocol.cycles}
-                </Typography>
-              </Box>
-            </Grid>
-          </Grid>
-        </Paper>
 
-        {/* Cycle Tabs */}
-        <Paper sx={{ mb: 3, borderRadius: 2 }}>
-          <Tabs
-            value={selectedCycle}
-            onChange={(_, newValue) => setSelectedCycle(newValue)}
-            variant="scrollable"
-            scrollButtons="auto"
-            indicatorColor="primary"
-            textColor="primary"
-            sx={{
-              borderBottom: 1,
-              borderColor: 'divider',
-              '& .MuiTab-root': { fontWeight: 600, minHeight: 48, fontSize: '0.85rem' },
-              minHeight: 48
-            }}
-          >
-            {Array.from({ length: patient.currentProtocol.cycles }, (_, i) => (
-              <Tab
-                key={i}
-                label={`Cycle ${i + 1}`}
-                icon={
-                  patient.cycleOutcomes?.some((c) => c.cycleNumber === i + 1) ? (
-                    <CheckCircleIcon sx={{ fontSize: '1rem' }} />
-                  ) : undefined
-                }
-                iconPosition="end"
-              />
-            ))}
-          </Tabs>
-        </Paper>
+            {/* Cycle Tabs */}
+             <Grid item xs={12}>
+                <Paper variant="outlined" sx={{ borderRadius: 2, mb: 1 }}>
+                    <Tabs
+                        value={selectedCycle}
+                        onChange={(_, newValue) => setSelectedCycle(newValue)}
+                        variant="scrollable"
+                        scrollButtons="auto"
+                        indicatorColor="primary"
+                        textColor="primary"
+                        sx={{
+                        '& .MuiTab-root': { 
+                            fontWeight: 600, 
+                            minHeight: 52, 
+                            fontSize: '0.85rem',
+                            textTransform: 'none',
+                             px: 3
+                        },
+                        minHeight: 52
+                        }}
+                    >
+                        {Array.from({ length: patient.currentProtocol.cycles }, (_, i) => (
+                        <Tab
+                            key={i}
+                            label={`Cycle ${i + 1}`}
+                            icon={
+                            patient.cycleOutcomes?.some((c) => c.cycleNumber === i + 1) ? (
+                                <CheckCircleIcon sx={{ fontSize: '1rem', color: 'success.main' }} />
+                            ) : undefined
+                            }
+                            iconPosition="end"
+                        />
+                        ))}
+                    </Tabs>
+                </Paper>
+             </Grid>
 
-        <Grid container spacing={2}>
           {/* Left Column - Drug Administration */}
-          <Grid item xs={12} md={6}>
-            <Paper sx={{ p: 2, borderRadius: 2, height: '100%' }}>
-              <Typography variant="overline" sx={{ mb: 1.5, fontWeight: 700, color: 'primary.main', fontSize: '0.75rem', letterSpacing: 1.2, display: 'block' }}>
-                Cycle {currentCycle} – Drug Administration
-              </Typography>
-
-              <Table size="small" sx={{ minWidth: 0, tableLayout: 'fixed' }}>
+          <Grid item xs={12} md={7}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, justifyContent: 'space-between' }}>
+                 <Typography variant="overline" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2 }}>
+                    Cycle {currentCycle} Administration
+                </Typography>
+                 <MicButton />
+            </Box>
+           
+            <Paper variant="outlined" sx={{ p: 0, borderRadius: 2, overflow: 'hidden' }}>
+              <Table size="small">
                 <TableHead>
                   <TableRow sx={{ bgcolor: 'grey.50' }}>
-                    <TableCell sx={{ fontWeight: 700, px: 1, color: 'text.secondary', fontSize: '0.75rem' }}>Drug</TableCell>
-                    <TableCell sx={{ fontWeight: 700, px: 1, color: 'text.secondary', fontSize: '0.75rem' }}>Basis</TableCell>
-                    <TableCell sx={{ fontWeight: 700, px: 1, color: 'text.secondary', fontSize: '0.75rem' }}>Dose</TableCell>
-                    <TableCell sx={{ fontWeight: 700, px: 1, width: '20%', color: 'text.secondary', fontSize: '0.75rem' }}>Status</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: 'text.secondary', fontSize: '0.75rem', py: 1.5 }}>Drug</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: 'text.secondary', fontSize: '0.75rem', py: 1.5 }}>Basis</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: 'text.secondary', fontSize: '0.75rem', py: 1.5 }}>Dose</TableCell>
+                    <TableCell align="right" sx={{ fontWeight: 600, color: 'text.secondary', fontSize: '0.75rem', py: 1.5 }}>Status</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {patient.currentProtocol.drugs.map((drug, index) => (
-                    <TableRow key={index}>
-                      <TableCell sx={{ fontWeight: 600, px: 1, py: 0.75, width: '35%', overflowWrap: 'break-word', fontSize: '0.8rem' }}>
-                        {drug.name}
-                        <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: '0.7rem' }}>Day {drug.day}</Typography>
+                    <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                      <TableCell sx={{ py: 2 }}>
+                        <Typography variant="body2" fontWeight={600} color="text.primary">{drug.name}</Typography>
+                        <Chip label={`Day ${drug.day}`} size="small" sx={{ mt: 0.5, height: 20, fontSize: '0.65rem', bgcolor: 'grey.100' }} />
                       </TableCell>
-                      <TableCell sx={{ width: '20%', px: 1, py: 0.75, fontSize: '0.8rem' }}>{drug.doseBasis}</TableCell>
-                      <TableCell sx={{ width: '25%', px: 1, py: 0.75, fontSize: '0.8rem' }}>{drug.dose}</TableCell>
-                      <TableCell sx={{ px: 1, py: 0.75 }}>
+                      <TableCell sx={{ py: 2 }}><Typography variant="body2">{drug.doseBasis}</Typography></TableCell>
+                      <TableCell sx={{ py: 2 }}><Typography variant="body2">{drug.dose}</Typography></TableCell>
+                      <TableCell align="right" sx={{ py: 2 }}>
                         {cycleOutcome ? (
                           <Chip
                             label={drug.status || 'Given'}
                             size="small"
                             color={drug.status === 'Held' ? 'warning' : 'success'}
+                            variant={drug.status === 'Held' ? 'outlined' : 'filled'}
                             icon={drug.status === 'Held' ? <PauseCircleIcon sx={{ fontSize: '0.9rem' }} /> : <CheckCircleIcon sx={{ fontSize: '0.9rem' }} />}
-                            sx={{ height: 20, fontSize: '0.65rem', '& .MuiChip-label': { px: 1 } }}
+                            sx={{ fontWeight: 500 }}
                           />
                         ) : (
-                          <Chip label="Pending" size="small" variant="outlined" sx={{ height: 20, fontSize: '0.65rem' }} />
+                          <Chip label="Pending" size="small" variant="outlined" sx={{ borderColor: 'grey.300', color: 'text.secondary' }} />
                         )}
                       </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
+            </Paper>
 
               {/* Pre-medication / Supportive Care */}
-              <Box sx={{ mt: 2.5, p: 1.5, bgcolor: 'info.light', borderRadius: 2 }}>
-                <Typography variant="caption" sx={{ fontWeight: 700, mb: 0.5, color: 'info.dark', display: 'block', letterSpacing: 0.5, fontSize: '0.7rem' }}>
-                  PRE-MEDICATIONS
-                </Typography>
-                <Grid container spacing={1}>
-                  <Grid item xs={12} sm={4}>
-                    <Typography variant="caption" display="block">• Dexamethasone 12 mg IV</Typography>
-                  </Grid>
-                  <Grid item xs={12} sm={4}>
-                    <Typography variant="caption" display="block">• Ondansetron 8 mg IV</Typography>
-                  </Grid>
-                  <Grid item xs={12} sm={4}>
-                    <Typography variant="caption" display="block">• Ranitidine 50 mg IV</Typography>
-                  </Grid>
-                </Grid>
-              </Box>
-            </Paper>
+               <Box sx={{ mt: 4 }}>
+                   <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'text.secondary', fontSize: '0.8rem', letterSpacing: 1, display: 'block' }}>
+                    Pre-Medications & Supportive Care
+                  </Typography>
+                  <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 2 }}>
+                    <Grid container spacing={2}>
+                        {[
+                            { name: 'Dexamethasone', dose: '12 mg IV' },
+                            { name: 'Ondansetron', dose: '8 mg IV' },
+                            { name: 'Ranitidine', dose: '50 mg IV' }
+                        ].map((med, i) => (
+                            <Grid item xs={12} sm={4} key={i}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                    <CheckCircleIcon color="success" sx={{ fontSize: 16, opacity: 0.7 }} />
+                                    <Box>
+                                        <Typography variant="body2" fontWeight={500}>{med.name}</Typography>
+                                        <Typography variant="caption" color="text.secondary">{med.dose}</Typography>
+                                    </Box>
+                                </Box>
+                            </Grid>
+                        ))}
+                    </Grid>
+                  </Paper>
+               </Box>
           </Grid>
 
           {/* Right Column - Cycle Outcome & Labs */}
-          <Grid item xs={12} md={6}>
-            <Paper sx={{ p: 2, borderRadius: 2, border: '1px solid', borderColor: cycleOutcome ? 'success.light' : 'divider' }}>
-              <Typography variant="overline" sx={{ mb: 1.5, fontWeight: 700, color: cycleOutcome ? 'success.dark' : 'text.secondary', fontSize: '0.75rem', letterSpacing: 1.2, display: 'block' }}>
-                Cycle {currentCycle} – Outcome
-              </Typography>
+          <Grid item xs={12} md={5}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, justifyContent: 'space-between' }}>
+                 <Typography variant="overline" sx={{ fontWeight: 700, color: cycleOutcome ? 'success.main' : 'text.secondary', fontSize: '0.85rem', letterSpacing: 1.2 }}>
+                    Cycle Outcome
+                </Typography>
+            </Box>
 
-              {cycleOutcome ? (
-                <Box>
-                  <Grid container spacing={2} sx={{ mb: 2 }}>
-                     <Grid item xs={6}>
-                        <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: '0.7rem' }}>ADMINISTERED DATE</Typography>
-                        <Typography variant="body2" fontWeight={600} sx={{ fontSize: '0.8rem' }}>{cycleOutcome.date}</Typography>
-                     </Grid>
-                     <Grid item xs={6}>
-                        <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: '0.7rem' }}>RESPONSE</Typography>
-                        <Chip
-                              label={cycleOutcome.response}
-                              size="small"
-                              color={
-                                cycleOutcome.response === 'Complete Response'
-                                  ? 'success'
-                                  : cycleOutcome.response === 'Partial Response'
-                                  ? 'info'
-                                  : cycleOutcome.response === 'Stable Disease'
-                                  ? 'warning'
-                                  : 'error'
-                              }
-                              sx={{ mt: 0.5, height: 20, fontSize: '0.65rem' }}
-                            />
-                     </Grid>
-                  </Grid>
+             <Paper variant="outlined" sx={{ p: 0, borderRadius: 2 }}>
+                {cycleOutcome ? (
+                  <Box>
+                    <Box sx={{ p: 3, borderBottom: '1px solid', borderColor: 'divider' }}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={6}>
+                                <Typography variant="caption" color="text.secondary" display="block">DATE ADMINISTERED</Typography>
+                                <Typography variant="subtitle2" fontWeight={600} sx={{ mt: 0.5 }}>{cycleOutcome.date}</Typography>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Typography variant="caption" color="text.secondary" display="block">RESPONSE</Typography>
+                                <Chip
+                                    label={cycleOutcome.response}
+                                    size="small"
+                                    color={
+                                        cycleOutcome.response.includes('Complete') ? 'success' :
+                                        cycleOutcome.response.includes('Partial') ? 'info' :
+                                        cycleOutcome.response.includes('Stable') ? 'warning' : 'error'
+                                    }
+                                    sx={{ mt: 0.5, fontWeight: 500 }}
+                                />
+                            </Grid>
+                        </Grid>
+                    </Box>
 
-                  <Table size="small" sx={{ minWidth: 0, tableLayout: 'fixed' }}>
-                    <TableBody>
-                      {cycleOutcome.toxicity && (
-                        <>
+                    <Table size="small">
+                      <TableBody>
+                        {cycleOutcome.toxicity && (
                           <TableRow>
-                            <TableCell sx={{ fontWeight: 600, width: '35%', px: 1, py: 0.5, fontSize: '0.8rem' }}>Toxicity Grade</TableCell>
-                            <TableCell sx={{ px: 1, py: 0.5 }}>
-                              <Chip
-                                label={cycleOutcome.toxicity}
-                                size="small"
-                                color={
-                                  cycleOutcome.toxicity === 'Grade 1' || cycleOutcome.toxicity === 'Grade 2'
-                                    ? 'warning'
-                                    : 'error'
-                                }
-                                sx={{ height: 20, fontSize: '0.65rem' }}
-                              />
+                            <TableCell component="th" scope="row" sx={{ color: 'text.secondary', borderBottom: 'none', pl: 3, py: 1.5, width: '40%' }}>Toxicity</TableCell>
+                            <TableCell sx={{ borderBottom: 'none', pr: 3, py: 1.5 }}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                     <Chip
+                                        label={cycleOutcome.toxicity}
+                                        size="small"
+                                        variant="outlined"
+                                        color={['Grade 1', 'Grade 2'].includes(cycleOutcome.toxicity) ? 'warning' : 'error'}
+                                        sx={{ height: 24 }}
+                                    />
+                                    {cycleOutcome.toxicityDescription && (
+                                        <Tooltip title={cycleOutcome.toxicityDescription}>
+                                            <InfoOutlinedIcon sx={{ fontSize: 16, color: 'text.secondary', cursor: 'pointer' }} />
+                                        </Tooltip>
+                                    )}
+                                </Box>
                             </TableCell>
                           </TableRow>
-                          <TableRow>
-                            <TableCell sx={{ fontWeight: 600, verticalAlign: 'top', width: '35%', px: 1, py: 0.5, fontSize: '0.8rem' }}>Details</TableCell>
-                            <TableCell sx={{ px: 1, py: 0.5, fontSize: '0.8rem' }}>{cycleOutcome.toxicityDescription}</TableCell>
+                        )}
+                        {cycleOutcome.qolImpact && (
+                           <TableRow>
+                            <TableCell component="th" scope="row" sx={{ color: 'text.secondary', borderBottom: 'none', pl: 3, py: 1.5 }}>QoL Impact</TableCell>
+                            <TableCell sx={{ borderBottom: 'none', pr: 3, py: 1.5 }}>
+                                <Typography 
+                                    variant="body2" 
+                                    sx={{ 
+                                        color: cycleOutcome.qolImpact === 'Improved' ? 'success.main' : 'error.main',
+                                        fontWeight: 500
+                                    }}
+                                >
+                                    {cycleOutcome.qolImpact}
+                                </Typography>
+                            </TableCell>
                           </TableRow>
-                        </>
-                      )}
-                      {cycleOutcome.qolImpact && (
-                        <TableRow>
-                          <TableCell sx={{ fontWeight: 600, px: 1, py: 0.5, fontSize: '0.8rem' }}>QoL Impact</TableCell>
-                          <TableCell sx={{ px: 1, py: 0.5 }}>
-                            <Chip
-                              label={cycleOutcome.qolImpact}
-                              size="small"
-                              color={
-                                cycleOutcome.qolImpact === 'Improved'
-                                  ? 'success'
-                                  : cycleOutcome.qolImpact === 'Worsened'
-                                  ? 'error'
-                                  : 'default'
-                              }
-                              sx={{ height: 20, fontSize: '0.65rem' }}
-                            />
-                          </TableCell>
-                        </TableRow>
-                      )}
-                      <TableRow>
-                        <TableCell sx={{ fontWeight: 600, verticalAlign: 'top', px: 1, py: 0.5, fontSize: '0.8rem' }}>Decision</TableCell>
-                        <TableCell sx={{ px: 1, py: 0.5 }}>
-                          <Typography variant="body2" sx={{ fontWeight: 700, color: 'success.main', fontSize: '0.8rem' }}>
-                            {cycleOutcome.decision}
-                          </Typography>
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
+                        )}
+                         <TableRow>
+                            <TableCell component="th" scope="row" sx={{ color: 'text.secondary', pl: 3, py: 1.5 }}>Decision</TableCell>
+                            <TableCell sx={{ pr: 3, py: 1.5 }}>
+                                <Typography variant="body2" fontWeight={600} color="primary.main">{cycleOutcome.decision}</Typography>
+                            </TableCell>
+                          </TableRow>
+                      </TableBody>
+                    </Table>
 
-                  {cycleOutcome.notes && (
-                    <Box sx={{ mt: 2, p: 1.5, bgcolor: 'grey.50', borderRadius: 1, borderLeft: '4px solid', borderColor: 'primary.main' }}>
-                      <Typography variant="caption" sx={{ fontWeight: 700, color: 'text.secondary', display: 'block', mb: 0.25, fontSize: '0.7rem' }}>
-                        CLINICAL NOTES
-                      </Typography>
-                      <Typography variant="body2" sx={{ fontSize: '0.8rem' }}>{cycleOutcome.notes}</Typography>
+                    {/* Notes Section within Card */}
+                    <Box sx={{ p: 3, bgcolor: 'grey.50' }}>
+                         <Typography variant="caption" sx={{ fontWeight: 700, color: 'text.secondary', display: 'block', mb: 1 }}>
+                            CLINICAL NOTES
+                         </Typography>
+                         <Typography variant="body2" color="text.primary" sx={{ mb: 2, fontStyle: 'italic' }}>
+                             "{cycleOutcome.notes || 'No specific notes recorded.'}"
+                         </Typography>
+                         
+                         <Divider sx={{ my: 2 }} />
+                         
+                         <Typography variant="caption" sx={{ fontWeight: 700, color: 'text.secondary', display: 'block', mb: 1 }}>
+                            ADDITIONAL COMMENTS
+                         </Typography>
+                         <TextField
+                            fullWidth
+                            multiline
+                            rows={2}
+                            placeholder="Add administration notes..."
+                            size="small"
+                            sx={{ bgcolor: 'white' }}
+                        />
                     </Box>
-                  )}
-                  
-                  {/* Administration Notes Input (Read-only view for past cycles typically, or editable) */}
-                   <Box sx={{ mt: 2 }}>
-                      <Typography variant="caption" sx={{ fontWeight: 700, color: 'text.secondary', display: 'block', mb: 0.5, fontSize: '0.7rem' }}>
-                        ADMINISTRATION NOTES
-                      </Typography>
-                      <TextField
-                        fullWidth
-                        multiline
-                        rows={2}
-                        defaultValue={cycleOutcome.notes || 'All drugs administered as per protocol. Patient tolerated well.'}
-                        size="small"
-                        variant="outlined"
-                        InputProps={{ sx: { fontSize: '0.8rem' } }}
-                      />
-                    </Box>
+                  </Box>
+                ) : (
+                  <Box sx={{ textAlign: 'center', py: 8, px: 3 }}>
+                    <PendingIcon sx={{ fontSize: 40, color: 'grey.300', mb: 2 }} />
+                    <Typography variant="h6" color="text.secondary" gutterBottom>Cycle Pending</Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                      This cycle has not been administered yet.
+                    </Typography>
+                    <Button variant="contained" disableElevation>
+                      Start Administration
+                    </Button>
+                  </Box>
+                )}
+             </Paper>
 
-                </Box>
-              ) : (
-                <Box sx={{ textAlign: 'center', py: 6, bgcolor: 'grey.50', borderRadius: 2 }}>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                    Cycle not yet administered
-                  </Typography>
-                  <Button variant="contained" color="primary" disableElevation size="small">
-                    Start Cycle {currentCycle}
-                  </Button>
-                </Box>
-              )}
-            </Paper>
-
-            {/* Lab Values for this Cycle */}
-            <Paper sx={{ p: 2, mt: 2, borderRadius: 2 }}>
-              <Typography variant="overline" sx={{ mb: 1.5, fontWeight: 700, color: 'primary.main', fontSize: '0.75rem', letterSpacing: 1.2, display: 'block' }}>
-                Pre-Cycle Lab Values
-              </Typography>
-              <Grid container spacing={1}>
-                 {[
-                    { name: 'Hemoglobin', value: '12.5 g/dL', status: 'Normal' },
-                    { name: 'WBC', value: '6.2 × 10³/µL', status: 'Normal' },
-                    { name: 'Platelets', value: '185 × 10³/µL', status: 'Normal' },
-                    { name: 'Creatinine', value: '0.9 mg/dL', status: 'Normal' },
-                 ].map((lab, i) => (
-                    <Grid item xs={6} sm={3} key={i}>
-                       <Box sx={{ p: 1, bgcolor: 'grey.50', borderRadius: 2, textAlign: 'center' }}>
-                          <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: '0.7rem' }}>{lab.name}</Typography>
-                           <Typography variant="body2" fontWeight={600} display="block" sx={{ my: 0.25, fontSize: '0.8rem' }}>{lab.value}</Typography>
-                           <Chip label={lab.status} size="small" color="success" sx={{ height: 16, fontSize: '0.6rem' }} />
-                       </Box>
+            {/* Pre-Cycle Lab Values */}
+            <Box sx={{ mt: 4 }}>
+                 <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'text.secondary', fontSize: '0.8rem', letterSpacing: 1, display: 'block' }}>
+                    Pre-Cycle Labs
+                </Typography>
+                <Grid container spacing={2}>
+                    {[
+                    { name: 'Hemoglobin', value: '12.5', unit: 'g/dL', status: 'Normal' },
+                    { name: 'WBC', value: '6.2', unit: '10³/µL', status: 'Normal' },
+                    { name: 'Platelets', value: '185', unit: '10³/µL', status: 'Normal' },
+                    { name: 'Creatinine', value: '0.9', unit: 'mg/dL', status: 'Normal' },
+                    ].map((lab, i) => (
+                    <Grid item xs={6} key={i}>
+                        <Paper variant="outlined" sx={{ p: 2, borderRadius: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Box>
+                                <Typography variant="caption" color="text.secondary" display="block">{lab.name}</Typography>
+                                <Typography variant="subtitle2" fontWeight={600}>
+                                    {lab.value} <Typography component="span" variant="caption" color="text.secondary">{lab.unit}</Typography>
+                                </Typography>
+                            </Box>
+                            <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: 'success.main' }} />
+                        </Paper>
                     </Grid>
-                 ))}
-              </Grid>
-            </Paper>
+                    ))}
+                </Grid>
+            </Box>
           </Grid>
         </Grid>
 
         {/* Treatment Timeline - Full Width */}
-        <Paper sx={{ p: 2, mt: 2, borderRadius: 2 }}>
-          <Typography variant="overline" sx={{ mb: 1.5, fontWeight: 700, color: 'primary.main', fontSize: '0.75rem', letterSpacing: 1.2, display: 'block' }}>
+        <Box sx={{ mt: 6 }}>
+           <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
             Treatment Timeline
           </Typography>
-          <Box 
+          <Paper variant="outlined" sx={{ p: 3, borderRadius: 2 }}>
+             <Box 
             sx={{ 
               display: 'flex', 
-              gap: 1.5, 
+              gap: 2, 
               overflowX: 'auto', 
               pb: 1,
-              // Custom Scrollbar Styles
-              '&::-webkit-scrollbar': {
-                height: '4px',
-              },
-              '&::-webkit-scrollbar-track': {
-                background: '#f1f1f1', 
-                borderRadius: '4px',
-              },
-              '&::-webkit-scrollbar-thumb': {
-                background: '#bdbdbd', 
-                borderRadius: '4px',
-                '&:hover': {
-                  background: '#a6a6a6', 
-                },
-              },
+              '&::-webkit-scrollbar': { height: '6px' },
+              '&::-webkit-scrollbar-track': { background: '#f1f1f1', borderRadius: '4px' },
+              '&::-webkit-scrollbar-thumb': { background: '#d1d1d1', borderRadius: '4px', '&:hover': { background: '#b0b0b0' } },
             }}
           >
             {Array.from({ length: patient.currentProtocol.cycles }, (_, i) => {
               const outcome = patient.cycleOutcomes?.find((c) => c.cycleNumber === i + 1);
+              const isCurrent = i + 1 === currentCycle;
+              
               return (
                 <Box
                   key={i}
                   sx={{
-                    minWidth: 120,
-                    p: 1.5,
+                    minWidth: 140,
+                    p: 0,
                     border: '1px solid',
-                    borderColor: outcome ? 'success.light' : 'divider',
+                    borderColor: isCurrent ? 'primary.main' : outcome ? 'success.light' : 'divider',
                     borderRadius: 2,
-                    bgcolor: outcome ? 'success.light' : 'background.paper',
-                    textAlign: 'center',
-                    opacity: outcome ? 1 : 0.7
+                    bgcolor: outcome ? alpha('#2e7d32', 0.04) : 'background.paper',
+                    position: 'relative',
+                    overflow: 'hidden'
                   }}
                 >
-                  <Typography variant="caption" sx={{ fontWeight: 700, mb: 0.5, display: 'block', color: outcome ? 'success.dark' : 'text.primary', fontSize: '0.7rem' }}>
-                    CYCLE {i + 1}
-                  </Typography>
-                  {outcome ? (
-                    <>
-                      <Typography variant="body2" fontWeight={600} sx={{ mb: 0.5, fontSize: '0.75rem' }}>{outcome.date}</Typography>
-                      <Chip label={outcome.response} size="small" color="success" variant="filled" sx={{ height: 16, fontSize: '0.6rem' }} />
-                    </>
-                  ) : (
-                     <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.75rem' }}>Pending</Typography>
-                  )}
+                    {isCurrent && <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, height: 4, bgcolor: 'primary.main' }} />}
+                    
+                    <Box sx={{ p: 2 }}>
+                        <Typography variant="caption" sx={{ fontWeight: 700, mb: 0.5, display: 'block', color: 'text.secondary', fontSize: '0.7rem', textTransform: 'uppercase' }}>
+                            CYCLE {i + 1}
+                        </Typography>
+                        
+                         {outcome ? (
+                            <>
+                            <Typography variant="body2" fontWeight={600} sx={{ mb: 1 }}>{outcome.date}</Typography>
+                            <Chip 
+                                label={outcome.response} 
+                                size="small" 
+                                color="success" 
+                                variant="outlined" 
+                                sx={{ height: 20, fontSize: '0.65rem', width: '100%' }} 
+                            />
+                            </>
+                        ) : (
+                             <Box sx={{ height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <Typography variant="caption" color="text.secondary" sx={{ fontStyle: 'italic' }}>Pending</Typography>
+                             </Box>
+                        )}
+                    </Box>
                 </Box>
               );
             })}
           </Box>
-        </Paper>
+          </Paper>
+        </Box>
       </Container>
-
+      
       {/* Bottom Action Bar */}
       <Box
         sx={{
@@ -412,91 +463,21 @@ export default function ChemoProtocolWorkspace({ patient, hideContextBar }: Chem
           zIndex: 1000,
         }}
       >
-        {/* Empty left side or can add content later */}
         <Box />
-
-        {/* Right side - Action buttons, Finish button and home icon */}
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-          <Fab
-            size="small"
-            sx={{
-              bgcolor: 'white',
-              border: '2px solid',
-              borderColor: 'primary.main',
-              color: 'primary.main',
-              width: 36,
-              height: 36,
-              minHeight: 36,
-              '&:hover': { bgcolor: 'grey.50' },
-            }}
-          >
+          <Fab size="small" sx={{ bgcolor: 'white', border: '2px solid', borderColor: 'primary.main', color: 'primary.main', width: 36, height: 36, minHeight: 36, elevation: 0, boxShadow: 'none', '&:hover': { bgcolor: 'grey.50' } }}>
             <MicIcon sx={{ fontSize: '1rem' }} />
           </Fab>
-          <Fab
-            size="small"
-            sx={{
-              bgcolor: 'white',
-              border: '2px solid',
-              borderColor: 'primary.main',
-              color: 'primary.main',
-              width: 36,
-              height: 36,
-              minHeight: 36,
-              '&:hover': { bgcolor: 'grey.50' },
-            }}
-          >
-            <Box
-              sx={{
-                fontWeight: 700,
-                fontSize: '0.75rem',
-              }}
-            >
-              Rx
-            </Box>
+          <Fab size="small" sx={{ bgcolor: 'white', border: '2px solid', borderColor: 'primary.main', color: 'primary.main', width: 36, height: 36, minHeight: 36, elevation: 0, boxShadow: 'none', '&:hover': { bgcolor: 'grey.50' } }}>
+            <Box sx={{ fontWeight: 700, fontSize: '0.75rem' }}>Rx</Box>
           </Fab>
-          <Fab
-            size="small"
-            sx={{
-              bgcolor: 'white',
-              border: '2px solid',
-              borderColor: 'primary.main',
-              color: 'primary.main',
-              width: 36,
-              height: 36,
-              minHeight: 36,
-              '&:hover': { bgcolor: 'grey.50' },
-            }}
-          >
+          <Fab size="small" sx={{ bgcolor: 'white', border: '2px solid', borderColor: 'primary.main', color: 'primary.main', width: 36, height: 36, minHeight: 36, elevation: 0, boxShadow: 'none', '&:hover': { bgcolor: 'grey.50' } }}>
             <LayersIcon sx={{ fontSize: '1rem' }} />
           </Fab>
-          <Fab
-            size="small"
-            sx={{
-              bgcolor: 'white',
-              border: '2px solid',
-              borderColor: 'primary.main',
-              color: 'primary.main',
-              width: 36,
-              height: 36,
-              minHeight: 36,
-              '&:hover': { bgcolor: 'grey.50' },
-            }}
-          >
+          <Fab size="small" sx={{ bgcolor: 'white', border: '2px solid', borderColor: 'primary.main', color: 'primary.main', width: 36, height: 36, minHeight: 36, elevation: 0, boxShadow: 'none', '&:hover': { bgcolor: 'grey.50' } }}>
             <ChatIcon sx={{ fontSize: '1rem' }} />
           </Fab>
-          <Fab
-            size="small"
-            sx={{
-              bgcolor: 'white',
-              border: '2px solid',
-              borderColor: 'primary.main',
-              color: 'primary.main',
-              width: 36,
-              height: 36,
-              minHeight: 36,
-              '&:hover': { bgcolor: 'grey.50' },
-            }}
-          >
+           <Fab size="small" sx={{ bgcolor: 'white', border: '2px solid', borderColor: 'primary.main', color: 'primary.main', width: 36, height: 36, minHeight: 36, elevation: 0, boxShadow: 'none', '&:hover': { bgcolor: 'grey.50' } }}>
             <MoreHorizIcon sx={{ fontSize: '1rem' }} />
           </Fab>
           <Button
@@ -508,7 +489,7 @@ export default function ChemoProtocolWorkspace({ patient, hideContextBar }: Chem
           >
             Finish and Next Patient
           </Button>
-          <Fab color="primary" size="small" sx={{ width: 36, height: 36, minHeight: 36 }}>
+          <Fab color="primary" size="small" sx={{ width: 36, height: 36, minHeight: 36, boxShadow: 'none' }}>
             <HomeIcon sx={{ fontSize: '1rem' }} />
           </Fab>
         </Box>
