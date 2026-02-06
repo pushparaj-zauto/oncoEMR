@@ -2,9 +2,7 @@ import {
   Box,
   Container,
   Grid,
-  Card,
-  CardContent,
-  CardHeader,
+  Paper,
   Typography,
   Chip,
   Table,
@@ -17,6 +15,7 @@ import {
   TextField,
   Slider,
   Stack,
+  Divider,
 } from '@mui/material';
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
@@ -47,38 +46,66 @@ export default function PalliativeDashboard({ patient }: PalliativeDashboardProp
       {/* Global Patient Context Bar */}
       <PatientContextBar patient={patient} />
 
-      <Container maxWidth="xl" sx={{ mt: 3, mb: 4 }}>
+      <Container maxWidth="xl" sx={{ mt: 4, mb: 5 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
           <Box>
-            <Typography variant="h4" sx={{ fontWeight: 700, color: 'primary.main', letterSpacing: '-0.2px' }}>
+            <Typography variant="h5" sx={{ fontWeight: 600, color: 'primary.main', letterSpacing: 0.3 }}>
               Palliative Care Dashboard
             </Typography>
-            <Typography variant="subtitle1" color="text.secondary" sx={{ mt: 0.5 }}>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
               Concise summary of symptoms, QoL metrics and current therapy
             </Typography>
           </Box>
           <Chip
             label="PALLIATIVE INTENT"
             color="info"
-            sx={{ fontWeight: 700, fontSize: '0.9rem', py: 1.5, px: 1.2 }}
+            sx={{ fontWeight: 700, fontSize: '0.85rem', py: 0.5 }}
             variant="outlined"
           />
         </Box>
 
         <Grid container spacing={3}>
-          {/* Pain Score - Large Prominent Display */}
+          {/* Column 1: Current Treatment & Pain Score */}
           <Grid item xs={12} md={4}>
-            <Card sx={{ p: 0, overflow: 'visible' }}>
-              <CardHeader
-                title="Pain Score (0–10)"
-                titleTypographyProps={{ variant: 'h6', fontWeight: 700 }}
-                sx={{ pb: 0 }}
-              />
-              <CardContent sx={{ textAlign: 'center', pt: 1 }}>
+            {/* Current Treatment (Moved here) */}
+             {patient.currentProtocol && (
+              <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: 2 }}>
+                <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
+                  Current Treatment
+                </Typography>
+                <Box>
+                  <Typography variant="body2" sx={{ mb: 0.5 }}>
+                    <strong>Protocol:</strong> {patient.currentProtocol.name}
+                  </Typography>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                    <Typography variant="caption" color="text.secondary">Progress</Typography>
+                    <Typography variant="caption" fontWeight={600}>
+                      {patient.cycleOutcomes?.length || 0} / {patient.currentProtocol.cycles} Cycles
+                    </Typography>
+                  </Box>
+                  <LinearProgress
+                    variant="determinate"
+                    value={((patient.cycleOutcomes?.length || 0) / patient.currentProtocol.cycles) * 100}
+                    color="primary"
+                    sx={{ height: 6, borderRadius: 1, bgcolor: 'grey.200' }}
+                  />
+                  <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
+                    Last cycle: {patient.cycleOutcomes?.[patient.cycleOutcomes.length - 1]?.date}
+                  </Typography>
+                </Box>
+              </Paper>
+            )}
+
+            <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
+              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
+                Pain Score (0–10)
+              </Typography>
+              
+              <Box sx={{ textAlign: 'center', pt: 1 }}>
                 <Box
                   sx={{
-                    width: 160,
-                    height: 160,
+                    width: 140,
+                    height: 140,
                     mx: 'auto',
                     borderRadius: '50%',
                     display: 'flex',
@@ -89,7 +116,7 @@ export default function PalliativeDashboard({ patient }: PalliativeDashboardProp
                     background: theme =>
                       `linear-gradient(135deg, ${theme.palette[getPainColor(painScore)].light}, ${theme.palette[getPainColor(painScore)].main})`,
                     color: 'common.white',
-                    mb: 1,
+                    mb: 2,
                   }}
                 >
                   <Typography variant="h2" sx={{ fontWeight: 800, lineHeight: 1 }}>
@@ -97,303 +124,260 @@ export default function PalliativeDashboard({ patient }: PalliativeDashboardProp
                   </Typography>
                 </Box>
 
-                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: 1 }}>
+                <Stack direction="row" justifyContent="center" alignItems="center" spacing={2} sx={{ mb: 3 }}>
                   <Typography variant="body2" color="text.secondary">
                     Previously: <strong>{previousPainScore}</strong>
                   </Typography>
                   <Chip label={`↓ ${previousPainScore - painScore} pts`} size="small" color="success" />
                 </Stack>
 
-                <Box sx={{ mt: 2 }}>
-                  <Slider
-                    value={painScore}
-                    min={0}
-                    max={10}
-                    marks
-                    disabled
-                    color={getPainColor(painScore)}
-                    sx={{ mt: 1 }}
-                  />
-                </Box>
-              </CardContent>
-            </Card>
+                <Slider
+                  value={painScore}
+                  min={0}
+                  max={10}
+                  marks
+                  disabled
+                  color={getPainColor(painScore)}
+                  sx={{ width: '90%' }}
+                />
+              </Box>
+            </Paper>
 
-            <Card sx={{ p: 0, mt: 2, bgcolor: 'info.light', border: theme => `1px solid ${theme.palette.info.main}` }}>
-              <CardContent>
-                <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 700, color: 'info.dark' }}>
-                  Care Goal
-                </Typography>
-                <Typography variant="body2" sx={{ fontWeight: 500, color: 'text.primary' }}>
-                  Comfort-focused care; continue current chemotherapy for disease control and symptom management.
-                </Typography>
-              </CardContent>
-            </Card>
+            <Paper elevation={1} sx={{ p: 3, mt: 3, borderRadius: 2, bgcolor: 'info.light', border: '1px solid', borderColor: 'info.main' }}>
+              <Typography variant="overline" sx={{ mb: 1, fontWeight: 700, color: 'info.dark', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
+                Care Goal
+              </Typography>
+              <Typography variant="body2" sx={{ fontWeight: 500, color: 'text.primary' }}>
+                Comfort-focused care; continue current chemotherapy for disease control and symptom management.
+              </Typography>
+            </Paper>
           </Grid>
 
-          {/* Symptom Checklist */}
+          {/* Column 2: Symptom Checklist & Meds */}
           <Grid item xs={12} md={4}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6" sx={{ mb: 2, fontWeight: 700, color: 'primary.main' }}>
-                  Symptom Assessment
-                </Typography>
+            <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
+              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
+                Symptom Assessment
+              </Typography>
 
-                {patient.qolMetrics?.symptoms && (
-                  <Box>
-                    <FormControlLabel
-                      control={<Checkbox checked={patient.qolMetrics.symptoms.pain} />}
-                      label={
-                        <Box>
-                          <Typography variant="body1" sx={{ fontWeight: 700 }}>
-                            Pain
-                          </Typography>
-                          <Chip label="Improved" size="small" color="success" sx={{ mt: 0.5 }} />
-                        </Box>
-                      }
-                      sx={{ width: '100%', mb: 2, alignItems: 'flex-start' }}
-                    />
-                    <FormControlLabel
-                      control={<Checkbox checked={patient.qolMetrics.symptoms.fatigue} />}
-                      label={
-                        <Box>
-                          <Typography variant="body1" sx={{ fontWeight: 700 }}>
-                            Fatigue
-                          </Typography>
-                          <Chip label="Stable" size="small" color="default" sx={{ mt: 0.5 }} />
-                        </Box>
-                      }
-                      sx={{ width: '100%', mb: 2, alignItems: 'flex-start' }}
-                    />
-                    <FormControlLabel
-                      control={<Checkbox checked={patient.qolMetrics.symptoms.breathlessness} />}
-                      label={
-                        <Box>
-                          <Typography variant="body1" sx={{ fontWeight: 700 }}>
-                            Breathlessness
-                          </Typography>
-                          <Chip label="Stable" size="small" color="default" sx={{ mt: 0.5 }} />
-                        </Box>
-                      }
-                      sx={{ width: '100%', mb: 2, alignItems: 'flex-start' }}
-                    />
-                    <FormControlLabel
-                      control={<Checkbox checked={patient.qolMetrics.symptoms.nausea} />}
-                      label={
-                        <Box>
-                          <Typography variant="body1" sx={{ fontWeight: 700 }}>
-                            Nausea
-                          </Typography>
-                        </Box>
-                      }
-                      sx={{ width: '100%', mb: 2, alignItems: 'flex-start' }}
-                    />
-                    <FormControlLabel
-                      control={<Checkbox checked={patient.qolMetrics.symptoms.anxiety} />}
-                      label={
-                        <Box>
-                          <Typography variant="body1" sx={{ fontWeight: 700 }}>
-                            Anxiety
-                          </Typography>
-                        </Box>
-                      }
-                      sx={{ width: '100%', alignItems: 'flex-start' }}
-                    />
-                  </Box>
-                )}
-              </CardContent>
-            </Card>
+              {patient.qolMetrics?.symptoms && (
+                <Box>
+                  <Stack spacing={2}>
+                    <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+                      <Checkbox checked={patient.qolMetrics.symptoms.pain} size="small" sx={{ p: 0.5, mt: 0.5, mr: 1 }} />
+                      <Box>
+                        <Typography variant="body2" sx={{ fontWeight: 600 }}>Pain</Typography>
+                        <Chip label="Improved" size="small" color="success" sx={{ mt: 0.5, height: 20, fontSize: '0.7rem' }} />
+                      </Box>
+                    </Box>
+                    <Divider />
+                    <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+                      <Checkbox checked={patient.qolMetrics.symptoms.fatigue} size="small" sx={{ p: 0.5, mt: 0.5, mr: 1 }} />
+                      <Box>
+                        <Typography variant="body2" sx={{ fontWeight: 600 }}>Fatigue</Typography>
+                        <Chip label="Stable" size="small" color="default" sx={{ mt: 0.5, height: 20, fontSize: '0.7rem' }} />
+                      </Box>
+                    </Box>
+                    <Divider />
+                    <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+                      <Checkbox checked={patient.qolMetrics.symptoms.breathlessness} size="small" sx={{ p: 0.5, mt: 0.5, mr: 1 }} />
+                      <Box>
+                        <Typography variant="body2" sx={{ fontWeight: 600 }}>Breathlessness</Typography>
+                        <Chip label="Stable" size="small" color="default" sx={{ mt: 0.5, height: 20, fontSize: '0.7rem' }} />
+                      </Box>
+                    </Box>
+                    <Divider />
+                    <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+                      <Checkbox checked={patient.qolMetrics.symptoms.nausea} size="small" sx={{ p: 0.5, mr: 1 }} />
+                      <Typography variant="body2" sx={{ fontWeight: 600, mt: 0.5 }}>Nausea</Typography>
+                    </Box>
+                    <Divider />
+                    <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+                      <Checkbox checked={patient.qolMetrics.symptoms.anxiety} size="small" sx={{ p: 0.5, mr: 1 }} />
+                      <Typography variant="body2" sx={{ fontWeight: 600, mt: 0.5 }}>Anxiety</Typography>
+                    </Box>
+                  </Stack>
+                </Box>
+              )}
+            </Paper>
 
             {/* Supportive Medications */}
-            <Card sx={{ mt: 2 }}>
-              <CardHeader
-                title="Supportive Medications"
-                titleTypographyProps={{ variant: 'subtitle1', fontWeight: 700 }}
-                sx={{ pb: 0 }}
-              />
-              <CardContent>
-                <Table size="small">
-                  <TableBody>
-                    <TableRow>
-                      <TableCell sx={{ fontWeight: 700 }}>Pain Relief</TableCell>
-                      <TableCell>Morphine SR 30 mg BD</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell sx={{ fontWeight: 700 }}>Anti-emetic</TableCell>
-                      <TableCell>Ondansetron 8 mg PRN</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell sx={{ fontWeight: 700 }}>Anxiolytic</TableCell>
-                      <TableCell>Lorazepam 0.5 mg PRN</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell sx={{ fontWeight: 700 }}>Appetite Stimulant</TableCell>
-                      <TableCell>Megestrol 400 mg OD</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
+            <Paper elevation={1} sx={{ p: 3, mt: 3, borderRadius: 2 }}>
+              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
+                Supportive Medications
+              </Typography>
+              <Table size="small">
+                <TableBody>
+                  <TableRow>
+                    <TableCell sx={{ color: 'text.secondary', fontWeight: 500 }}>Pain Relief</TableCell>
+                    <TableCell>Morphine SR 30 mg BD</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell sx={{ color: 'text.secondary', fontWeight: 500 }}>Anti-emetic</TableCell>
+                    <TableCell>Ondansetron 8 mg PRN</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell sx={{ color: 'text.secondary', fontWeight: 500 }}>Anxiolytic</TableCell>
+                    <TableCell>Lorazepam 0.5 mg PRN</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell sx={{ color: 'text.secondary', fontWeight: 500 }}>Appetite Stimulant</TableCell>
+                    <TableCell>Megestrol 400 mg OD</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </Paper>
           </Grid>
 
-          {/* Quality of Life Metrics */}
+          {/* Column 3: Quality of Life & Notes */}
           <Grid item xs={12} md={4}>
-            <Card sx={{ p: 0 }}>
-              <CardHeader
-                title="Quality of Life"
-                titleTypographyProps={{ variant: 'h6', fontWeight: 700, color: 'success.dark' }}
-                sx={{ pb: 0 }}
-              />
-              <CardContent sx={{ bgcolor: 'success.light' }}>
+            <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
+              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'success.dark', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
+                Quality of Life
+              </Typography>
+              
+              <Box sx={{ p: 2, bgcolor: 'grey.50', borderRadius: 1, border: '1px solid', borderColor: 'divider' }}>
                 {patient.qolMetrics && (
-                  <Box>
-                  {/* Mobility */}
-                  <Box sx={{ mb: 3 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                      <AccessibleIcon sx={{ color: 'success.dark' }} />
-                      <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                        Mobility
-                      </Typography>
-                    </Box>
-                    <Chip
-                      label={patient.qolMetrics.mobility}
-                      color={patient.qolMetrics.mobility === 'Independent' ? 'success' : 'warning'}
-                      sx={{ fontWeight: 600 }}
-                    />
-                  </Box>
-
-                  {/* Sleep */}
-                  <Box sx={{ mb: 3 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                      <HotelIcon sx={{ color: 'success.dark' }} />
-                      <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                        Sleep
-                      </Typography>
-                    </Box>
-                    <Chip
-                      label={patient.qolMetrics.sleep}
-                      color={
-                        patient.qolMetrics.sleep === 'Good'
-                          ? 'success'
-                          : patient.qolMetrics.sleep === 'Fair'
-                          ? 'warning'
-                          : 'error'
-                      }
-                      sx={{ fontWeight: 600 }}
-                      icon={
-                        patient.qolMetrics.sleep === 'Good' ? (
-                          <SentimentVerySatisfiedIcon />
-                        ) : patient.qolMetrics.sleep === 'Fair' ? (
-                          <SentimentSatisfiedIcon />
-                        ) : (
-                          <SentimentDissatisfiedIcon />
-                        )
-                      }
-                    />
-                  </Box>
-
-                  {/* Daily Activity */}
-                  <Box sx={{ mb: 3 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                      <FavoriteIcon sx={{ color: 'success.dark' }} />
-                      <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                        Daily Activity
-                      </Typography>
-                    </Box>
-                    <Chip
-                      label={patient.qolMetrics.dailyActivity}
-                      color={patient.qolMetrics.dailyActivity === 'Independent' ? 'success' : 'warning'}
-                      sx={{ fontWeight: 600 }}
-                    />
-                  </Box>
-
-                  {/* Appetite */}
-                  <Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                      <RestaurantIcon sx={{ color: 'success.dark' }} />
-                      <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                        Appetite
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Stack spacing={2}>
+                    {/* Mobility */}
+                    <Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+                        <AccessibleIcon sx={{ color: 'success.main', fontSize: '1.1rem' }} />
+                        <Typography variant="body2" sx={{ fontWeight: 600 }}>Mobility</Typography>
+                      </Box>
                       <Chip
-                        label={patient.qolMetrics.appetite}
+                        label={patient.qolMetrics.mobility}
+                        size="small"
+                        variant="outlined"
+                        color={patient.qolMetrics.mobility === 'Independent' ? 'success' : 'warning'}
+                        sx={{ fontWeight: 600, height: 24 }}
+                      />
+                    </Box>
+
+                    <Divider />
+
+                    {/* Sleep */}
+                    <Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+                        <HotelIcon sx={{ color: 'success.main', fontSize: '1.1rem' }} />
+                        <Typography variant="body2" sx={{ fontWeight: 600 }}>Sleep</Typography>
+                      </Box>
+                      <Chip
+                        label={patient.qolMetrics.sleep}
+                        size="small"
+                        variant="outlined"
                         color={
-                          patient.qolMetrics.appetite === 'Good'
+                          patient.qolMetrics.sleep === 'Good'
                             ? 'success'
-                            : patient.qolMetrics.appetite === 'Fair'
+                            : patient.qolMetrics.sleep === 'Fair'
                             ? 'warning'
                             : 'error'
                         }
-                        sx={{ fontWeight: 600 }}
+                        sx={{ fontWeight: 600, height: 24 }}
+                        icon={
+                          patient.qolMetrics.sleep === 'Good' ? (
+                            <SentimentVerySatisfiedIcon sx={{ fontSize: '1rem !important' }} />
+                          ) : patient.qolMetrics.sleep === 'Fair' ? (
+                            <SentimentSatisfiedIcon sx={{ fontSize: '1rem !important' }} />
+                          ) : (
+                            <SentimentDissatisfiedIcon sx={{ fontSize: '1rem !important' }} />
+                          )
+                        }
                       />
-                      <Chip label="Improved" size="small" color="success" />
                     </Box>
-                  </Box>
-                </Box>
-              )}
-              </CardContent>
-            </Card>
 
-            {/* Chemotherapy Status (if continuing) */}
-            {patient.currentProtocol && (
-              <Card sx={{ mt: 2 }}>
-                <CardContent>
-                  <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 700, color: 'primary.main' }}>
-                    Current Treatment
-                  </Typography>
-                  <Typography variant="body2" sx={{ mb: 1 }}>
-                    <strong>Protocol:</strong> {patient.currentProtocol.name}
-                  </Typography>
-                  <Typography variant="body2" sx={{ mb: 1 }}>
-                    <strong>Cycles Completed:</strong> {patient.cycleOutcomes?.length || 0} /{' '}
-                    {patient.currentProtocol.cycles}
-                  </Typography>
-                  <Box sx={{ mt: 2 }}>
-                    <LinearProgress
-                      variant="determinate"
-                      value={((patient.cycleOutcomes?.length || 0) / patient.currentProtocol.cycles) * 100}
-                      color="primary"
-                      sx={{ height: 8, borderRadius: 1 }}
-                    />
-                  </Box>
-                  <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
-                    Last cycle: {patient.cycleOutcomes?.[patient.cycleOutcomes.length - 1]?.date}
-                  </Typography>
-                </CardContent>
-              </Card>
-            )}
+                    <Divider />
+
+                    {/* Daily Activity */}
+                    <Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+                        <FavoriteIcon sx={{ color: 'success.main', fontSize: '1.1rem' }} />
+                        <Typography variant="body2" sx={{ fontWeight: 600 }}>Daily Activity</Typography>
+                      </Box>
+                      <Chip
+                        label={patient.qolMetrics.dailyActivity}
+                        size="small"
+                        variant="outlined"
+                        color={patient.qolMetrics.dailyActivity === 'Independent' ? 'success' : 'warning'}
+                        sx={{ fontWeight: 600, height: 24 }}
+                      />
+                    </Box>
+
+                    <Divider />
+
+                    {/* Appetite */}
+                    <Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+                        <RestaurantIcon sx={{ color: 'success.main', fontSize: '1.1rem' }} />
+                        <Typography variant="body2" sx={{ fontWeight: 600 }}>Appetite</Typography>
+                      </Box>
+                      <Box sx={{ display: 'flex', gap: 1 }}>
+                        <Chip
+                          label={patient.qolMetrics.appetite}
+                          size="small"
+                          variant="outlined"
+                          color={
+                            patient.qolMetrics.appetite === 'Good'
+                              ? 'success'
+                              : patient.qolMetrics.appetite === 'Fair'
+                              ? 'warning'
+                              : 'error'
+                          }
+                          sx={{ fontWeight: 600, height: 24 }}
+                        />
+                        <Chip label="Improved" size="small" color="success" sx={{ height: 24 }} />
+                      </Box>
+                    </Box>
+                  </Stack>
+                )}
+              </Box>
+            </Paper>
 
             {/* Clinical Notes */}
-            <Card sx={{ mt: 2 }}>
-              <CardContent>
-                <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 700, color: 'primary.main' }}>
-                  Progress Notes
-                </Typography>
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={4}
-                  defaultValue="Patient tolerating treatment better this cycle. Pain score reduced from 7 to 3. Appetite improved, now able to eat regular meals. Breathing improved significantly. Family support is strong. Continue current management."
-                  variant="outlined"
-                  size="small"
-                />
-              </CardContent>
-            </Card>
+            <Paper elevation={1} sx={{ p: 3, mt: 3, borderRadius: 2 }}>
+              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
+                Progress Notes
+              </Typography>
+              <TextField
+                fullWidth
+                multiline
+                rows={4}
+                defaultValue="Patient tolerating treatment better this cycle. Pain score reduced from 7 to 3. Appetite improved, now able to eat regular meals. Breathing improved significantly. Family support is strong. Continue current management."
+                variant="outlined"
+                size="small"
+                InputProps={{
+                    style: { fontSize: '0.875rem', lineHeight: 1.6 }
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    bgcolor: 'grey.50',
+                  }
+                }}
+              />
+            </Paper>
           </Grid>
         </Grid>
 
         {/* Overall Status Banner */}
-        <Card sx={{ mt: 3, p: 2, bgcolor: 'success.main', color: 'white', textAlign: 'center', boxShadow: 6 }}>
-          <CardContent>
-            <Typography variant="h5" sx={{ fontWeight: 800, mb: 0.5 }}>
-              Overall Assessment: Quality of Life Improving
-            </Typography>
-            <Typography variant="body1" sx={{ opacity: 0.95 }}>
-              Patient responding well to palliative chemotherapy with significant symptom improvement. Continue current
-              treatment plan with regular symptom monitoring.
-            </Typography>
-          </CardContent>
-        </Card>
+        <Paper 
+          elevation={3}
+          sx={{ 
+            mt: 3, 
+            p: 2, 
+            bgcolor: 'success.main', 
+            color: 'white', 
+            textAlign: 'center',
+            borderRadius: 2
+          }}
+        >
+          <Typography variant="subtitle1" sx={{ fontWeight: 800, mb: 0.5, fontSize: '1.1rem' }}>
+            Overall Assessment: Quality of Life Improving
+          </Typography>
+          <Typography variant="body2" sx={{ opacity: 0.95 }}>
+            Patient responding well to palliative chemotherapy with significant symptom improvement. Continue current
+            treatment plan with regular symptom monitoring.
+          </Typography>
+        </Paper>
       </Container>
     </Box>
   );
