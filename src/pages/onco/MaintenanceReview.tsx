@@ -34,54 +34,77 @@ export default function MaintenanceReview({ patient }: MaintenanceReviewProps) {
       {/* Global Patient Context Bar */}
       <PatientContextBar patient={patient} />
 
-      <Container maxWidth="xl" sx={{ mt: 3, mb: 4 }}>
-        <Typography variant="h4" sx={{ mb: 4, fontWeight: 700, color: 'text.primary', letterSpacing: '-0.5px' }}>
+      <Container maxWidth="xl" sx={{ mt: 4, mb: 5 }}>
+        <Typography
+          variant="h5"
+          sx={{ mb: 3, fontWeight: 600, color: 'primary.main', letterSpacing: 0.3 }}
+        >
           Maintenance Overview
         </Typography>
 
         <Grid container spacing={3}>
           {/* Left Column - Active Therapy */}
           <Grid item xs={12} md={4}>
-            <Paper elevation={2} sx={{ p: 3, borderRadius: 2 }}>
-              <Typography variant="h6" sx={{ mb: 3, fontWeight: 700, color: 'text.primary', letterSpacing: '-0.3px' }}>
+            <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
+              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
                 Active Therapy
               </Typography>
               <Table size="small">
                 <TableBody>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Medication</TableCell>
-                    <TableCell>Osimertinib (Tagrisso)</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Dose</TableCell>
-                    <TableCell>80 mg once daily</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Route</TableCell>
-                    <TableCell>Oral</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Start Date</TableCell>
+                    <TableCell sx={{ width: '40%' }}>
+                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Medication</Typography>
+                    </TableCell>
                     <TableCell>
-                      {patient.treatmentStartDate || '2025-10-20'}
+                      <Typography variant="body2" color="text.primary">Osimertinib (Tagrisso)</Typography>
                     </TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Duration</TableCell>
+                    <TableCell>
+                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Dose</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2" color="text.primary">80 mg once daily</Typography>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>
+                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Route</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2" color="text.primary">Oral</Typography>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>
+                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Start Date</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2" color="text.primary">{patient.treatmentStartDate || '2025-10-20'}</Typography>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>
+                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Duration</Typography>
+                    </TableCell>
                     <TableCell>
                       <Chip label="Until Progression" size="small" color="info" />
                     </TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Review Interval</TableCell>
-                    <TableCell>Every 4 weeks</TableCell>
+                    <TableCell>
+                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Review Interval</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2" color="text.primary">Every 4 weeks</Typography>
+                    </TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
             </Paper>
 
-            <Paper elevation={2} sx={{ p: 3, mt: 2, borderRadius: 2 }}>
-              <Typography variant="h6" sx={{ mb: 3, fontWeight: 700, color: 'text.primary', letterSpacing: '-0.3px' }}>
+            <Paper elevation={1} sx={{ p: 3, mt: 2, borderRadius: 2 }}>
+              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'success.dark', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
                 Compliance & Adherence
               </Typography>
               <Box sx={{ mb: 2 }}>
@@ -95,17 +118,17 @@ export default function MaintenanceReview({ patient }: MaintenanceReviewProps) {
                 </Box>
                 <LinearProgress variant="determinate" value={98} color="success" sx={{ height: 8, borderRadius: 1 }} />
               </Box>
-              <Typography variant="body2" color="text.secondary">
-                Patient reports excellent compliance with daily medication.
+              <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic' }}>
+                "Patient reports excellent compliance with daily medication."
               </Typography>
             </Paper>
 
-            <Paper elevation={2} sx={{ p: 3, mt: 2, bgcolor: 'grey.50', borderRadius: 2 }}>
-              <Typography variant="h6" sx={{ mb: 3, fontWeight: 700, color: 'text.primary', letterSpacing: '-0.3px' }}>
+            <Paper elevation={1} sx={{ p: 3, mt: 2, bgcolor: 'primary.50', borderRadius: 2, border: '1px solid', borderColor: 'primary.100' }}>
+              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.dark', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
                 Treatment Duration
               </Typography>
-              <Box sx={{ textAlign: 'center', py: 2 }}>
-                <Typography variant="h2" sx={{ fontWeight: 800, color: 'primary.main', letterSpacing: '-1px' }}>
+              <Box sx={{ textAlign: 'center', py: 1 }}>
+                <Typography variant="h3" sx={{ fontWeight: 700, color: 'primary.main' }}>
                   3.5
                 </Typography>
                 <Typography variant="body1" sx={{ fontWeight: 500, color: 'text.secondary', mt: 0.5 }}>
@@ -117,40 +140,58 @@ export default function MaintenanceReview({ patient }: MaintenanceReviewProps) {
 
           {/* Middle Column - Last Review Outcome */}
           <Grid item xs={12} md={4}>
-            <Paper elevation={3} sx={{ p: 3, borderRadius: 2, borderLeft: '4px solid', borderLeftColor: 'primary.main' }}>
-              <Typography variant="h6" sx={{ mb: 3, fontWeight: 700, color: 'text.primary', letterSpacing: '-0.3px' }}>
+            <Paper elevation={3} sx={{ p: 3, borderRadius: 2, borderTop: '4px solid', borderTopColor: 'primary.main', borderLeft: 0 }}>
+              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
                 Last Review Outcome
               </Typography>
               <Table size="small">
                 <TableBody>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Review Date</TableCell>
-                    <TableCell>{patient.lastReviewDate || '2026-02-01'}</TableCell>
+                    <TableCell>
+                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Review Date</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2" color="text.primary">{patient.lastReviewDate || '2026-02-01'}</Typography>
+                    </TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Disease Status</TableCell>
+                    <TableCell>
+                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Disease Status</Typography>
+                    </TableCell>
                     <TableCell>
                       <Chip label="Stable" size="small" color="success" icon={<CheckCircleIcon />} />
                     </TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Imaging Findings</TableCell>
-                    <TableCell>No new lesions, stable disease</TableCell>
+                    <TableCell>
+                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Imaging Findings</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2" color="text.primary">No new lesions, stable disease</Typography>
+                    </TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Tumor Markers</TableCell>
+                    <TableCell>
+                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Tumor Markers</Typography>
+                    </TableCell>
                     <TableCell>
                       <Chip label="Within Normal Range" size="small" color="success" />
                     </TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Side Effects</TableCell>
-                    <TableCell>Mild skin rash (Grade 1)</TableCell>
+                    <TableCell>
+                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Side Effects</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2" color="text.primary">Mild skin rash (Grade 1)</Typography>
+                    </TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600, verticalAlign: 'top' }}>Next Review</TableCell>
+                    <TableCell sx={{ verticalAlign: 'top' }}>
+                      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>Next Review</Typography>
+                    </TableCell>
                     <TableCell>
-                      <Typography variant="body2" sx={{ fontWeight: 600, color: 'primary.main' }}>
+                      <Typography variant="body2" sx={{ fontWeight: 700, color: 'primary.main' }}>
                         10 Jun 2026
                       </Typography>
                     </TableCell>
@@ -161,8 +202,8 @@ export default function MaintenanceReview({ patient }: MaintenanceReviewProps) {
 
             {/* QoL Summary */}
             {patient.qolMetrics && (
-              <Paper elevation={2} sx={{ p: 3, mt: 2, bgcolor: 'grey.50', borderRadius: 2 }}>
-                <Typography variant="h6" sx={{ mb: 3, fontWeight: 700, color: 'text.primary', letterSpacing: '-0.3px' }}>
+              <Paper elevation={1} sx={{ p: 3, mt: 2, bgcolor: 'background.paper', borderRadius: 2 }}>
+                <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'text.primary', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
                   Quality of Life Summary
                 </Typography>
                 <Grid container spacing={2}>
@@ -219,8 +260,8 @@ export default function MaintenanceReview({ patient }: MaintenanceReviewProps) {
 
           {/* Right Column - Review History */}
           <Grid item xs={12} md={4}>
-            <Paper elevation={2} sx={{ p: 3, borderRadius: 2 }}>
-              <Typography variant="h6" sx={{ mb: 3, fontWeight: 700, color: 'text.primary', letterSpacing: '-0.3px' }}>
+            <Paper elevation={1} sx={{ p: 3, borderRadius: 2 }}>
+              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
                 Review History
               </Typography>
               <Box>
@@ -274,8 +315,8 @@ export default function MaintenanceReview({ patient }: MaintenanceReviewProps) {
               </Box>
             </Paper>
 
-            <Paper elevation={2} sx={{ p: 3, mt: 2, bgcolor: 'grey.50', borderRadius: 2, borderTop: '3px solid', borderTopColor: 'warning.main' }}>
-              <Typography variant="h6" sx={{ mb: 2.5, fontWeight: 700, color: 'text.primary', letterSpacing: '-0.3px' }}>
+            <Paper elevation={1} sx={{ p: 3, mt: 2, bgcolor: 'warning.light', borderRadius: 2 }}>
+              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'warning.dark', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
                 Monitoring Plan
               </Typography>
               <Typography variant="body2" sx={{ mb: 1.5, fontWeight: 700, color: 'text.primary' }}>
