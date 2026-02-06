@@ -1,4 +1,4 @@
-import { Paper, Typography, Box, Button, IconButton, Tabs, Tab } from '@mui/material';
+import { Typography, Box, Button, Tabs, Tab } from '@mui/material';
 import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
 import AddIcon from '@mui/icons-material/Add';
 import { VitalSigns } from '../types';

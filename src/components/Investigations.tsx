@@ -1,4 +1,4 @@
-import { Paper, Typography, Box, Chip, IconButton, Button } from '@mui/material';
+import { Paper, Typography, Box, Chip, IconButton } from '@mui/material';
 import ScienceIcon from '@mui/icons-material/Science';
 import MicIcon from '@mui/icons-material/Mic';
 import PrintIcon from '@mui/icons-material/Print';

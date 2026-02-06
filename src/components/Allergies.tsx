@@ -1,4 +1,4 @@
-import { Paper, Typography, Box, IconButton, Button } from '@mui/material';
+import { Typography, Box, IconButton } from '@mui/material';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import AddIcon from '@mui/icons-material/Add';
 import { Allergy } from '../types';

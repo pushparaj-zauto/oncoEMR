@@ -1,4 +1,4 @@
-import { Paper, Typography, Box, Button, TextField } from '@mui/material';
+import { Paper, Typography, Box, Button } from '@mui/material';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 
 export default function ClinicalSummary() {
