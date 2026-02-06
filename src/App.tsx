@@ -1,5 +1,5 @@
 import { ThemeProvider, createTheme, CssBaseline, Box } from '@mui/material';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import PatientDashboard from './pages/PatientDashboard';
 import PatientsList from './pages/PatientsList';
 import Sidebar from './components/Sidebar';
@@ -105,7 +105,10 @@ function App() {
           >
             <Routes>
               {/* General EMR Routes */}
-              <Route path="/" element={<PatientsList />} />
+              <Route path="/" element={<OncoPatientsList />} />
+              <Route path="/day-care" element={<Navigate to="/" replace />} />
+              <Route path="/in-patient" element={<Navigate to="/" replace />} />
+              <Route path="/emergency" element={<Navigate to="/" replace />} />
               <Route path="/patients" element={<PatientsList />} />
               <Route path="/patient/:patientId" element={<PatientDashboard />} />
               

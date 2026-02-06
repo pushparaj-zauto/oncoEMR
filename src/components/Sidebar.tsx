@@ -20,18 +20,6 @@ const menuSections = [
       { text: 'Emergency', icon: <WarningIcon />, path: '/emergency' },
     ],
   },
-  {
-    title: 'BED MANAGEMENT',
-    items: [
-      { text: 'Beds', icon: <HotelIcon />, path: '/beds' },
-    ],
-  },
-  {
-    title: 'DOCTOR MANAGEMENT',
-    items: [
-      { text: 'Doctors', icon: <MedicalServicesIcon />, path: '/doctors' },
-    ],
-  },
 ];
 
 export default function Sidebar() {
