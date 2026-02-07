@@ -194,14 +194,15 @@ export const mockOncoPatient3: OncologyPatient = {
   symptomDuration: 'N/A',
   
   vitals: {
-    bp: '130/80',
-    hr: 78,
-    temp: 36.8,
+    bp: '134/84',
+    hr: 88,
+    temp: 36.9,
     resp: 18,
-    spo2: 98,
+    spo2: 97,
     height: 170,
-    weight: 74,
-    bmi: 25.6
+    weight: 72,
+    bmi: 24.9,
+    glucose: 168 // Elevated due to steroid pre-medication
   },
 
   patientHistory: {
@@ -264,6 +265,25 @@ export const mockOncoPatient3: OncologyPatient = {
       'Disease Recurrence'
     ]
   },
+
+  preCycleLabs: {
+    date: '2026-02-07',
+    cbc: {
+      wbc: 5.8,
+      anc: 3200,
+      hgb: 11.8,
+      platelets: 185000
+    },
+    chemistry: {
+      creatinine: 0.9,
+      bilirubin: 0.7,
+      alt: 28,
+      ast: 32
+    },
+    tumorMarkers: {
+      cea: 4.2 // Down from 12.5 at diagnosis
+    }
+  },
   
   cycleOutcomes: [
     {
@@ -325,14 +345,14 @@ export const mockOncoPatient4: OncologyPatient = {
   symptomDuration: 'Chronic',
 
   vitals: {
-    bp: '110/70',
-    hr: 92,
-    temp: 36.5,
-    resp: 20,
-    spo2: 94,
+    bp: '98/62',
+    hr: 102,
+    temp: 37.2,
+    resp: 22,
+    spo2: 92,
     height: 155,
-    weight: 48,
-    bmi: 19.9
+    weight: 44, // Lost 4kg in last month
+    bmi: 18.3
   },
 
   patientHistory: {
@@ -476,9 +496,9 @@ export const mockOncoPatient5: OncologyPatient = {
     drugs: [
       { name: 'Osimertinib', doseBasis: 'Fixed', dose: '80 mg', day: 'Daily', status: 'Given' },
     ],
-    maintenanceRationale: 'Continued after response to first-line therapy',
-    timeOnTherapy: '3.5 months',
-    totalExposure: '105 days',
+    maintenanceRationale: 'Continued after excellent response to first-line EGFR TKI therapy',
+    timeOnTherapy: '14 months',
+    totalExposure: '420 days',
     doseInterruptions: 'None',
     stopCriteria: [
       'Disease progression',
@@ -488,14 +508,14 @@ export const mockOncoPatient5: OncologyPatient = {
   },
   
   vitals: {
-    bp: '122/78',
-    hr: 70,
-    temp: 36.6,
-    resp: 16,
-    spo2: 98,
-    height: 172,
-    weight: 71,
-    bmi: 24.0
+    bp: '118/72',
+    hr: 68,
+    temp: 36.5,
+    resp: 15,
+    spo2: 99,
+    height: 165,  // Shorter than Kishore (170cm)
+    weight: 62,   // Lighter patient
+    bmi: 22.8
   },
   
   patientHistory: {
@@ -513,12 +533,129 @@ export const mockOncoPatient5: OncologyPatient = {
   
   cycleOutcomes: [
       {
+          cycleNumber: 1,
+          response: 'Too Early',
+          decision: 'Continue',
+          date: '2024-12-05',
+          toxicity: 'Grade 1',
+          toxicityDescription: 'Mild rash, diarrhea',
+          qolImpact: 'Minimal Impact'
+      },
+      {
+          cycleNumber: 2,
+          response: 'Too Early',
+          decision: 'Continue',
+          date: '2025-01-05',
+          toxicity: 'Grade 1',
+          toxicityDescription: 'Acneiform rash developing',
+          qolImpact: 'Stable'
+      },
+      {
+          cycleNumber: 3,
+          response: 'Partial Response (-42%)',
+          decision: 'Continue',
+          date: '2025-02-05',
+          toxicity: 'Grade 1',
+          toxicityDescription: 'Dry skin, mild acneiform rash',
+          qolImpact: 'Improved (symptom relief)'
+      },
+      {
+          cycleNumber: 4,
+          response: 'Partial Response',
+          decision: 'Continue',
+          date: '2025-03-05',
+          toxicity: 'Grade 1',
+          toxicityDescription: 'Stable skin toxicity',
+          qolImpact: 'Improved (symptom relief)'
+      },
+      {
+          cycleNumber: 5,
+          response: 'Partial Response',
+          decision: 'Continue',
+          date: '2025-04-05',
+          toxicity: 'Grade 1',
+          toxicityDescription: 'Dry skin persists',
+          qolImpact: 'Stable'
+      },
+      {
+          cycleNumber: 6,
+          response: 'Partial Response (-58%)',
+          decision: 'Continue',
+          date: '2025-05-05',
+          toxicity: 'Grade 1',
+          toxicityDescription: 'Persistent dry skin',
+          qolImpact: 'Stable'
+      },
+      {
+          cycleNumber: 7,
+          response: 'Stable Disease',
+          decision: 'Continue',
+          date: '2025-06-05',
+          toxicity: 'Grade 1',
+          toxicityDescription: 'Mild dry skin',
+          qolImpact: 'Stable'
+      },
+      {
+          cycleNumber: 8,
+          response: 'Stable Disease',
+          decision: 'Continue',
+          date: '2025-07-05',
+          toxicity: 'Grade 1',
+          toxicityDescription: 'Dry skin, early paronychia',
+          qolImpact: 'Stable'
+      },
+      {
+          cycleNumber: 9,
+          response: 'Stable Disease',
+          decision: 'Continue',
+          date: '2025-08-05',
+          toxicity: 'Grade 1-2',
+          toxicityDescription: 'Paronychia developing (Grade 2)',
+          qolImpact: 'Stable'
+      },
+      {
+          cycleNumber: 10,
+          response: 'Stable Disease',
+          decision: 'Continue',
+          date: '2025-09-05',
+          toxicity: 'Grade 2',
+          toxicityDescription: 'Paronychia managed with topical care',
+          qolImpact: 'Stable'
+      },
+      {
+          cycleNumber: 11,
+          response: 'Stable Disease',
+          decision: 'Continue',
+          date: '2025-10-05',
+          toxicity: 'Grade 1',
+          toxicityDescription: 'Improving paronychia',
+          qolImpact: 'Stable'
+      },
+      {
+          cycleNumber: 12,
+          response: 'Stable Disease',
+          decision: 'Continue',
+          date: '2025-11-05',
+          toxicity: 'Grade 1',
+          toxicityDescription: 'Dry skin, managed paronychia',
+          qolImpact: 'Stable'
+      },
+      {
+          cycleNumber: 13,
+          response: 'Stable Disease',
+          decision: 'Continue',
+          date: '2025-12-05',
+          toxicity: 'Grade 1',
+          toxicityDescription: 'Well-controlled skin toxicity',
+          qolImpact: 'Stable'
+      },
+      {
           cycleNumber: 14,
           response: 'Stable Disease',
           decision: 'Continue',
           date: '2026-01-15',
           toxicity: 'Grade 1',
-          toxicityDescription: 'Dry skin, Paronychia',
+          toxicityDescription: 'Dry skin, Paronychia (controlled)',
           qolImpact: 'Stable'
       }
   ],

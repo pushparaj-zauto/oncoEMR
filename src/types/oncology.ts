@@ -20,11 +20,20 @@ export type MDTStatus = 'Pending' | 'Approved' | 'Modified';
 
 export type TreatmentModality = 'Surgery' | 'Chemotherapy' | 'Radiation' | 'Immunotherapy' | 'Supportive Care';
 
-export type ResponseType = 'Complete Response' | 'Partial Response' | 'Stable Disease' | 'Progressive Disease' | 'N/A' | 'N/A (Adjuvant)';
+export type ResponseType = 
+  | 'Complete Response' 
+  | 'Partial Response' 
+  | 'Partial Response (-42%)' 
+  | 'Partial Response (-58%)' 
+  | 'Stable Disease' 
+  | 'Progressive Disease' 
+  | 'Too Early' 
+  | 'N/A' 
+  | 'N/A (Adjuvant)';
 
-export type ToxicityGrade = 'Grade 1' | 'Grade 2' | 'Grade 3' | 'Grade 4';
+export type ToxicityGrade = 'Grade 1' | 'Grade 1-2' | 'Grade 2' | 'Grade 3' | 'Grade 4';
 
-export type QoLStatus = 'Improved' | 'Stable' | 'Worsened';
+export type QoLStatus = 'Improved' | 'Improved (symptom relief)' | 'Minimal Impact' | 'Stable' | 'Worsened';
 
 export interface DiagnosticTracker {
   biopsy: DiagnosticStatus;
@@ -129,6 +138,28 @@ export interface Vitals {
   height: number; // cm
   weight: number; // kg
   bmi: number;
+  glucose?: number; // mg/dL - for diabetic patients on steroids
+}
+
+export interface PreCycleLabs {
+  date: string;
+  cbc: {
+    wbc: number;
+    anc: number;
+    hgb: number;
+    platelets: number;
+  };
+  chemistry: {
+    creatinine: number;
+    bilirubin: number;
+    alt: number;
+    ast: number;
+  };
+  tumorMarkers?: {
+    cea?: number;
+    ca125?: number;
+    psa?: number;
+  };
 }
 
 export interface PatientHistory {
@@ -176,6 +207,7 @@ export interface OncologyPatient {
   mdtDecision?: MDTDecision;
   treatmentStrategy?: TreatmentStrategy;
   currentProtocol?: ChemoProtocol;
+  preCycleLabs?: PreCycleLabs;
   
   // Outcomes
   cycleOutcomes?: CycleOutcome[];

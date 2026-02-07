@@ -80,10 +80,15 @@ const DataField = ({ label, value, highlight = false }: { label: string, value: 
 
 export default function MaintenanceReview({ patient, hideContextBar }: MaintenanceReviewProps) {
   const theme = useTheme();
+  // Build review history from the last 4 cycle outcomes + add a pending next review
+  const cycleOutcomes = patient.cycleOutcomes || [];
+  const lastFourCycles = cycleOutcomes.slice(-3); // Last 3 completed cycles
   const reviewDates = [
-    { date: '2025-11-15', status: 'Stable', note: 'Routine' },
-    { date: '2025-12-15', status: 'Stable', note: 'Mild rash reported' },
-    { date: '2026-01-15', status: 'Stable', note: 'Dose maintained' },
+    ...lastFourCycles.map(c => ({
+      date: c.date,
+      status: c.response.includes('Stable') ? 'Stable' : c.response.includes('Partial') ? 'Responding' : 'Completed',
+      note: c.toxicityDescription || 'Routine'
+    })),
     { date: '2026-02-15', status: 'Pending', note: 'Upcoming' },
   ];
 
@@ -145,7 +150,7 @@ export default function MaintenanceReview({ patient, hideContextBar }: Maintenan
                                         <Box sx={{ display: 'flex', gap: 4 }}>
                                             <Box>
                                                 <Typography variant="body2" color="text.secondary" sx={{ display: 'block', mb: 0.5, fontSize: '0.8rem' }}>Start Date</Typography>
-                                                <Typography variant="subtitle1" fontWeight={500} sx={{ fontSize: '0.9rem' }}>2025-10-20</Typography>
+                                                <Typography variant="subtitle1" fontWeight={500} sx={{ fontSize: '0.9rem' }}>{patient.currentProtocol?.startDate || 'N/A'}</Typography>
                                             </Box>
                                             <Box>
                                                 <Typography variant="body2" color="text.secondary" sx={{ display: 'block', mb: 0.5, fontSize: '0.8rem' }}>Review Interval</Typography>
@@ -260,7 +265,7 @@ export default function MaintenanceReview({ patient, hideContextBar }: Maintenan
                                             {[
                                                 { l: 'ECOG', v: '0' },
                                                 { l: 'Pain', v: '0/10' },
-                                                { l: 'Weight', v: '71 kg' }
+                                                { l: 'Weight', v: `${patient.vitals?.weight || 'N/A'} kg` }
                                             ].map((m, i) => (
                                                 <Grid item xs={4} key={i}>
                                                     <Box sx={{ textAlign: 'center' }}>
