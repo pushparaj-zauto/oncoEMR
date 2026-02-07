@@ -41,54 +41,54 @@ export default function PatientSummary({ patient, hideContextBar }: PatientSumma
         <Grid container spacing={3}>
             {/* Vitals Section */}
             <Grid item xs={12}>
-                <Paper sx={{ p: 3, borderRadius: 2 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                        <Typography variant="overline" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2 }}>
+                <Paper sx={{ p: 2, borderRadius: 2 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
+                        <Typography variant="overline" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.75rem', letterSpacing: 1 }}>
                             Patient Vitals
                         </Typography>
                         <MicButton />
                     </Box>
-                    <Grid container spacing={2}>
+                    <Grid container spacing={1.5}>
                         <Grid item xs={6} md={2}>
-                            <Paper variant="outlined" sx={{ p: 2, textAlign: 'center', bgcolor: 'grey.50', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                <Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 0.5 }}>BP</Typography>
-                                <Typography variant="h6" color="primary.main">{patient.vitals?.bp || '--'}</Typography>
-                                <Typography variant="caption" color="text.disabled">mmHg</Typography>
+                            <Paper variant="outlined" sx={{ px: 1.5, py: 1, textAlign: 'center', bgcolor: 'grey.50', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: '0.7rem', lineHeight: 1.2 }}>BP</Typography>
+                                <Typography variant="subtitle1" color="primary.main" sx={{ fontWeight: 600, lineHeight: 1.3 }}>{patient.vitals?.bp || '--'}</Typography>
+                                <Typography variant="caption" color="text.disabled" sx={{ fontSize: '0.65rem' }}>mmHg</Typography>
                             </Paper>
                         </Grid>
                         <Grid item xs={6} md={2}>
-                            <Paper variant="outlined" sx={{ p: 2, textAlign: 'center', bgcolor: 'grey.50', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                <Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 0.5 }}>Heart Rate</Typography>
-                                <Typography variant="h6" color="primary.main">{patient.vitals?.hr || '--'}</Typography>
-                                <Typography variant="caption" color="text.disabled">bpm</Typography>
+                            <Paper variant="outlined" sx={{ px: 1.5, py: 1, textAlign: 'center', bgcolor: 'grey.50', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: '0.7rem', lineHeight: 1.2 }}>Heart Rate</Typography>
+                                <Typography variant="subtitle1" color="primary.main" sx={{ fontWeight: 600, lineHeight: 1.3 }}>{patient.vitals?.hr || '--'}</Typography>
+                                <Typography variant="caption" color="text.disabled" sx={{ fontSize: '0.65rem' }}>bpm</Typography>
                             </Paper>
                         </Grid>
                         <Grid item xs={6} md={2}>
-                            <Paper variant="outlined" sx={{ p: 2, textAlign: 'center', bgcolor: 'grey.50', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                <Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 0.5 }}>Temperature</Typography>
-                                <Typography variant="h6" color="primary.main">{patient.vitals?.temp || '--'}</Typography>
-                                <Typography variant="caption" color="text.disabled">°C</Typography>
+                            <Paper variant="outlined" sx={{ px: 1.5, py: 1, textAlign: 'center', bgcolor: 'grey.50', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: '0.7rem', lineHeight: 1.2 }}>Temperature</Typography>
+                                <Typography variant="subtitle1" color="primary.main" sx={{ fontWeight: 600, lineHeight: 1.3 }}>{patient.vitals?.temp || '--'}</Typography>
+                                <Typography variant="caption" color="text.disabled" sx={{ fontSize: '0.65rem' }}>°C</Typography>
                             </Paper>
                         </Grid>
                         <Grid item xs={6} md={2}>
-                            <Paper variant="outlined" sx={{ p: 2, textAlign: 'center', bgcolor: 'grey.50', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                <Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 0.5 }}>SpO2</Typography>
-                                <Typography variant="h6" color="primary.main">{patient.vitals?.spo2 || '--'}</Typography>
-                                <Typography variant="caption" color="text.disabled">%</Typography>
+                            <Paper variant="outlined" sx={{ px: 1.5, py: 1, textAlign: 'center', bgcolor: 'grey.50', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: '0.7rem', lineHeight: 1.2 }}>SpO2</Typography>
+                                <Typography variant="subtitle1" color="primary.main" sx={{ fontWeight: 600, lineHeight: 1.3 }}>{patient.vitals?.spo2 || '--'}</Typography>
+                                <Typography variant="caption" color="text.disabled" sx={{ fontSize: '0.65rem' }}>%</Typography>
                             </Paper>
                         </Grid>
                          <Grid item xs={6} md={2}>
-                            <Paper variant="outlined" sx={{ p: 2, textAlign: 'center', bgcolor: 'grey.50', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                <Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 0.5 }}>Respiratory Rate</Typography>
-                                <Typography variant="h6" color="primary.main">{patient.vitals?.resp || '--'}</Typography>
-                                <Typography variant="caption" color="text.disabled">/min</Typography>
+                            <Paper variant="outlined" sx={{ px: 1.5, py: 1, textAlign: 'center', bgcolor: 'grey.50', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: '0.7rem', lineHeight: 1.2 }}>Respiratory Rate</Typography>
+                                <Typography variant="subtitle1" color="primary.main" sx={{ fontWeight: 600, lineHeight: 1.3 }}>{patient.vitals?.resp || '--'}</Typography>
+                                <Typography variant="caption" color="text.disabled" sx={{ fontSize: '0.65rem' }}>/min</Typography>
                             </Paper>
                         </Grid>
                          <Grid item xs={6} md={2}>
-                            <Paper variant="outlined" sx={{ p: 2, textAlign: 'center', bgcolor: 'grey.50', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                <Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 0.5 }}>BMI</Typography>
-                                <Typography variant="h6" color={patient.vitals?.bmi && patient.vitals.bmi > 25 ? 'warning.main' : 'primary.main'}>{patient.vitals?.bmi || '--'}</Typography>
-                                <Typography variant="caption" color="text.secondary">
+                            <Paper variant="outlined" sx={{ px: 1.5, py: 1, textAlign: 'center', bgcolor: 'grey.50', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: '0.7rem', lineHeight: 1.2 }}>BMI</Typography>
+                                <Typography variant="subtitle1" sx={{ fontWeight: 600, lineHeight: 1.3, color: patient.vitals?.bmi && patient.vitals.bmi > 25 ? 'warning.main' : 'primary.main' }}>{patient.vitals?.bmi || '--'}</Typography>
+                                <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.65rem' }}>
                                     {patient.vitals?.weight}kg / {patient.vitals?.height}cm
                                 </Typography>
                             </Paper>
