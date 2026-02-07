@@ -9,8 +9,6 @@ import {
   TableBody,
   TableCell,
   TableRow,
-  Tabs,
-  Tab,
   Button,
   TextField,
   TableHead,
@@ -118,41 +116,131 @@ export default function ChemoProtocolWorkspace({ patient, hideContextBar }: Chem
                 </Paper>
             </Grid>
 
-            {/* Cycle Tabs */}
+            {/* Cycle Navigation - Clean Card Design */}
              <Grid item xs={12}>
-                <Paper variant="outlined" sx={{ borderRadius: 2, mb: 1 }}>
-                    <Tabs
-                        value={selectedCycle}
-                        onChange={(_, newValue) => setSelectedCycle(newValue)}
-                        variant="scrollable"
-                        scrollButtons="auto"
-                        indicatorColor="primary"
-                        textColor="primary"
-                        sx={{
-                        '& .MuiTab-root': { 
-                            fontWeight: 600, 
-                            minHeight: 52, 
-                            fontSize: '0.85rem',
-                            textTransform: 'none',
-                             px: 3
-                        },
-                        minHeight: 52
-                        }}
-                    >
-                        {Array.from({ length: patient.currentProtocol.cycles }, (_, i) => (
-                        <Tab
-                            key={i}
-                            label={`Cycle ${i + 1}`}
-                            icon={
-                            patient.cycleOutcomes?.some((c) => c.cycleNumber === i + 1) ? (
-                                <CheckCircleIcon sx={{ fontSize: '1rem', color: 'success.main' }} />
-                            ) : undefined
-                            }
-                            iconPosition="end"
-                        />
-                        ))}
-                    </Tabs>
-                </Paper>
+                <Box 
+                    sx={{ 
+                        display: 'flex', 
+                        gap: 1.5, 
+                        overflowX: 'auto',
+                        pt: 0.5,
+                        pb: 1.5,
+                        '&::-webkit-scrollbar': { height: '4px' },
+                        '&::-webkit-scrollbar-track': { background: 'transparent' },
+                        '&::-webkit-scrollbar-thumb': { background: '#d1d1d1', borderRadius: '4px' },
+                    }}
+                >
+                    {Array.from({ length: patient.currentProtocol.cycles }, (_, i) => {
+                        const outcome = patient.cycleOutcomes?.find((c) => c.cycleNumber === i + 1);
+                        const isSelected = selectedCycle === i;
+                        const isCompleted = !!outcome;
+                        
+                        return (
+                            <Paper
+                                key={i}
+                                elevation={0}
+                                onClick={() => setSelectedCycle(i)}
+                                sx={{
+                                    minWidth: 115,
+                                    p: 1.5,
+                                    cursor: 'pointer',
+                                    border: '2px solid',
+                                    borderColor: isSelected ? 'primary.main' : isCompleted ? 'success.light' : 'grey.200',
+                                    borderRadius: 2.5,
+                                    bgcolor: isSelected 
+                                        ? alpha('#6366f1', 0.08) 
+                                        : isCompleted 
+                                            ? alpha('#2e7d32', 0.04) 
+                                            : 'grey.50',
+                                    transition: 'all 0.2s ease',
+                                    position: 'relative',
+                                    overflow: 'hidden',
+                                    '&:hover': {
+                                        borderColor: isSelected ? 'primary.main' : isCompleted ? 'success.main' : 'primary.light',
+                                        transform: 'translateY(-2px)',
+                                        boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                                    },
+                                }}
+                            >
+                                {/* Top accent bar for selected */}
+                                {isSelected && (
+                                    <Box sx={{ 
+                                        position: 'absolute', 
+                                        top: 0, 
+                                        left: 0, 
+                                        right: 0, 
+                                        height: 3, 
+                                        bgcolor: 'primary.main',
+                                        borderRadius: '4px 4px 0 0'
+                                    }} />
+                                )}
+                                
+                                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 0.75 }}>
+                                    <Typography 
+                                        variant="caption" 
+                                        sx={{ 
+                                            fontWeight: 700, 
+                                            color: isSelected ? 'primary.main' : 'text.secondary',
+                                            fontSize: '0.7rem',
+                                            textTransform: 'uppercase',
+                                            letterSpacing: 0.5
+                                        }}
+                                    >
+                                        Cycle {i + 1}
+                                    </Typography>
+                                    {isCompleted && (
+                                        <CheckCircleIcon sx={{ fontSize: '0.85rem', color: 'success.main' }} />
+                                    )}
+                                </Box>
+                                
+                                {outcome ? (
+                                    <>
+                                        <Typography 
+                                            variant="body2" 
+                                            sx={{ 
+                                                fontWeight: 600, 
+                                                color: 'text.primary',
+                                                fontSize: '0.8rem',
+                                                mb: 0.75
+                                            }}
+                                        >
+                                            {outcome.date}
+                                        </Typography>
+                                        <Chip 
+                                            label={outcome.response.length > 12 ? outcome.response.substring(0, 12) + '...' : outcome.response} 
+                                            size="small" 
+                                            sx={{ 
+                                                height: 22, 
+                                                fontSize: '0.65rem',
+                                                bgcolor: outcome.response.includes('Complete') ? alpha('#2e7d32', 0.12) :
+                                                         outcome.response.includes('Partial') ? alpha('#0288d1', 0.12) :
+                                                         outcome.response.includes('Adjuvant') ? alpha('#ed6c02', 0.15) : alpha('#9e9e9e', 0.12),
+                                                color: outcome.response.includes('Complete') ? '#1b5e20' :
+                                                       outcome.response.includes('Partial') ? '#01579b' :
+                                                       outcome.response.includes('Adjuvant') ? '#e65100' : '#616161',
+                                                fontWeight: 600,
+                                                '& .MuiChip-label': { px: 1 }
+                                            }} 
+                                        />
+                                    </>
+                                ) : (
+                                    <Box sx={{ py: 1.25 }}>
+                                        <Typography 
+                                            variant="caption" 
+                                            sx={{ 
+                                                color: 'text.disabled', 
+                                                fontStyle: 'italic',
+                                                fontSize: '0.75rem'
+                                            }}
+                                        >
+                                            Scheduled
+                                        </Typography>
+                                    </Box>
+                                )}
+                            </Paper>
+                        );
+                    })}
+                </Box>
              </Grid>
 
           {/* Left Column - Drug Administration */}
@@ -227,6 +315,43 @@ export default function ChemoProtocolWorkspace({ patient, hideContextBar }: Chem
                         ))}
                     </Grid>
                   </Paper>
+               </Box>
+
+               {/* Pre-Cycle Lab Values - Single Row */}
+               <Box sx={{ mt: 4 }}>
+                  <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'text.secondary', fontSize: '0.8rem', letterSpacing: 1, display: 'block' }}>
+                    Pre-Cycle Labs
+                  </Typography>
+                  <Box sx={{ display: 'flex', gap: 2 }}>
+                    {[
+                      { name: 'Hemoglobin', value: '12.5', unit: 'g/dL', status: 'Normal' },
+                      { name: 'WBC', value: '6.2', unit: '10³/µL', status: 'Normal' },
+                      { name: 'Platelets', value: '185', unit: '10³/µL', status: 'Normal' },
+                      { name: 'Creatinine', value: '0.9', unit: 'mg/dL', status: 'Normal' },
+                    ].map((lab, i) => (
+                      <Paper 
+                        key={i} 
+                        variant="outlined" 
+                        sx={{ 
+                          flex: 1, 
+                          p: 1.5, 
+                          borderRadius: 2, 
+                          display: 'flex', 
+                          justifyContent: 'space-between', 
+                          alignItems: 'center',
+                          minWidth: 0
+                        }}
+                      >
+                        <Box sx={{ minWidth: 0 }}>
+                          <Typography variant="caption" color="text.secondary" display="block" noWrap>{lab.name}</Typography>
+                          <Typography variant="subtitle2" fontWeight={600} noWrap>
+                            {lab.value} <Typography component="span" variant="caption" color="text.secondary">{lab.unit}</Typography>
+                          </Typography>
+                        </Box>
+                        <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: 'success.main', flexShrink: 0, ml: 1 }} />
+                      </Paper>
+                    ))}
+                  </Box>
                </Box>
           </Grid>
 
@@ -349,100 +474,10 @@ export default function ChemoProtocolWorkspace({ patient, hideContextBar }: Chem
                 )}
              </Paper>
 
-            {/* Pre-Cycle Lab Values */}
-            <Box sx={{ mt: 4 }}>
-                 <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'text.secondary', fontSize: '0.8rem', letterSpacing: 1, display: 'block' }}>
-                    Pre-Cycle Labs
-                </Typography>
-                <Grid container spacing={2}>
-                    {[
-                    { name: 'Hemoglobin', value: '12.5', unit: 'g/dL', status: 'Normal' },
-                    { name: 'WBC', value: '6.2', unit: '10³/µL', status: 'Normal' },
-                    { name: 'Platelets', value: '185', unit: '10³/µL', status: 'Normal' },
-                    { name: 'Creatinine', value: '0.9', unit: 'mg/dL', status: 'Normal' },
-                    ].map((lab, i) => (
-                    <Grid item xs={6} key={i}>
-                        <Paper variant="outlined" sx={{ p: 2, borderRadius: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Box>
-                                <Typography variant="caption" color="text.secondary" display="block">{lab.name}</Typography>
-                                <Typography variant="subtitle2" fontWeight={600}>
-                                    {lab.value} <Typography component="span" variant="caption" color="text.secondary">{lab.unit}</Typography>
-                                </Typography>
-                            </Box>
-                            <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: 'success.main' }} />
-                        </Paper>
-                    </Grid>
-                    ))}
-                </Grid>
-            </Box>
           </Grid>
         </Grid>
 
-        {/* Treatment Timeline - Full Width */}
-        <Box sx={{ mt: 6 }}>
-           <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
-            Treatment Timeline
-          </Typography>
-          <Paper variant="outlined" sx={{ p: 3, borderRadius: 2 }}>
-             <Box 
-            sx={{ 
-              display: 'flex', 
-              gap: 2, 
-              overflowX: 'auto', 
-              pb: 1,
-              '&::-webkit-scrollbar': { height: '6px' },
-              '&::-webkit-scrollbar-track': { background: '#f1f1f1', borderRadius: '4px' },
-              '&::-webkit-scrollbar-thumb': { background: '#d1d1d1', borderRadius: '4px', '&:hover': { background: '#b0b0b0' } },
-            }}
-          >
-            {Array.from({ length: patient.currentProtocol.cycles }, (_, i) => {
-              const outcome = patient.cycleOutcomes?.find((c) => c.cycleNumber === i + 1);
-              const isCurrent = i + 1 === currentCycle;
-              
-              return (
-                <Box
-                  key={i}
-                  sx={{
-                    minWidth: 140,
-                    p: 0,
-                    border: '1px solid',
-                    borderColor: isCurrent ? 'primary.main' : outcome ? 'success.light' : 'divider',
-                    borderRadius: 2,
-                    bgcolor: outcome ? alpha('#2e7d32', 0.04) : 'background.paper',
-                    position: 'relative',
-                    overflow: 'hidden'
-                  }}
-                >
-                    {isCurrent && <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, height: 4, bgcolor: 'primary.main' }} />}
-                    
-                    <Box sx={{ p: 2 }}>
-                        <Typography variant="caption" sx={{ fontWeight: 700, mb: 0.5, display: 'block', color: 'text.secondary', fontSize: '0.7rem', textTransform: 'uppercase' }}>
-                            CYCLE {i + 1}
-                        </Typography>
-                        
-                         {outcome ? (
-                            <>
-                            <Typography variant="body2" fontWeight={600} sx={{ mb: 1 }}>{outcome.date}</Typography>
-                            <Chip 
-                                label={outcome.response} 
-                                size="small" 
-                                color="success" 
-                                variant="outlined" 
-                                sx={{ height: 20, fontSize: '0.65rem', width: '100%' }} 
-                            />
-                            </>
-                        ) : (
-                             <Box sx={{ height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <Typography variant="caption" color="text.secondary" sx={{ fontStyle: 'italic' }}>Pending</Typography>
-                             </Box>
-                        )}
-                    </Box>
-                </Box>
-              );
-            })}
-          </Box>
-          </Paper>
-        </Box>
+
       </Container>
       
       {/* Bottom Action Bar */}
