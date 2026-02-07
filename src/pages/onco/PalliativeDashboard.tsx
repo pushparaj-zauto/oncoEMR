@@ -11,26 +11,29 @@ import {
   TableRow,
   LinearProgress,
   Checkbox,
-  FormControlLabel,
-  TextField,
   Slider,
   Stack,
   Divider,
   Button,
   Fab,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
 } from '@mui/material';
 import MicIcon from '@mui/icons-material/Mic';
 import ChatIcon from '@mui/icons-material/Chat';
 import LayersIcon from '@mui/icons-material/Layers';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import HomeIcon from '@mui/icons-material/Home';
-import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
-import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
-import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import AccessibleIcon from '@mui/icons-material/Accessible';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import HotelIcon from '@mui/icons-material/Hotel';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import TrendingDownIcon from '@mui/icons-material/TrendingDown';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import { alpha } from '@mui/material/styles';
 import { OncologyPatient } from '../../types/oncology';
 import PatientContextBar from '../../components/onco/PatientContextBar';
 
@@ -39,8 +42,42 @@ interface PalliativeDashboardProps {
   hideContextBar?: boolean;
 }
 
+// Reusable MicButton component matching DiagnosticEvaluation style
+const MicButton = () => (
+  <IconButton 
+    size="small" 
+    sx={{ 
+        ml: 1.5,
+        border: '1px solid',
+        borderColor: 'primary.main', 
+        borderRadius: 1, 
+        p: 0.5,
+        color: 'primary.main',
+        transition: 'all 0.2s',
+        '&:hover': {
+            bgcolor: (theme) => alpha(theme.palette.primary.main, 0.1),
+            borderColor: 'primary.dark',
+            transform: 'translateY(-1px)',
+            boxShadow: (theme) => `0 2px 8px ${alpha(theme.palette.primary.main, 0.2)}`
+        }
+    }}
+  >
+    <MicIcon sx={{ fontSize: 16 }} />
+  </IconButton>
+);
+
+// Section Header component matching MaintenanceReview style
+const SectionHeader = ({ title, color = 'primary.main', action }: { title: string, color?: string, action?: React.ReactNode }) => (
+    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+        <Typography variant="overline" sx={{ fontWeight: 700, color: color, fontSize: '0.85rem', letterSpacing: 1.2 }}>
+            {title}
+        </Typography>
+        {action}
+    </Box>
+);
+
 export default function PalliativeDashboard({ patient, hideContextBar }: PalliativeDashboardProps) {
-  const getPainColor = (score: number) => {
+  const getPainColor = (score: number): 'success' | 'warning' | 'error' => {
     if (score <= 3) return 'success';
     if (score <= 6) return 'warning';
     return 'error';
@@ -48,14 +85,16 @@ export default function PalliativeDashboard({ patient, hideContextBar }: Palliat
 
   const painScore = patient.qolMetrics?.painScore || 3;
   const previousPainScore = patient.qolMetrics?.previousPainScore || painScore;
+  const painDiff = previousPainScore - painScore;
 
   return (
     <Box sx={{ pb: 10 }}>
       {/* Global Patient Context Bar */}
       {!hideContextBar && <PatientContextBar patient={patient} />}
 
-      <Container maxWidth="xl" sx={{ mt: 4, mb: 5 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+      <Container maxWidth="xl" sx={{ mt: 2, mb: 5 }}>
+        {/* Page Header - Simplified */}
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
           <Box>
             <Typography variant="h5" sx={{ fontWeight: 600, color: 'primary.main', letterSpacing: 0.3 }}>
               Palliative Care Dashboard
@@ -66,212 +105,233 @@ export default function PalliativeDashboard({ patient, hideContextBar }: Palliat
           </Box>
           <Chip
             label="PALLIATIVE INTENT"
-            color="info"
-            sx={{ fontWeight: 700, fontSize: '0.85rem', py: 0.5 }}
+            color="primary"
+            sx={{ fontWeight: 600, fontSize: '0.8rem', py: 0.5 }}
             variant="outlined"
           />
         </Box>
 
-        <Grid container spacing={3}>
+        <Grid container spacing={4}>
           {/* Column 1: Current Treatment & Pain Score */}
           <Grid item xs={12} md={4}>
-            {/* Current Treatment (Moved here) */}
-             {patient.currentProtocol && (
-              <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: 2 }}>
-                <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
-                  Current Treatment
-                </Typography>
-                <Box>
-                  <Typography variant="body2" sx={{ mb: 0.5 }}>
-                    <strong>Protocol:</strong> {patient.currentProtocol.name}
-                  </Typography>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                    <Typography variant="caption" color="text.secondary">Progress</Typography>
-                    <Typography variant="caption" fontWeight={600}>
-                      {patient.cycleOutcomes?.length || 0} / {patient.currentProtocol.cycles} Cycles
-                    </Typography>
-                  </Box>
+            {/* Current Treatment */}
+            {patient.currentProtocol && (
+              <Box sx={{ mb: 4 }}>
+                <SectionHeader title="Current Treatment" action={<MicButton />} />
+                <Paper variant="outlined" sx={{ p: 3, borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
+                  <Table size="small">
+                    <TableBody>
+                      <TableRow>
+                        <TableCell sx={{ width: '35%', borderBottom: 'none', pl: 0 }}>
+                          <Typography variant="body2" color="text.secondary">Protocol</Typography>
+                        </TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>
+                          <Typography variant="body2" fontWeight={500}>{patient.currentProtocol.name}</Typography>
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell sx={{ borderBottom: 'none', pl: 0 }}>
+                          <Typography variant="body2" color="text.secondary">Progress</Typography>
+                        </TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>
+                          <Typography variant="body2" fontWeight={600}>
+                            {patient.cycleOutcomes?.length || 0} / {patient.currentProtocol.cycles} Cycles
+                          </Typography>
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
                   <LinearProgress
                     variant="determinate"
                     value={((patient.cycleOutcomes?.length || 0) / patient.currentProtocol.cycles) * 100}
                     color="primary"
-                    sx={{ height: 6, borderRadius: 1, bgcolor: 'grey.200' }}
+                    sx={{ height: 4, borderRadius: 1, bgcolor: 'grey.200', mt: 1 }}
                   />
-                  <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
+                  <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1.5 }}>
                     Last cycle: {patient.cycleOutcomes?.[patient.cycleOutcomes.length - 1]?.date}
                   </Typography>
-                </Box>
-              </Paper>
+                </Paper>
+              </Box>
             )}
 
-            <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
-              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
-                Pain Score (0–10)
-              </Typography>
-              
-              <Box sx={{ textAlign: 'center', pt: 1 }}>
-                <Box
-                  sx={{
-                    width: 140,
-                    height: 140,
-                    mx: 'auto',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    bgcolor: 'background.paper',
-                    boxShadow: 3,
-                    background: theme =>
-                      `linear-gradient(135deg, ${theme.palette[getPainColor(painScore)].light}, ${theme.palette[getPainColor(painScore)].main})`,
-                    color: 'common.white',
-                    mb: 2,
-                  }}
-                >
-                  <Typography variant="h2" sx={{ fontWeight: 800, lineHeight: 1 }}>
-                    {painScore}
-                  </Typography>
-                </Box>
-
-                  <Stack direction="row" justifyContent="center" alignItems="center" spacing={2} sx={{ mb: 3 }}>
-                    <Typography variant="body2" color="text.secondary">
-                      Previously: <strong>{previousPainScore}</strong>
+            {/* Pain Score - Minimalistic */}
+            <Box sx={{ mb: 4 }}>
+              <SectionHeader title="Pain Score (0–10)" action={<MicButton />} />
+              <Paper variant="outlined" sx={{ p: 3, borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                  {/* Compact pain score display */}
+                  <Box
+                    sx={{
+                      width: 80,
+                      height: 80,
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      border: '3px solid',
+                      borderColor: `${getPainColor(painScore)}.main`,
+                      bgcolor: (theme) => alpha(theme.palette[getPainColor(painScore)].main, 0.08),
+                      flexShrink: 0,
+                    }}
+                  >
+                    <Typography variant="h3" sx={{ fontWeight: 700, color: `${getPainColor(painScore)}.main`, lineHeight: 1 }}>
+                      {painScore}
                     </Typography>
-                    {previousPainScore !== painScore && (
-                      <Chip 
-                        label={painScore < previousPainScore ? `↓ ${previousPainScore - painScore} pts` : `↑ ${painScore - previousPainScore} pts`} 
-                        size="small" 
-                        color={painScore < previousPainScore ? 'success' : 'error'} 
-                      />
-                    )}
-                  </Stack>
+                  </Box>
 
-                <Slider
-                  value={painScore}
-                  min={0}
-                  max={10}
-                  marks
-                  disabled
-                  color={getPainColor(painScore)}
-                  sx={{ width: '90%' }}
-                />
-              </Box>
-            </Paper>
+                  <Box sx={{ flex: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                      <Typography variant="body2" color="text.secondary">
+                        Previously: <strong>{previousPainScore}</strong>
+                      </Typography>
+                      {painDiff !== 0 && (
+                        <Chip 
+                          icon={painDiff > 0 ? <TrendingDownIcon sx={{ fontSize: '14px !important' }} /> : <TrendingUpIcon sx={{ fontSize: '14px !important' }} />}
+                          label={`${Math.abs(painDiff)} pts`} 
+                          size="small" 
+                          color={painDiff > 0 ? 'success' : 'error'} 
+                          variant="outlined"
+                          sx={{ height: 22, fontSize: '0.7rem', fontWeight: 600 }}
+                        />
+                      )}
+                    </Box>
+                    <Slider
+                      value={painScore}
+                      min={0}
+                      max={10}
+                      marks
+                      disabled
+                      color={getPainColor(painScore)}
+                      sx={{ py: 1 }}
+                    />
+                  </Box>
+                </Box>
+              </Paper>
+            </Box>
 
-            <Paper elevation={1} sx={{ p: 3, mt: 3, borderRadius: 2, bgcolor: 'info.light', border: '1px solid', borderColor: 'info.main' }}>
-              <Typography variant="overline" sx={{ mb: 1, fontWeight: 700, color: 'info.dark', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
-                Care Goal
-              </Typography>
-              <Typography variant="body2" sx={{ fontWeight: 500, color: 'text.primary' }}>
-                Comfort-focused care; continue current chemotherapy for disease control and symptom management.
-              </Typography>
-            </Paper>
+            {/* Care Goal - Clean */}
+            <Box>
+              <SectionHeader title="Care Goal" color="info.dark" action={<MicButton />} />
+              <Paper 
+                variant="outlined" 
+                sx={{ 
+                  p: 2.5, 
+                  borderRadius: 2, 
+                  border: '1px solid', 
+                  borderColor: (theme) => alpha(theme.palette.info.main, 0.3),
+                  bgcolor: (theme) => alpha(theme.palette.info.main, 0.02)
+                }}
+              >
+                <Typography variant="body2" sx={{ fontWeight: 500, color: 'text.primary', lineHeight: 1.6 }}>
+                  Comfort-focused care; continue current chemotherapy for disease control and symptom management.
+                </Typography>
+              </Paper>
+            </Box>
           </Grid>
 
           {/* Column 2: Symptom Checklist & Meds */}
           <Grid item xs={12} md={4}>
-            <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
-              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
-                Symptom Assessment
-              </Typography>
-
-              {patient.qolMetrics?.symptoms && (
-                <Box>
-                  <Stack spacing={2}>
-                    <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
-                      <Checkbox checked={patient.qolMetrics.symptoms.pain} size="small" sx={{ p: 0.5, mt: 0.5, mr: 1 }} />
-                      <Box>
-                        <Typography variant="body2" sx={{ fontWeight: 600 }}>Pain</Typography>
-                        <Chip label="Improved" size="small" color="success" sx={{ mt: 0.5, height: 20, fontSize: '0.7rem' }} />
-                      </Box>
-                    </Box>
-                    <Divider />
-                    <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
-                      <Checkbox checked={patient.qolMetrics.symptoms.fatigue} size="small" sx={{ p: 0.5, mt: 0.5, mr: 1 }} />
-                      <Box>
-                        <Typography variant="body2" sx={{ fontWeight: 600 }}>Fatigue</Typography>
-                        <Chip label="Stable" size="small" color="default" sx={{ mt: 0.5, height: 20, fontSize: '0.7rem' }} />
-                      </Box>
-                    </Box>
-                    <Divider />
-                    <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
-                      <Checkbox checked={patient.qolMetrics.symptoms.breathlessness} size="small" sx={{ p: 0.5, mt: 0.5, mr: 1 }} />
-                      <Box>
-                        <Typography variant="body2" sx={{ fontWeight: 600 }}>Breathlessness</Typography>
-                        <Chip label="Stable" size="small" color="default" sx={{ mt: 0.5, height: 20, fontSize: '0.7rem' }} />
-                      </Box>
-                    </Box>
-                    <Divider />
-                    <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
-                      <Checkbox checked={patient.qolMetrics.symptoms.nausea} size="small" sx={{ p: 0.5, mr: 1 }} />
-                      <Typography variant="body2" sx={{ fontWeight: 600, mt: 0.5 }}>Nausea</Typography>
-                    </Box>
-                    <Divider />
-                    <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
-                      <Checkbox checked={patient.qolMetrics.symptoms.anxiety} size="small" sx={{ p: 0.5, mr: 1 }} />
-                      <Typography variant="body2" sx={{ fontWeight: 600, mt: 0.5 }}>Anxiety</Typography>
-                    </Box>
-                  </Stack>
-                </Box>
-              )}
-            </Paper>
+            {/* Symptom Assessment */}
+            <Box sx={{ mb: 4 }}>
+              <SectionHeader title="Symptom Assessment" action={<MicButton />} />
+              <Paper variant="outlined" sx={{ p: 0, borderRadius: 2, border: '1px solid', borderColor: 'divider', overflow: 'hidden' }}>
+                {patient.qolMetrics?.symptoms && (
+                  <List disablePadding>
+                    {[
+                      { key: 'pain', label: 'Pain', checked: patient.qolMetrics.symptoms.pain, status: 'Improved' },
+                      { key: 'fatigue', label: 'Fatigue', checked: patient.qolMetrics.symptoms.fatigue, status: 'Stable' },
+                      { key: 'breathlessness', label: 'Breathlessness', checked: patient.qolMetrics.symptoms.breathlessness, status: 'Stable' },
+                      { key: 'nausea', label: 'Nausea', checked: patient.qolMetrics.symptoms.nausea, status: null },
+                      { key: 'anxiety', label: 'Anxiety', checked: patient.qolMetrics.symptoms.anxiety, status: null },
+                    ].map((symptom, index, arr) => (
+                      <ListItem 
+                        key={symptom.key}
+                        divider={index < arr.length - 1}
+                        sx={{ py: 1.5, px: 2 }}
+                      >
+                        <Checkbox 
+                          checked={symptom.checked} 
+                          size="small" 
+                          sx={{ p: 0.5, mr: 1.5 }} 
+                        />
+                        <ListItemText 
+                          primary={
+                            <Typography variant="body2" sx={{ fontWeight: 500 }}>{symptom.label}</Typography>
+                          }
+                        />
+                        {symptom.status && (
+                          <Chip 
+                            label={symptom.status} 
+                            size="small" 
+                            color={symptom.status === 'Improved' ? 'success' : 'default'} 
+                            variant="outlined"
+                            sx={{ height: 22, fontSize: '0.7rem', fontWeight: 600, borderRadius: 1 }} 
+                          />
+                        )}
+                      </ListItem>
+                    ))}
+                  </List>
+                )}
+              </Paper>
+            </Box>
 
             {/* Supportive Medications */}
-            <Paper elevation={1} sx={{ p: 3, mt: 3, borderRadius: 2 }}>
-              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
-                Supportive Medications
-              </Typography>
-              <Table size="small">
-                <TableBody>
-                  {patient.qolMetrics?.supportiveMeds ? (
-                    patient.qolMetrics.supportiveMeds.map((med, idx) => (
-                      <TableRow key={idx}>
-                        <TableCell sx={{ color: 'text.secondary', fontWeight: 500 }}>{med.category}</TableCell>
-                        <TableCell>{med.medication}</TableCell>
+            <Box>
+              <SectionHeader title="Supportive Medications" action={<MicButton />} />
+              <Paper variant="outlined" sx={{ p: 0, borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
+                <Table size="small">
+                  <TableBody>
+                    {patient.qolMetrics?.supportiveMeds ? (
+                      patient.qolMetrics.supportiveMeds.map((med, idx) => (
+                        <TableRow key={idx}>
+                          <TableCell sx={{ color: 'text.secondary', fontWeight: 500, fontSize: '0.85rem', borderBottom: idx === (patient.qolMetrics?.supportiveMeds?.length || 0) - 1 ? 'none' : undefined }}>
+                            {med.category}
+                          </TableCell>
+                          <TableCell sx={{ fontWeight: 500, fontSize: '0.85rem', color: 'text.primary', borderBottom: idx === (patient.qolMetrics?.supportiveMeds?.length || 0) - 1 ? 'none' : undefined }}>
+                            {med.medication}
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={2} sx={{ color: 'text.secondary', fontStyle: 'italic' }}>No medications recorded</TableCell>
                       </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={2} sx={{ color: 'text.secondary', fontStyle: 'italic' }}>No medications recorded</TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </Paper>
+                    )}
+                  </TableBody>
+                </Table>
+              </Paper>
+            </Box>
           </Grid>
 
           {/* Column 3: Quality of Life & Notes */}
           <Grid item xs={12} md={4}>
-            <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
-              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'success.dark', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
-                Quality of Life
-              </Typography>
-              
-              <Box sx={{ p: 2, bgcolor: 'grey.50', borderRadius: 1, border: '1px solid', borderColor: 'divider' }}>
+            {/* Quality of Life */}
+            <Box sx={{ mb: 4 }}>
+              <SectionHeader title="Quality of Life" color="success.dark" action={<MicButton />} />
+              <Paper variant="outlined" sx={{ p: 0, borderRadius: 2, border: '1px solid', borderColor: 'divider', overflow: 'hidden' }}>
                 {patient.qolMetrics && (
-                  <Stack spacing={2}>
+                  <List disablePadding>
                     {/* Mobility */}
-                    <Box>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
-                        <AccessibleIcon sx={{ color: 'success.main', fontSize: '1.1rem' }} />
-                        <Typography variant="body2" sx={{ fontWeight: 600 }}>Mobility</Typography>
-                      </Box>
+                    <ListItem divider sx={{ py: 1.5, px: 2.5 }}>
+                      <AccessibleIcon sx={{ color: 'text.secondary', fontSize: '1.2rem', mr: 1.5 }} />
+                      <ListItemText 
+                        primary={<Typography variant="body2" fontWeight={500}>Mobility</Typography>}
+                      />
                       <Chip
                         label={patient.qolMetrics.mobility}
                         size="small"
                         variant="outlined"
                         color={patient.qolMetrics.mobility === 'Independent' ? 'success' : 'warning'}
-                        sx={{ fontWeight: 600, height: 24 }}
+                        sx={{ fontWeight: 600, height: 22, fontSize: '0.7rem', borderRadius: 1 }}
                       />
-                    </Box>
-
-                    <Divider />
+                    </ListItem>
 
                     {/* Sleep */}
-                    <Box>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
-                        <HotelIcon sx={{ color: 'success.main', fontSize: '1.1rem' }} />
-                        <Typography variant="body2" sx={{ fontWeight: 600 }}>Sleep</Typography>
-                      </Box>
+                    <ListItem divider sx={{ py: 1.5, px: 2.5 }}>
+                      <HotelIcon sx={{ color: 'text.secondary', fontSize: '1.2rem', mr: 1.5 }} />
+                      <ListItemText 
+                        primary={<Typography variant="body2" fontWeight={500}>Sleep</Typography>}
+                      />
                       <Chip
                         label={patient.qolMetrics.sleep}
                         size="small"
@@ -283,45 +343,32 @@ export default function PalliativeDashboard({ patient, hideContextBar }: Palliat
                             ? 'warning'
                             : 'error'
                         }
-                        sx={{ fontWeight: 600, height: 24 }}
-                        icon={
-                          patient.qolMetrics.sleep === 'Good' ? (
-                            <SentimentVerySatisfiedIcon sx={{ fontSize: '1rem !important' }} />
-                          ) : patient.qolMetrics.sleep === 'Fair' ? (
-                            <SentimentSatisfiedIcon sx={{ fontSize: '1rem !important' }} />
-                          ) : (
-                            <SentimentDissatisfiedIcon sx={{ fontSize: '1rem !important' }} />
-                          )
-                        }
+                        sx={{ fontWeight: 600, height: 22, fontSize: '0.7rem', borderRadius: 1 }}
                       />
-                    </Box>
-
-                    <Divider />
+                    </ListItem>
 
                     {/* Daily Activity */}
-                    <Box>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
-                        <FavoriteIcon sx={{ color: 'success.main', fontSize: '1.1rem' }} />
-                        <Typography variant="body2" sx={{ fontWeight: 600 }}>Daily Activity</Typography>
-                      </Box>
+                    <ListItem divider sx={{ py: 1.5, px: 2.5 }}>
+                      <FavoriteIcon sx={{ color: 'text.secondary', fontSize: '1.2rem', mr: 1.5 }} />
+                      <ListItemText 
+                        primary={<Typography variant="body2" fontWeight={500}>Daily Activity</Typography>}
+                      />
                       <Chip
                         label={patient.qolMetrics.dailyActivity}
                         size="small"
                         variant="outlined"
                         color={patient.qolMetrics.dailyActivity === 'Independent' ? 'success' : 'warning'}
-                        sx={{ fontWeight: 600, height: 24 }}
+                        sx={{ fontWeight: 600, height: 22, fontSize: '0.7rem', borderRadius: 1 }}
                       />
-                    </Box>
-
-                    <Divider />
+                    </ListItem>
 
                     {/* Appetite */}
-                    <Box>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
-                        <RestaurantIcon sx={{ color: 'success.main', fontSize: '1.1rem' }} />
-                        <Typography variant="body2" sx={{ fontWeight: 600 }}>Appetite</Typography>
-                      </Box>
-                      <Box sx={{ display: 'flex', gap: 1 }}>
+                    <ListItem sx={{ py: 1.5, px: 2.5 }}>
+                      <RestaurantIcon sx={{ color: 'text.secondary', fontSize: '1.2rem', mr: 1.5 }} />
+                      <ListItemText 
+                        primary={<Typography variant="body2" fontWeight={500}>Appetite</Typography>}
+                      />
+                      <Stack direction="row" spacing={0.5}>
                         <Chip
                           label={patient.qolMetrics.appetite}
                           size="small"
@@ -333,62 +380,56 @@ export default function PalliativeDashboard({ patient, hideContextBar }: Palliat
                               ? 'warning'
                               : 'error'
                           }
-                          sx={{ fontWeight: 600, height: 24 }}
+                          sx={{ fontWeight: 600, height: 22, fontSize: '0.7rem', borderRadius: 1 }}
                         />
-                        <Chip label="Improved" size="small" color="success" sx={{ height: 24 }} />
-                      </Box>
-                    </Box>
-                  </Stack>
+                        <Chip label="Improved" size="small" color="success" sx={{ height: 22, fontSize: '0.65rem', fontWeight: 600, borderRadius: 1 }} />
+                      </Stack>
+                    </ListItem>
+                  </List>
                 )}
-              </Box>
-            </Paper>
+              </Paper>
+            </Box>
 
-            {/* Clinical Notes */}
-            <Paper elevation={1} sx={{ p: 3, mt: 3, borderRadius: 2 }}>
-              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
-                Progress Notes
-              </Typography>
-              <TextField
-                fullWidth
-                multiline
-                rows={4}
-                defaultValue={patient.qolMetrics?.progressNote || 'No progress notes recorded.'}
-                variant="outlined"
-                size="small"
-                InputProps={{
-                    style: { fontSize: '0.875rem', lineHeight: 1.6 }
-                }}
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    bgcolor: 'grey.50',
-                  }
-                }}
-              />
-            </Paper>
+            {/* Progress Notes */}
+            <Box>
+              <SectionHeader title="Progress Notes" action={<MicButton />} />
+              <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
+                <Typography variant="body2" sx={{ lineHeight: 1.7, color: 'text.primary' }}>
+                  {patient.qolMetrics?.progressNote || 'No progress notes recorded.'}
+                </Typography>
+              </Paper>
+            </Box>
           </Grid>
         </Grid>
 
-        {/* Overall Status Banner */}
-        <Paper 
-          elevation={3}
-          sx={{ 
-            mt: 3, 
-            p: 2, 
-            bgcolor: 'success.main', 
-            color: 'white', 
-            textAlign: 'center',
-            borderRadius: 2
-          }}
-        >
-          <Typography variant="subtitle1" sx={{ fontWeight: 800, mb: 0.5, fontSize: '1.1rem' }}>
-            Overall Assessment: Quality of Life Improving
-          </Typography>
-          <Typography variant="body2" sx={{ opacity: 0.95 }}>
-            Patient responding well to palliative chemotherapy with significant symptom improvement. Continue current
-            treatment plan with regular symptom monitoring.
-          </Typography>
-        </Paper>
+        {/* Overall Assessment - Clean Banner */}
+        <Box sx={{ mt: 4 }}>
+          <Paper 
+            variant="outlined"
+            sx={{ 
+              p: 2.5, 
+              borderRadius: 2,
+              border: '1px solid',
+              borderColor: (theme) => alpha(theme.palette.success.main, 0.3),
+              bgcolor: (theme) => alpha(theme.palette.success.main, 0.04),
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2
+            }}
+          >
+            <CheckCircleIcon sx={{ color: 'success.main', fontSize: '2rem' }} />
+            <Box>
+              <Typography variant="subtitle1" sx={{ fontWeight: 600, color: 'success.dark', mb: 0.25 }}>
+                Overall Assessment: Quality of Life Improving
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Patient responding well to palliative chemotherapy with significant symptom improvement. Continue current treatment plan with regular symptom monitoring.
+              </Typography>
+            </Box>
+          </Paper>
+        </Box>
       </Container>
+
       {/* Bottom Action Bar */}
       <Box
         sx={{
