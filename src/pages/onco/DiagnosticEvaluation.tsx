@@ -125,9 +125,12 @@ export default function DiagnosticEvaluation({
           <Grid item xs={12} md={4}>
             
             <Box>
-              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
-                Problem Summary
-              </Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <Typography variant="overline" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2 }}>
+                  Problem Summary
+                </Typography>
+                <MicButton />
+              </Box>
               <Paper variant="outlined" sx={{ p: 3, borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
                 <Table size="small">
                     <TableBody>
@@ -167,9 +170,12 @@ export default function DiagnosticEvaluation({
 
              {/* Pending Actions */}
              <Box sx={{ mt: 4 }}>
-                <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'warning.dark', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
-                    Pending Actions
-                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                  <Typography variant="overline" sx={{ fontWeight: 700, color: 'warning.dark', fontSize: '0.85rem', letterSpacing: 1.2 }}>
+                      Pending Actions
+                  </Typography>
+                  <MicButton />
+                </Box>
                 <Paper variant="outlined" sx={{ borderRadius: 2, borderColor: 'warning.light', bgcolor: alpha('#ed6c02', 0.02) }}>
                     <List dense>
                         {pendingActions.map((action, index) => (
@@ -205,12 +211,15 @@ export default function DiagnosticEvaluation({
           {/* Middle Column - Diagnostic Status Tracker */}
           <Grid item xs={12} md={4}>
             <Box>
-                <Typography
-                    variant="overline"
-                    sx={{ mb: 2, fontWeight: 700, color: 'primary.main', display: 'block', fontSize: '0.85rem', letterSpacing: 1.2 }}
-                >
-                    Diagnostic Status
-                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                  <Typography
+                      variant="overline"
+                      sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2 }}
+                  >
+                      Diagnostic Status
+                  </Typography>
+                  <MicButton />
+                </Box>
                 <Paper variant="outlined" sx={{ p: 0, borderRadius: 2, overflow: 'hidden' }}>
                     <Box sx={{ bgcolor: 'primary.50', p: 1.5, borderBottom: '1px solid', borderColor: 'divider', textAlign: 'center' }}>
                          <Stack direction="row" spacing={2} justifyContent="center">
@@ -263,9 +272,12 @@ export default function DiagnosticEvaluation({
 
             {/* Diagnostic Events Timeline */}
             <Box sx={{ mt: 4 }}>
-              <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
-                Timeline
-              </Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <Typography variant="overline" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2 }}>
+                  Timeline
+                </Typography>
+                <MicButton />
+              </Box>
               <Paper variant="outlined" sx={{ p: 0, borderRadius: 2 }}>
                 <List disablePadding>
                     {diagnosticEvents.map((event, index) => (
@@ -395,9 +407,12 @@ export default function DiagnosticEvaluation({
             {/* Comorbidity Risk */}
             {patient.comorbidities && (
                <Box sx={{ mt: 4 }}>
-                 <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'text.secondary', fontSize: '0.8rem', letterSpacing: 1, display: 'block' }}>
-                  Comorbidities
-                </Typography>
+                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                   <Typography variant="overline" sx={{ fontWeight: 700, color: 'text.secondary', fontSize: '0.8rem', letterSpacing: 1 }}>
+                    Comorbidities
+                   </Typography>
+                   <MicButton />
+                 </Box>
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
                   {patient.comorbidities.diabetes && <Chip label="Diabetes" size="small" variant="outlined" />}
                   {patient.comorbidities.cardiacDisease && <Chip label="Cardiac Disease" size="small" variant="outlined" />}
