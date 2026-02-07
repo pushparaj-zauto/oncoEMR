@@ -178,7 +178,14 @@ export default function DiagnosticEvaluation({
                 </Box>
                 <Paper variant="outlined" sx={{ borderRadius: 2, borderColor: 'warning.light', bgcolor: alpha('#ed6c02', 0.02) }}>
                     <List dense>
-                        {pendingActions.map((action, index) => (
+                        {pendingActions.map((action, index) => {
+                        const getButtonLabel = (actionText: string) => {
+                            if (actionText.toLowerCase().includes('schedule') || actionText.toLowerCase().includes('mdt')) return 'Schedule';
+                            if (actionText.toLowerCase().includes('referral') || actionText.toLowerCase().includes('counseling')) return 'Refer';
+                            if (actionText.toLowerCase().includes('workup') || actionText.toLowerCase().includes('mri') || actionText.toLowerCase().includes('evaluation')) return 'Order';
+                            return 'Review';
+                        };
+                        return (
                         <Box key={index}>
                             <ListItem sx={{ py: 1.5 }}>
                             <ListItemIcon sx={{ minWidth: 36 }}>
@@ -199,10 +206,27 @@ export default function DiagnosticEvaluation({
                             <ListItemText 
                                 primary={<Typography variant="body2" sx={{ fontWeight: 500 }}>{action.action}</Typography>} 
                             />
+                            <Button
+                                variant="outlined"
+                                size="small"
+                                sx={{
+                                    ml: 1,
+                                    textTransform: 'none',
+                                    fontSize: '0.7rem',
+                                    py: 0.25,
+                                    px: 1.5,
+                                    minWidth: 'auto',
+                                    borderRadius: 1,
+                                    fontWeight: 600,
+                                }}
+                            >
+                                {getButtonLabel(action.action)}
+                            </Button>
                             </ListItem>
                             {index < pendingActions.length - 1 && <Divider component="li" variant="inset" sx={{ ml: 6 }} />}
                         </Box>
-                        ))}
+                        );
+                        })}
                     </List>
                 </Paper>
              </Box>
