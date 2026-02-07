@@ -44,7 +44,7 @@ export default function PatientSummary({ patient, hideContextBar }: PatientSumma
                 <Paper sx={{ p: 2, borderRadius: 2 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
                         <Typography variant="overline" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.75rem', letterSpacing: 1 }}>
-                            Patient Vitals
+                            Vitals
                         </Typography>
                         <MicButton />
                     </Box>
@@ -149,7 +149,7 @@ export default function PatientSummary({ patient, hideContextBar }: PatientSumma
             <Grid item xs={12} md={5}>
                 <Paper sx={{ p: 3, borderRadius: 2, height: '100%' }}>
                      <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
-                        Patient History
+                        History
                     </Typography>
 
                     <Box sx={{ mb: 3 }}>

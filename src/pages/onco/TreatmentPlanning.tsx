@@ -250,7 +250,7 @@ export default function TreatmentPlanning({ patient, hideContextBar }: Treatment
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, justifyContent: 'center' }}>
                     <Typography
                         variant="overline"
-                        sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.9rem', letterSpacing: 1 }}
+                        sx={{ fontWeight: 600, color: 'primary.main', fontSize: '0.9rem', letterSpacing: 1 }}
                     >
                         Treatment Intent
                     </Typography>

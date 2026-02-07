@@ -30,7 +30,7 @@ export default function OncoPatientLayout() {
   }
 
   const menuItems = [
-    { label: 'Patient Summary', icon: <MonitorHeartIcon />, path: 'summary', color: '#e91e63' },
+    { label: 'Summary', icon: <MonitorHeartIcon />, path: 'summary', color: '#e91e63' },
     { label: 'Diagnostic Findings', icon: <ScienceIcon />, path: 'diagnostic', color: '#ff9800' },
     { label: 'Treatment Planning', icon: <AssignmentIcon />, path: 'planning', color: '#2196f3' },
     { label: 'Chemo Protocol', icon: <MedicationLiquidIcon />, path: 'chemo', color: '#7c4dff' },
