@@ -356,23 +356,19 @@ export default function TreatmentPlanning({ patient, hideContextBar }: Treatment
                         <TableCell sx={{ color: 'text.secondary', fontWeight: 500, borderBottom: 'none', pl: 0 }}>Regimen Name</TableCell>
                         <TableCell sx={{ borderBottom: 'none' }}>
                         <Typography variant="body2" fontWeight={600}>
-                            {patient.cancerSite === 'Breast'
-                            ? 'AC-T (Doxorubicin + Cyclophosphamide → Paclitaxel)'
-                            : patient.cancerSite === 'Colon'
-                            ? 'FOLFOX'
-                            : 'Carboplatin + Paclitaxel'}
+                            {patient.currentProtocol?.name || 'Standard Protocol'}
                         </Typography>
                         </TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell sx={{ color: 'text.secondary', fontWeight: 500, borderBottom: 'none', pl: 0 }}>Planned Cycles</TableCell>
                         <TableCell sx={{ borderBottom: 'none' }}>
-                        {patient.cancerSite === 'Breast' ? '8 cycles' : '6 cycles'}
+                        {patient.currentProtocol?.cycles || 6} cycles
                         </TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell sx={{ color: 'text.secondary', fontWeight: 500, borderBottom: 'none', pl: 0 }}>Cycle Frequency</TableCell>
-                        <TableCell sx={{ borderBottom: 'none' }}>Every 21 days</TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>Every {patient.currentProtocol?.cycleFrequency || 21} days</TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell sx={{ color: 'text.secondary', fontWeight: 500, borderBottom: 'none', pl: 0 }}>Dose Intent</TableCell>
