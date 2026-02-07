@@ -105,11 +105,26 @@ export default function DiagnosticEvaluation({
       {!hideContextBar && <PatientContextBar patient={patient} />}
 
       <Container maxWidth="xl" sx={{ mt: 4, mb: 5 }}>
+        {/* Alerts Panel - Full Width */}
+        {patient.alerts && patient.alerts.length > 0 && (
+          <Box sx={{ mb: 4 }}>
+            {patient.alerts.map((alert, index) => (
+              <Alert
+                key={index}
+                severity="error"
+                icon={<WarningIcon />}
+                sx={{ mb: 1, fontWeight: 500, borderRadius: 2 }}
+              >
+                <strong>{alert.type}:</strong> {alert.message}
+              </Alert>
+            ))}
+          </Box>
+        )}
         <Grid container spacing={4}>
           {/* Left Column - Patient Snapshot & Problem Summary */}
           <Grid item xs={12} md={4}>
             
-            <Paper elevation={0} sx={{ p: 0, borderRadius: 2 }}>
+            <Box>
               <Typography variant="overline" sx={{ mb: 2, fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2, display: 'block' }}>
                 Problem Summary
               </Typography>
@@ -148,7 +163,7 @@ export default function DiagnosticEvaluation({
                     </TableBody>
                 </Table>
               </Paper>
-            </Paper>
+            </Box>
 
              {/* Pending Actions */}
              <Box sx={{ mt: 4 }}>
@@ -397,21 +412,6 @@ export default function DiagnosticEvaluation({
           </Grid>
         </Grid>
 
-        {/* Alerts Panel - Full Width */}
-        {patient.alerts && patient.alerts.length > 0 && (
-          <Box sx={{ mt: 4 }}>
-            {patient.alerts.map((alert, index) => (
-              <Alert
-                key={index}
-                severity="error"
-                icon={<WarningIcon />}
-                sx={{ mb: 1, fontWeight: 500, borderRadius: 2 }}
-              >
-                <strong>{alert.type}:</strong> {alert.message}
-              </Alert>
-            ))}
-          </Box>
-        )}
       </Container>
       {/* Bottom Action Bar */}
       <Box
