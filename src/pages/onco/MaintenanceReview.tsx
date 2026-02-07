@@ -153,22 +153,67 @@ export default function MaintenanceReview({ patient, hideContextBar }: Maintenan
                                             </Box>
                                         </Box>
                                      </Box>
+                                     
+                                     {/* Stopping Criteria - Moved to Left Column */}
+                                    <Box sx={{ mt: 3, pl: 1 }}>
+                                        <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600, textTransform: 'uppercase', mb: 1, display: 'block' }}>
+                                            Maintenance continues until
+                                        </Typography>
+                                        <List dense disablePadding>
+                                            {(patient.currentProtocol?.stopCriteria || ['Disease progression', 'Unacceptable toxicity', 'Patient preference']).map((criteria, idx) => (
+                                                <ListItem key={idx} sx={{ px: 0, py: 0.25 }}>
+                                                    <Box component="span" sx={{ width: 4, height: 4, borderRadius: '50%', bgcolor: 'text.disabled', mr: 1, mt: 0.8, alignSelf: 'flex-start' }} />
+                                                    <ListItemText 
+                                                        primary={<Typography variant="body2" sx={{ fontSize: '0.85rem' }}>{criteria}</Typography>} 
+                                                    />
+                                                </ListItem>
+                                            ))}
+                                        </List>
+                                    </Box>
                                 </Grid>
                                 <Grid item xs={12} md={5}>
                                     <Box sx={{ pl: { md: 2 } }}>
-                                        <DataField label="Duration" value="3.5 Months" highlight />
-                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 1 }}>
-                                            <Box sx={{ flexGrow: 1 }}>
-                                                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
-                                                    <Typography variant="body2" fontWeight={500} color="text.secondary" fontSize="0.8rem">Adherence</Typography>
-                                                    <Typography variant="caption" fontWeight={600} color="success.main">98%</Typography>
-                                                </Box>
-                                                <LinearProgress variant="determinate" value={98} color="success" sx={{ height: 6, borderRadius: 3, bgcolor: alpha(theme.palette.success.main, 0.1) }} />
-                                                <Typography variant="body2" sx={{ mt: 1.5, fontSize: '0.8rem', fontStyle: 'italic', color: 'text.secondary', bgcolor: 'grey.50', p: 1, borderRadius: 1, borderLeft: '3px solid', borderColor: 'success.main' }}>
-                                                    "Patient reports excellent compliance with daily medication."
-                                                </Typography>
-                                            </Box>
+                                        {/* Maintenance Rationale */}
+                                        <Box sx={{ mb: 1 }}>
+                                            <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.75rem', fontWeight: 500, mb: 0.5 }}>
+                                                Maintenance Rationale
+                                            </Typography>
+                                            <Typography variant="body1" sx={{ fontSize: '0.9rem', fontWeight: 500, lineHeight: 1.3 }}>
+                                                {patient.currentProtocol?.maintenanceRationale || 'Continued after response to first-line therapy'}
+                                            </Typography>
                                         </Box>
+
+                                        {/* Time & Exposure Grid */}
+                                        <Grid container spacing={2} sx={{ mb: 2 }}>
+                                            <Grid item xs={6}>
+                                                <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.8rem', fontWeight: 500, mb: 0.5 }}>
+                                                    Time on therapy
+                                                </Typography>
+                                                <Typography variant="subtitle1" color="primary.main" sx={{ fontWeight: 700, fontSize: '0.95rem' }}>
+                                                    {patient.currentProtocol?.timeOnTherapy || '3.5 Months'}
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                 <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.8rem', fontWeight: 500, mb: 0.5 }}>
+                                                    Total exposure
+                                                </Typography>
+                                                <Typography variant="subtitle1" sx={{ fontWeight: 600, fontSize: '0.95rem' }}>
+                                                    {patient.currentProtocol?.totalExposure || '105 days'}
+                                                </Typography>
+                                            </Grid>
+                                        </Grid>
+
+                                        {/* Dose Interruptions */}
+                                        <Box sx={{ mb: 2 }}>
+                                             <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.8rem', fontWeight: 500, mb: 0.5 }}>
+                                                Dose interruptions
+                                            </Typography>
+                                            <Typography variant="body2" sx={{ fontSize: '0.9rem', fontWeight: 500 }}>
+                                                {patient.currentProtocol?.doseInterruptions || 'None'}
+                                            </Typography>
+                                        </Box>
+
+
                                     </Box>
                                 </Grid>
                              </Grid>
@@ -238,9 +283,6 @@ export default function MaintenanceReview({ patient, hideContextBar }: Maintenan
                 <Paper 
                     elevation={0} 
                     sx={{ 
-                        height: 'calc(100vh - 140px)', // Fixed height relative to viewport
-                        position: 'sticky',
-                        top: 24,
                         borderRadius: 3, 
                         border: '1px solid', 
                         borderColor: 'divider',
@@ -249,22 +291,16 @@ export default function MaintenanceReview({ patient, hideContextBar }: Maintenan
                         overflow: 'hidden'
                     }}
                 >
-                    <Box sx={{ p: 2, borderBottom: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', bgcolor: 'grey.50', flexShrink: 0 }}>
+                    <Box sx={{ p: 1.5, borderBottom: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', bgcolor: 'grey.50', flexShrink: 0 }}>
                          <Typography variant="overline" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2 }}>
                             Review History
                         </Typography>
                          <MicButton />
                     </Box>
 
-                    {/* Scrollable History List */}
+                    {/* Review History List - Auto Height */}
                     <Box sx={{ 
-                        flexGrow: 1, 
-                        overflowY: 'auto', 
-                        p: 0,
-                        '&::-webkit-scrollbar': { width: '6px' },
-                        '&::-webkit-scrollbar-track': { background: 'transparent' },
-                        '&::-webkit-scrollbar-thumb': { background: (theme) => alpha(theme.palette.primary.main, 0.2), borderRadius: '10px' },
-                        '&::-webkit-scrollbar-thumb:hover': { background: (theme) => alpha(theme.palette.primary.main, 0.5) }
+                        p: 0
                     }}>
                         <List disablePadding>
                             {reviewDates.slice().reverse().map((review, index) => {
@@ -275,7 +311,7 @@ export default function MaintenanceReview({ patient, hideContextBar }: Maintenan
                                     divider={index !== reviewDates.length - 1}
                                     sx={{ 
                                         px: 2, 
-                                        py: 2,
+                                        py: 1.5,
                                         bgcolor: index === 0 ? alpha(theme.palette.primary.main, 0.02) : 'transparent',
                                         '&:hover': { bgcolor: 'action.hover' },
                                         transition: 'background-color 0.2s',
@@ -312,8 +348,8 @@ export default function MaintenanceReview({ patient, hideContextBar }: Maintenan
                     </Box>
 
                     {/* Fixed Forward Plan Section - Outside Scroll */}
-                     <Box sx={{ p: 2.5, borderTop: '1px solid', borderColor: 'divider', bgcolor: 'white', flexShrink: 0 }}>
-                         <Typography variant="overline" sx={{ fontWeight: 700, color: 'text.secondary', fontSize: '0.75rem', letterSpacing: 1.1, mb: 1.5, display: 'block' }}>
+                     <Box sx={{ p: 1.5, borderTop: '1px solid', borderColor: 'divider', bgcolor: 'white', flexShrink: 0 }}>
+                         <Typography variant="overline" sx={{ fontWeight: 700, color: 'text.secondary', fontSize: '0.75rem', letterSpacing: 1.1, mb: 1, display: 'block' }}>
                             Forward Plan
                         </Typography>
                          <List dense disablePadding sx={{ mb: 1 }}>
@@ -330,7 +366,7 @@ export default function MaintenanceReview({ patient, hideContextBar }: Maintenan
                          </List>
                     </Box>
                     
-                    <Box sx={{ p: 2, borderTop: '1px solid', borderColor: 'divider', bgcolor: 'background.paper', flexShrink: 0 }}>
+                    <Box sx={{ p: 1.5, borderTop: '1px solid', borderColor: 'divider', bgcolor: 'background.paper', flexShrink: 0 }}>
                          <Button 
                             variant="outlined" 
                             fullWidth 

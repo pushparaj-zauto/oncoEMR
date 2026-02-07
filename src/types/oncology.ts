@@ -77,6 +77,12 @@ export interface ChemoProtocol {
   cycles: number;
   cycleFrequency: number; // in days
   startDate: string;
+  step?: number; // For multi-step protocols
+  maintenanceRationale?: string;
+  timeOnTherapy?: string;
+  totalExposure?: string;
+  doseInterruptions?: string;
+  stopCriteria?: string[];
   drugs: ChemoDrug[];
 }
 

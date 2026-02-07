@@ -78,6 +78,13 @@ export const mockOncoPatient1: OncologyPatient = {
     }
   ],
   
+  mdtDecision: {
+    status: 'Pending',
+    date: '2026-02-02',
+    summary: 'Preliminary discussion: Likely Stage IV NSCLC. Await final biopsy and molecular markers before treatment planning.',
+    participants: ['Dr. Rao (Med Onco)', 'Dr. Sarah (Surg Onco)', 'Dr. Pathak (Pathology)']
+  },
+
   diagnosisDate: '2026-02-01',
 };
 
@@ -247,6 +254,15 @@ export const mockOncoPatient3: OncologyPatient = {
       { name: '5-FU Bolus', doseBasis: 'BSA', dose: '400 mg/m²', day: 'D1', status: 'Given' },
       { name: '5-FU Infusion', doseBasis: 'BSA', dose: '2400 mg/m²', day: 'D1-D2', status: 'Given' },
     ],
+    maintenanceRationale: 'Adjuvant therapy to eradicate micrometastases',
+    timeOnTherapy: '1 Month',
+    totalExposure: '2 Cycles',
+    doseInterruptions: 'None',
+    stopCriteria: [
+      'Completion of 6 months therapy',
+      'Severe Neuropathy (Grade 3+)',
+      'Disease Recurrence'
+    ]
   },
   
   cycleOutcomes: [
@@ -374,6 +390,15 @@ export const mockOncoPatient4: OncologyPatient = {
     drugs: [
       { name: 'Gemcitabine', doseBasis: 'BSA', dose: '1000 mg/m²', day: 'D1, D8, D15', status: 'Pending D15' },
     ],
+    maintenanceRationale: 'Palliative symptom control and survival extension',
+    timeOnTherapy: '1 Month',
+    totalExposure: '1 Cycle',
+    doseInterruptions: 'D15 delayed (Neutropenia)',
+    stopCriteria: [
+      'Unmanageable toxicity',
+      'Decline in ECOG status',
+      'Patient withdrawal of consent'
+    ]
   },
 
   treatmentStrategy: {
@@ -451,6 +476,15 @@ export const mockOncoPatient5: OncologyPatient = {
     drugs: [
       { name: 'Osimertinib', doseBasis: 'Fixed', dose: '80 mg', day: 'Daily', status: 'Given' },
     ],
+    maintenanceRationale: 'Continued after response to first-line therapy',
+    timeOnTherapy: '3.5 months',
+    totalExposure: '105 days',
+    doseInterruptions: 'None',
+    stopCriteria: [
+      'Disease progression',
+      'Unacceptable toxicity',
+      'Patient preference'
+    ]
   },
   
   vitals: {
@@ -502,6 +536,13 @@ export const mockOncoPatient5: OncologyPatient = {
           message: 'Dermatology referral for paronychia management'
       }
   ],
+
+  mdtDecision: {
+    status: 'Approved',
+    date: '2024-11-25',
+    summary: 'EGFR Mutation confirmed (Exon 19 del). Start First-Line Osimertinib. Monitor for pneumonitis/cardiac toxicity.',
+    participants: ['Dr. Rao (Med Onco)', 'Dr. Sarah (Surg Onco)', 'Dr. Pathak (Pathology)']
+  },
 
   diagnosisDate: '2024-11-20',
   treatmentStartDate: '2024-12-05',
@@ -584,6 +625,13 @@ export const mockOncoPatient6: OncologyPatient = {
           message: 'Schedule Annual Echocardiogram (Doxorubicin exposure)'
       }
   ],
+
+  mdtDecision: {
+    status: 'Approved',
+    date: '2024-02-01',
+    summary: 'Complete Metabolic Response pending. Proceed to Surveillance. Annual review + Echo.',
+    participants: ['Dr. Rao (Med Onco)', 'Dr. Hematology']
+  },
 
   diagnosisDate: '2024-02-10',
   lastReviewDate: '2026-02-01',
