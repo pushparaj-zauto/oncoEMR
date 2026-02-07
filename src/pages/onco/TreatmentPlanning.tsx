@@ -252,58 +252,45 @@ export default function TreatmentPlanning({ patient, hideContextBar }: Treatment
                         variant="overline"
                         sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.9rem', letterSpacing: 1 }}
                     >
-                        Treatment Intent (Critical)
+                        Treatment Intent
                     </Typography>
                     <MicButton />
                 </Box>
                 <Paper variant="outlined" sx={{ p: 3, borderColor: 'primary.main', borderWidth: 1, borderStyle: 'solid', borderRadius: 2 }}>
                 <FormControl component="fieldset" fullWidth>
                     <RadioGroup value={intent} onChange={handleIntentChange}>
-                    <FormControlLabel
-                        value="Curative"
-                        control={<Radio onClick={() => handleRadioClick('Curative')} />}
-                        label={
-                        <Box>
-                            <Typography variant="body1" fontWeight={500}>
-                            Curative
-                            </Typography>
-                            <Typography variant="caption" color="text.secondary">
-                            Goal is cure
-                            </Typography>
-                        </Box>
-                        }
-                    />
-                    <FormControlLabel
-                        value="Disease Control"
-                        control={<Radio onClick={() => handleRadioClick('Disease Control')} />}
-                        label={
-                        <Box>
-                            <Typography variant="body1" fontWeight={500}>
-                            Disease Control
-                            </Typography>
-                            <Typography variant="caption" color="text.secondary">
-                            Long-term control
-                            </Typography>
-                        </Box>
-                        }
-                    />
-                    <FormControlLabel
-                        value="Palliative"
-                        control={<Radio onClick={() => handleRadioClick('Palliative')} />}
-                        label={
-                        <Box>
-                            <Typography variant="body1" fontWeight={500}>
-                            Palliative
-                            </Typography>
-                            <Typography variant="caption" color="text.secondary">
-                            Symptom relief
-                            </Typography>
-                        </Box>
-                        }
-                    />
+                    {['Curative', 'Disease Control', 'Palliative'].map((option) => (
+                        <Paper
+                            key={option}
+                            variant="outlined"
+                            sx={{
+                                mb: 1,
+                                border: intent === option ? '2px solid' : '1px solid',
+                                borderColor: intent === option ? 'primary.main' : 'divider',
+                                bgcolor: intent === option ? (theme) => alpha(theme.palette.primary.main, 0.08) : 'transparent',
+                                transition: 'all 0.2s',
+                                '&:hover': {
+                                    bgcolor: (theme) => alpha(theme.palette.primary.main, 0.04),
+                                    borderColor: intent === option ? 'primary.main' : 'primary.light',
+                                }
+                            }}
+                        >
+                            <FormControlLabel
+                                value={option}
+                                control={<Radio size="small" onClick={() => handleRadioClick(option)} sx={{ p: 0.5 }} />}
+                                label={
+                                    <Typography variant="body2" fontWeight={intent === option ? 700 : 500} color={intent === option ? 'primary.main' : 'text.primary'}>
+                                        {option}
+                                    </Typography>
+                                }
+                                sx={{ m: 0, width: '100%', py: 0.5, px: 1, '& .MuiFormControlLabel-label': { width: '100%' } }}
+                            />
+                        </Paper>
+                    ))}
                     </RadioGroup>
                 </FormControl>
                 </Paper>
+
             </Box>
 
             <Box sx={{ mt: 4 }}>
