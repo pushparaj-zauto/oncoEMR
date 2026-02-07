@@ -389,6 +389,7 @@ export const mockOncoPatient4: OncologyPatient = {
 
   qolMetrics: {
     painScore: 7,
+    previousPainScore: 8, // Was worse last visit
     symptoms: {
       pain: true,
       fatigue: true,
@@ -400,6 +401,14 @@ export const mockOncoPatient4: OncologyPatient = {
     appetite: 'Poor',
     sleep: 'Poor',
     dailyActivity: 'Dependent',
+    supportiveMeds: [
+      { category: 'Pain Relief', medication: 'Morphine SR 30 mg BD' },
+      { category: 'Breakthrough Pain', medication: 'Morphine IR 10 mg PRN' },
+      { category: 'Anti-emetic', medication: 'Ondansetron 8 mg PRN' },
+      { category: 'Anxiolytic', medication: 'Lorazepam 0.5 mg PRN' },
+      { category: 'Appetite Stimulant', medication: 'Megestrol 400 mg OD' },
+    ],
+    progressNote: 'Pain remains poorly controlled despite current regimen. Consider palliative care team review for opioid optimization. Appetite declining, weight loss 4kg in past month. Family meeting scheduled to discuss goals of care.',
   },
   
   currentProtocol: {

@@ -116,6 +116,7 @@ export interface CycleOutcome {
 
 export interface QoLMetrics {
   painScore: number; // 0-10
+  previousPainScore?: number; // For tracking trend
   symptoms: {
     pain: boolean;
     fatigue: boolean;
@@ -127,6 +128,8 @@ export interface QoLMetrics {
   sleep: 'Good' | 'Fair' | 'Poor';
   dailyActivity: 'Independent' | 'Partially Independent' | 'Dependent';
   appetite: 'Good' | 'Fair' | 'Poor';
+  supportiveMeds?: Array<{ category: string; medication: string }>;
+  progressNote?: string;
 }
 
 export interface Vitals {

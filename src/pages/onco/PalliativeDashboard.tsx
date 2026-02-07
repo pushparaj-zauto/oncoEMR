@@ -47,7 +47,7 @@ export default function PalliativeDashboard({ patient, hideContextBar }: Palliat
   };
 
   const painScore = patient.qolMetrics?.painScore || 3;
-  const previousPainScore = 7; // Mock previous score
+  const previousPainScore = patient.qolMetrics?.previousPainScore || painScore;
 
   return (
     <Box sx={{ pb: 10 }}>
@@ -132,12 +132,18 @@ export default function PalliativeDashboard({ patient, hideContextBar }: Palliat
                   </Typography>
                 </Box>
 
-                <Stack direction="row" justifyContent="center" alignItems="center" spacing={2} sx={{ mb: 3 }}>
-                  <Typography variant="body2" color="text.secondary">
-                    Previously: <strong>{previousPainScore}</strong>
-                  </Typography>
-                  <Chip label={`↓ ${previousPainScore - painScore} pts`} size="small" color="success" />
-                </Stack>
+                  <Stack direction="row" justifyContent="center" alignItems="center" spacing={2} sx={{ mb: 3 }}>
+                    <Typography variant="body2" color="text.secondary">
+                      Previously: <strong>{previousPainScore}</strong>
+                    </Typography>
+                    {previousPainScore !== painScore && (
+                      <Chip 
+                        label={painScore < previousPainScore ? `↓ ${previousPainScore - painScore} pts` : `↑ ${painScore - previousPainScore} pts`} 
+                        size="small" 
+                        color={painScore < previousPainScore ? 'success' : 'error'} 
+                      />
+                    )}
+                  </Stack>
 
                 <Slider
                   value={painScore}
@@ -216,22 +222,18 @@ export default function PalliativeDashboard({ patient, hideContextBar }: Palliat
               </Typography>
               <Table size="small">
                 <TableBody>
-                  <TableRow>
-                    <TableCell sx={{ color: 'text.secondary', fontWeight: 500 }}>Pain Relief</TableCell>
-                    <TableCell>Morphine SR 30 mg BD</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ color: 'text.secondary', fontWeight: 500 }}>Anti-emetic</TableCell>
-                    <TableCell>Ondansetron 8 mg PRN</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ color: 'text.secondary', fontWeight: 500 }}>Anxiolytic</TableCell>
-                    <TableCell>Lorazepam 0.5 mg PRN</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ color: 'text.secondary', fontWeight: 500 }}>Appetite Stimulant</TableCell>
-                    <TableCell>Megestrol 400 mg OD</TableCell>
-                  </TableRow>
+                  {patient.qolMetrics?.supportiveMeds ? (
+                    patient.qolMetrics.supportiveMeds.map((med, idx) => (
+                      <TableRow key={idx}>
+                        <TableCell sx={{ color: 'text.secondary', fontWeight: 500 }}>{med.category}</TableCell>
+                        <TableCell>{med.medication}</TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={2} sx={{ color: 'text.secondary', fontStyle: 'italic' }}>No medications recorded</TableCell>
+                    </TableRow>
+                  )}
                 </TableBody>
               </Table>
             </Paper>
@@ -350,7 +352,7 @@ export default function PalliativeDashboard({ patient, hideContextBar }: Palliat
                 fullWidth
                 multiline
                 rows={4}
-                defaultValue="Patient tolerating treatment better this cycle. Pain score reduced from 7 to 3. Appetite improved, now able to eat regular meals. Breathing improved significantly. Family support is strong. Continue current management."
+                defaultValue={patient.qolMetrics?.progressNote || 'No progress notes recorded.'}
                 variant="outlined"
                 size="small"
                 InputProps={{

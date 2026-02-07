@@ -108,7 +108,11 @@ export default function TreatmentPlanning({ patient, hideContextBar }: Treatment
                             {patient.cancerSite === 'Breast'
                             ? 'ER+, PR+, HER2-'
                             : patient.cancerSite === 'Lung'
-                            ? 'EGFR Wild Type'
+                            ? (patient.histology?.includes('EGFR') 
+                                ? patient.histology.match(/\(([^)]+)\)/)?.[1] || 'EGFR Mutant'
+                                : 'EGFR Wild Type')
+                            : patient.cancerSite === 'Colon'
+                            ? 'MSS, RAS Wild-type'
                             : 'Standard'}
                         </Typography>
                         </TableCell>
