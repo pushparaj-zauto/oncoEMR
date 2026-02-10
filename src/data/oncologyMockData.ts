@@ -670,6 +670,172 @@ export const mockOncoPatient5: OncologyPatient = {
       }
   ],
 
+  responseAssessments: [
+    {
+      assessmentDate: '2025-03-10',
+      assessmentNumber: 1,
+      scanResults: [
+        {
+          type: 'CT Chest + Upper Abdomen',
+          date: '2025-03-08',
+          site: 'Primary RLL lesion + mediastinal nodes',
+          baseline: 'Sum of target lesions 6.8 cm (RLL mass 4.5 cm, mediastinal node 2.3 cm)',
+          current: 'Sum 3.9 cm (RLL mass 2.6 cm, mediastinal node 1.3 cm)',
+          changePercent: -43,
+          recistCategory: 'Partial Response (PR)'
+        },
+        {
+          type: 'CT Brain',
+          date: '2025-03-08',
+          site: 'Intracranial',
+          baseline: 'No measurable metastases',
+          current: 'No new lesions, no enhancement',
+          changePercent: 0,
+          recistCategory: 'Stable Disease (SD)'
+        }
+      ],
+      markerTrends: [
+        {
+          name: 'Serum CEA',
+          baseline: 12.5,
+          current: 4.1,
+          unit: 'ng/mL',
+          trend: 'Falling',
+          normal: { min: 0, max: 5 }
+        },
+        {
+          name: 'Plasma EGFR Ex19del ctDNA',
+          baseline: 100,
+          current: 8,
+          unit: 'relative copies/mL',
+          trend: 'Falling',
+          normal: { min: 0, max: 1 }
+        }
+      ],
+      overallResponse: 'Partial Response (PR)',
+      clinicalBenefit: true,
+      toxicitySummary: 'Excellent early radiologic response with >40% reduction in target lesion burden on Osimertinib. Patient reports improved cough and dyspnoea with weight stabilisation. Toxicity limited to Grade 1 acneiform rash and intermittent loose stools, controlled with topical emollients and loperamide as needed. No red flag symptoms for ILD or cardiac toxicity.',
+      cumulativeToxicity: [
+        'Grade 1 acneiform rash (ongoing)',
+        'Intermittent Grade 1 diarrhea (resolved)',
+        'No clinical features of ILD / pneumonitis',
+        'No QTc prolongation or LV dysfunction documented'
+      ],
+      doctorAssessment: 'Radiologically confirmed partial response by RECIST with significant symptomatic improvement on first-line Osimertinib. Skin and GI toxicity are mild and manageable. No evidence of CNS progression. Treatment intent remains long-term disease control.',
+      nextStep: 'Continue Treatment',
+      nextStepDetails: 'Continue Osimertinib 80 mg OD with routine dermatology and cardiac monitoring. Repeat imaging at 6–8 months or earlier if new symptoms arise.'
+    },
+    {
+      assessmentDate: '2025-09-15',
+      assessmentNumber: 2,
+      scanResults: [
+        {
+          type: 'CT Chest + Upper Abdomen',
+          date: '2025-09-12',
+          site: 'Primary RLL lesion + mediastinal nodes',
+          baseline: 'Initial pre-treatment sum 6.8 cm',
+          current: 'Sum 2.8 cm (RLL mass 1.9 cm, mediastinal node 0.9 cm)',
+          changePercent: -59,
+          recistCategory: 'Partial Response (PR)'
+        },
+        {
+          type: 'CT Brain',
+          date: '2025-09-12',
+          site: 'Intracranial',
+          baseline: 'No measurable metastases',
+          current: 'No new lesions, no leptomeningeal disease',
+          changePercent: 0,
+          recistCategory: 'Stable Disease (SD)'
+        }
+      ],
+      markerTrends: [
+        {
+          name: 'Serum CEA',
+          baseline: 12.5,
+          current: 3.6,
+          unit: 'ng/mL',
+          trend: 'Falling',
+          normal: { min: 0, max: 5 }
+        },
+        {
+          name: 'Plasma EGFR Ex19del ctDNA',
+          baseline: 100,
+          current: 2,
+          unit: 'relative copies/mL',
+          trend: 'Falling',
+          normal: { min: 0, max: 1 }
+        }
+      ],
+      overallResponse: 'Partial Response (PR)',
+      clinicalBenefit: true,
+      toxicitySummary: 'Sustained deep partial response with close to 60% shrinkage from baseline. Patient continues on full-dose Osimertinib. Skin toxicity now mainly dry skin with early paronychia around great toes; managed with emollients, urea-based creams and local care. No diarrhoea, no dyspnoea, performance status ECOG 0.',
+      cumulativeToxicity: [
+        'Grade 1 xerosis (dry skin)',
+        'Grade 2 paronychia (improving with local care)',
+        'Prior Grade 1 diarrhea (resolved)',
+        'No ILD / pneumonitis on imaging',
+        'Baseline and interval echocardiograms within normal limits'
+      ],
+      doctorAssessment: 'Patient demonstrates durable partial response on Osimertinib with excellent performance status and preserved quality of life. Toxicities are predominantly cutaneous and manageable with supportive care. No systemic dose reductions required at this stage.',
+      nextStep: 'Continue Treatment',
+      nextStepDetails: 'Maintain Osimertinib 80 mg OD. Continue dermatology support for paronychia and skin care. Schedule next systemic imaging at 12–14 months on treatment or sooner if clinical progression is suspected.'
+    },
+    {
+      assessmentDate: '2026-01-20',
+      assessmentNumber: 3,
+      scanResults: [
+        {
+          type: 'CT Chest + Upper Abdomen',
+          date: '2026-01-18',
+          site: 'Primary RLL lesion + mediastinal nodes',
+          baseline: 'Initial pre-treatment sum 6.8 cm',
+          current: 'Sum 2.7 cm (RLL mass 1.8 cm, mediastinal node 0.9 cm)',
+          changePercent: -60,
+          recistCategory: 'Stable Disease (SD)'
+        },
+        {
+          type: 'CT Brain',
+          date: '2026-01-18',
+          site: 'Intracranial',
+          baseline: 'No measurable metastases',
+          current: 'No new lesions; screening still negative',
+          changePercent: 0,
+          recistCategory: 'Stable Disease (SD)'
+        }
+      ],
+      markerTrends: [
+        {
+          name: 'Serum CEA',
+          baseline: 12.5,
+          current: 3.9,
+          unit: 'ng/mL',
+          trend: 'Stable',
+          normal: { min: 0, max: 5 }
+        },
+        {
+          name: 'Plasma EGFR Ex19del ctDNA',
+          baseline: 100,
+          current: 2,
+          unit: 'relative copies/mL',
+          trend: 'Stable',
+          normal: { min: 0, max: 1 }
+        }
+      ],
+      overallResponse: 'Stable Disease (SD)',
+      clinicalBenefit: true,
+      toxicitySummary: 'Radiologically stable disease with maintained reduction in tumour burden compared to baseline after 14 months of Osimertinib. No new metastatic sites. Patient remains asymptomatic apart from chronic low-grade dry skin and controlled paronychia; no pulmonary or cardiac toxicity identified.',
+      cumulativeToxicity: [
+        'Chronic Grade 1 xerosis (ongoing, moisturiser dependent)',
+        'Grade 1 paronychia (controlled, no secondary infection)',
+        'No history of ILD / pneumonitis',
+        'No significant cardiotoxicity (serial ECG / Echo normal)'
+      ],
+      doctorAssessment: 'After 14 months of EGFR TKI therapy, the disease remains radiologically stable with sustained volume reduction and excellent functional status (ECOG 0). Toxicity profile remains favourable and manageable, supporting continued targeted therapy as long as benefit is maintained.',
+      nextStep: 'Continue Treatment',
+      nextStepDetails: 'Continue Osimertinib 80 mg OD with ongoing clinical and laboratory surveillance. Plan next CT chest/abdomen in 4–6 months, with earlier review if new respiratory symptoms, worsening skin toxicity, or biochemical/clinical progression occurs.'
+    }
+  ],
+
   comorbidities: {
       diabetes: false,
       cardiacDisease: false,
