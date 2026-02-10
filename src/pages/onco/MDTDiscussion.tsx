@@ -9,15 +9,65 @@ import {
   Stack,
   Divider,
   Avatar,
+  IconButton,
 } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import GroupsIcon from '@mui/icons-material/Groups';
 import PersonIcon from '@mui/icons-material/Person';
+import MicIcon from '@mui/icons-material/Mic';
+import EditIcon from '@mui/icons-material/Edit';
+import AddIcon from '@mui/icons-material/Add';
 import { OncologyPatient } from '../../types/oncology';
 import PatientContextBar from '../../components/onco/PatientContextBar';
 import ActionFooter from '../../components/onco/ActionFooter';
+
+const MicButton = () => (
+  <IconButton
+    size="small"
+    sx={{
+      ml: 1.5,
+      border: '1px solid',
+      borderColor: 'primary.main',
+      borderRadius: 1,
+      p: 0.5,
+      color: 'primary.main',
+      transition: 'all 0.2s',
+      '&:hover': {
+        bgcolor: (theme) => alpha(theme.palette.primary.main, 0.1),
+        borderColor: 'primary.dark',
+        transform: 'translateY(-1px)',
+        boxShadow: (theme) => `0 2px 8px ${alpha(theme.palette.primary.main, 0.2)}`,
+      },
+    }}
+  >
+    <MicIcon sx={{ fontSize: 16 }} />
+  </IconButton>
+);
+
+const EditButton = () => (
+  <IconButton
+    size="small"
+    sx={{
+      ml: 0.75,
+      border: '1px solid',
+      borderColor: 'grey.400',
+      borderRadius: 1,
+      p: 0.5,
+      color: 'grey.600',
+      transition: 'all 0.2s',
+      '&:hover': {
+        bgcolor: (theme) => alpha(theme.palette.grey[600], 0.1),
+        borderColor: 'grey.600',
+        transform: 'translateY(-1px)',
+        boxShadow: (theme) => `0 2px 8px ${alpha(theme.palette.grey[600], 0.2)}`,
+      },
+    }}
+  >
+    <EditIcon sx={{ fontSize: 14 }} />
+  </IconButton>
+);
 
 interface MDTDiscussionProps {
   patient: OncologyPatient;
@@ -140,12 +190,16 @@ export default function MDTDiscussion({
           {/* ══════ Left column ══════ */}
           <Grid item xs={12} md={4}>
             {/* ── Section 1: Participants ── */}
-            <Typography
-              variant="overline"
-              sx={{ fontWeight: 700, color: 'text.secondary', fontSize: '0.8rem', letterSpacing: 1.2, mb: 1, display: 'block' }}
-            >
-              Participants
-            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+              <Typography
+                variant="overline"
+                sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.8rem', letterSpacing: 1.2 }}
+              >
+                Participants
+              </Typography>
+              <MicButton />
+              <EditButton />
+            </Box>
             <Paper variant="outlined" sx={{ p: 2, borderRadius: 2, mb: 3 }}>
               <Stack spacing={1.5}>
                 {participants.map((p, i) => (
@@ -177,12 +231,16 @@ export default function MDTDiscussion({
             </Paper>
 
             {/* ── Section 2: Key Findings ── */}
-            <Typography
-              variant="overline"
-              sx={{ fontWeight: 700, color: 'text.secondary', fontSize: '0.8rem', letterSpacing: 1.2, mb: 1, display: 'block' }}
-            >
-              Key Findings
-            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+              <Typography
+                variant="overline"
+                sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.8rem', letterSpacing: 1.2 }}
+              >
+                Key Findings
+              </Typography>
+              <MicButton />
+              <EditButton />
+            </Box>
             <Paper variant="outlined" sx={{ p: 2, borderRadius: 2 }}>
               <Stack spacing={1}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -217,12 +275,32 @@ export default function MDTDiscussion({
           {/* ══════ Right column ══════ */}
           <Grid item xs={12} md={8}>
             {/* ── Section 3: Discussion Notes (chat-style timeline) ── */}
-            <Typography
-              variant="overline"
-              sx={{ fontWeight: 700, color: 'text.secondary', fontSize: '0.8rem', letterSpacing: 1.2, mb: 1, display: 'block' }}
-            >
-              Discussion Notes
-            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+              <Typography
+                variant="overline"
+                sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.8rem', letterSpacing: 1.2 }}
+              >
+                Discussion Notes
+              </Typography>
+              <Button
+                size="small"
+                variant="outlined"
+                startIcon={<AddIcon sx={{ fontSize: 14 }} />}
+                sx={{
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  fontSize: '0.7rem',
+                  py: 0.25,
+                  px: 1.5,
+                  borderRadius: 1,
+                  borderColor: 'primary.main',
+                  color: 'primary.main',
+                  '&:hover': { bgcolor: (theme) => alpha(theme.palette.primary.main, 0.08) },
+                }}
+              >
+                Add Notes
+              </Button>
+            </Box>
             <Paper variant="outlined" sx={{ p: 0, borderRadius: 2, mb: 3, overflow: 'hidden' }}>
               {discussionNotes.map((note, idx) => {
                 const isConsensus = note.role === 'Consensus';
@@ -294,12 +372,16 @@ export default function MDTDiscussion({
             {/* ── Section 4: Final Decision Card ── */}
             {mdt && (
               <>
-                <Typography
-                  variant="overline"
-                  sx={{ fontWeight: 700, color: 'text.secondary', fontSize: '0.8rem', letterSpacing: 1.2, mb: 1, display: 'block' }}
-                >
-                  Final Decision
-                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                  <Typography
+                    variant="overline"
+                    sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.8rem', letterSpacing: 1.2 }}
+                  >
+                    Final Decision
+                  </Typography>
+                  <MicButton />
+                  <EditButton />
+                </Box>
                 <Paper
                   variant="outlined"
                   sx={{

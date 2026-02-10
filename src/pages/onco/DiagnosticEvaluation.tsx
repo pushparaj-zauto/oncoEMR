@@ -23,6 +23,7 @@ import {
   IconButton,
 } from '@mui/material';
 import MicIcon from '@mui/icons-material/Mic';
+import EditIcon from '@mui/icons-material/Edit';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ActionFooter from '../../components/onco/ActionFooter';
 import PendingIcon from '@mui/icons-material/Pending';
@@ -59,6 +60,29 @@ const MicButton = () => (
     }}
   >
     <MicIcon sx={{ fontSize: 16 }} />
+  </IconButton>
+);
+
+const EditButton = () => (
+  <IconButton
+    size="small"
+    sx={{
+      ml: 0.75,
+      border: '1px solid',
+      borderColor: 'grey.400',
+      borderRadius: 1,
+      p: 0.5,
+      color: 'grey.600',
+      transition: 'all 0.2s',
+      '&:hover': {
+        bgcolor: (theme) => alpha(theme.palette.grey[600], 0.1),
+        borderColor: 'grey.600',
+        transform: 'translateY(-1px)',
+        boxShadow: (theme) => `0 2px 8px ${alpha(theme.palette.grey[600], 0.2)}`,
+      },
+    }}
+  >
+    <EditIcon sx={{ fontSize: 14 }} />
   </IconButton>
 );
 
@@ -127,6 +151,7 @@ export default function DiagnosticEvaluation({
                   Problem Summary
                 </Typography>
                 <MicButton />
+                <EditButton />
               </Box>
               <Paper variant="outlined" sx={{ p: 3, borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
                 <Table size="small">
@@ -172,6 +197,7 @@ export default function DiagnosticEvaluation({
                       Pending Actions
                   </Typography>
                   <MicButton />
+                <EditButton />
                 </Box>
                 <Paper variant="outlined" sx={{ borderRadius: 2, borderColor: 'warning.light', bgcolor: alpha('#ed6c02', 0.02) }}>
                     <List dense>
@@ -240,6 +266,7 @@ export default function DiagnosticEvaluation({
                       Diagnostic Status
                   </Typography>
                   <MicButton />
+                <EditButton />
                 </Box>
                 <Paper variant="outlined" sx={{ p: 0, borderRadius: 2, overflow: 'hidden' }}>
                     <Box sx={{ bgcolor: 'primary.50', p: 1.5, borderBottom: '1px solid', borderColor: 'divider', textAlign: 'center' }}>
@@ -298,6 +325,7 @@ export default function DiagnosticEvaluation({
                   Timeline
                 </Typography>
                 <MicButton />
+                <EditButton />
               </Box>
               <Paper variant="outlined" sx={{ p: 0, borderRadius: 2 }}>
                 <List disablePadding>
@@ -338,6 +366,7 @@ export default function DiagnosticEvaluation({
                         Clinical Findings
                     </Typography>
                     <MicButton />
+                <EditButton />
                 </Box>
 
               <Paper variant="outlined" sx={{ p: 3, borderRadius: 2 }}>
@@ -383,6 +412,7 @@ export default function DiagnosticEvaluation({
                         Provisional Assessment
                     </Typography>
                     <MicButton />
+                <EditButton />
                 </Box>
               
               <Paper variant="outlined" sx={{ p: 3, borderRadius: 2, bgcolor: (theme) => alpha(theme.palette.primary.main, 0.02), borderColor:  (theme) => alpha(theme.palette.primary.main, 0.2) }}>
@@ -433,6 +463,7 @@ export default function DiagnosticEvaluation({
                     Comorbidities
                    </Typography>
                    <MicButton />
+                <EditButton />
                  </Box>
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
                   {patient.comorbidities.diabetes && <Chip label="Diabetes" size="small" variant="outlined" />}

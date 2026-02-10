@@ -22,6 +22,7 @@ import {
 } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import MicIcon from '@mui/icons-material/Mic';
+import EditIcon from '@mui/icons-material/Edit';
 import ActionFooter from '../../components/onco/ActionFooter';
 import { useState } from 'react';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -61,6 +62,29 @@ const MicButton = () => (
     }}
   >
     <MicIcon sx={{ fontSize: 16 }} />
+  </IconButton>
+);
+
+const EditButton = () => (
+  <IconButton
+    size="small"
+    sx={{
+      ml: 0.75,
+      border: '1px solid',
+      borderColor: 'grey.400',
+      borderRadius: 1,
+      p: 0.5,
+      color: 'grey.600',
+      transition: 'all 0.2s',
+      '&:hover': {
+        bgcolor: (theme) => alpha(theme.palette.grey[600], 0.1),
+        borderColor: 'grey.600',
+        transform: 'translateY(-1px)',
+        boxShadow: (theme) => `0 2px 8px ${alpha(theme.palette.grey[600], 0.2)}`,
+      },
+    }}
+  >
+    <EditIcon sx={{ fontSize: 14 }} />
   </IconButton>
 );
 
@@ -176,13 +200,13 @@ export default function ChemoProtocolWorkspace({ patient, hideContextBar, onComp
                                         <Typography variant="body2" fontWeight={600} color="primary.main">
                                             {patient.vitals?.height && patient.vitals?.weight 
                                                 ? (Math.sqrt((patient.vitals.height * patient.vitals.weight) / 3600)).toFixed(2) 
-                                                : '—'} m²
+                                                : 'â€”'} mÂ²
                                         </Typography>
                                     </Box>
                                     <Box>
                                         <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600, display: 'block', mb: 0.5 }}>HEIGHT / WEIGHT</Typography>
                                         <Typography variant="body2" fontWeight={500}>
-                                            {patient.vitals?.height || '—'} cm / {patient.vitals?.weight || '—'} kg
+                                            {patient.vitals?.height || 'â€”'} cm / {patient.vitals?.weight || 'â€”'} kg
                                         </Typography>
                                     </Box>
                                 </Stack>
@@ -337,6 +361,7 @@ export default function ChemoProtocolWorkspace({ patient, hideContextBar, onComp
                     Cycle {currentCycle} Administration
                 </Typography>
                  <MicButton />
+                <EditButton />
             </Box>
            
             <Paper variant="outlined" sx={{ p: 0, borderRadius: 2, overflow: 'hidden' }}>
@@ -373,7 +398,7 @@ export default function ChemoProtocolWorkspace({ patient, hideContextBar, onComp
                               {calculatedDose} mg
                             </Typography>
                           ) : (
-                            <Typography variant="body2" color="text.secondary">—</Typography>
+                            <Typography variant="body2" color="text.secondary">â€”</Typography>
                           )}
                         </TableCell>
                         <TableCell align="right" sx={{ py: 2 }}>
@@ -404,6 +429,7 @@ export default function ChemoProtocolWorkspace({ patient, hideContextBar, onComp
                       Pre-Medications & Supportive Care
                     </Typography>
                     <MicButton />
+                <EditButton />
                   </Box>
                   <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 2 }}>
                     <Grid container spacing={2}>
@@ -433,12 +459,13 @@ export default function ChemoProtocolWorkspace({ patient, hideContextBar, onComp
                       Pre-Cycle Labs
                     </Typography>
                     <MicButton />
+                <EditButton />
                   </Box>
                   <Box sx={{ display: 'flex', gap: 2 }}>
                     {[
                       { name: 'Hemoglobin', value: '12.5', unit: 'g/dL', status: 'Normal' },
-                      { name: 'WBC', value: '6.2', unit: '10³/µL', status: 'Normal' },
-                      { name: 'Platelets', value: '185', unit: '10³/µL', status: 'Normal' },
+                      { name: 'WBC', value: '6.2', unit: '10Â³/ÂµL', status: 'Normal' },
+                      { name: 'Platelets', value: '185', unit: '10Â³/ÂµL', status: 'Normal' },
                       { name: 'Creatinine', value: '0.9', unit: 'mg/dL', status: 'Normal' },
                     ].map((lab, i) => (
                       <Paper 
@@ -474,6 +501,7 @@ export default function ChemoProtocolWorkspace({ patient, hideContextBar, onComp
                     Cycle Outcome
                 </Typography>
                 <MicButton />
+                <EditButton />
             </Box>
 
              <Paper variant="outlined" sx={{ p: 0, borderRadius: 2 }}>

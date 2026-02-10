@@ -63,6 +63,29 @@ const MicButton = () => (
   </IconButton>
 );
 
+const EditButton = () => (
+  <IconButton 
+    size="small" 
+    sx={{ 
+        ml: 0.75,
+        border: '1px solid',
+        borderColor: 'grey.400', 
+        borderRadius: 1, 
+        p: 0.5,
+        color: 'grey.600',
+        transition: 'all 0.2s',
+        '&:hover': {
+            bgcolor: (theme) => alpha(theme.palette.grey[600], 0.1),
+            borderColor: 'grey.600',
+            transform: 'translateY(-1px)',
+            boxShadow: (theme) => `0 2px 8px ${alpha(theme.palette.grey[600], 0.2)}`
+        }
+    }}
+  >
+    <EditIcon sx={{ fontSize: 14 }} />
+  </IconButton>
+);
+
 const SectionHeader = ({ title, action }: { title: string, action?: React.ReactNode }) => (
     <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
         <Typography variant="overline" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.9rem', letterSpacing: 1.1 }}>
@@ -156,7 +179,7 @@ export default function MaintenanceReview({ patient, hideContextBar, onTransitio
                     <Box sx={{ p: 4 }}>
                         {/* Section 1: Active Therapy */}
                          <Box sx={{ mb: 5 }}>
-                             <SectionHeader title="Current Therapy Protocol" action={<MicButton />} />
+                             <SectionHeader title="Current Therapy Protocol" action={<><MicButton /><EditButton /></>} />
                              <Grid container spacing={4}>
                                 <Grid item xs={12} md={7}>
                                      <Box sx={{ p: 2.5, border: '1px solid', borderColor: 'primary.main', bgcolor: alpha(theme.palette.primary.main, 0.02), borderRadius: 2 }}>
@@ -253,7 +276,7 @@ export default function MaintenanceReview({ patient, hideContextBar, onTransitio
 
                         {/* Section 2: Last Review & Findings (Stacked below) */}
                         <Box sx={{ mb: 4 }}>
-                            <SectionHeader title="Last Review Outcome" action={<MicButton />} />
+                            <SectionHeader title="Last Review Outcome" action={<><MicButton /><EditButton /></>} />
                             
                             <Grid container spacing={4}>
                                 <Grid item xs={12} md={6}>
@@ -326,6 +349,7 @@ export default function MaintenanceReview({ patient, hideContextBar, onTransitio
                             Review History
                         </Typography>
                          <MicButton />
+                         <EditButton />
                     </Box>
 
                     {/* Review History List - Auto Height */}

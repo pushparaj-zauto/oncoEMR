@@ -49,18 +49,43 @@ const MicButton = () => (
     sx={{
       ml: 1.5,
       border: '1px solid',
-      borderColor: 'grey.300',
+      borderColor: 'primary.main',
       borderRadius: 1,
       p: 0.5,
-      color: 'grey.500',
+      color: 'primary.main',
       transition: 'all 0.2s',
       '&:hover': {
-        bgcolor: 'grey.100',
-        borderColor: 'grey.400',
+        bgcolor: (theme) => alpha(theme.palette.primary.main, 0.1),
+        borderColor: 'primary.dark',
+        transform: 'translateY(-1px)',
+        boxShadow: (theme) => `0 2px 8px ${alpha(theme.palette.primary.main, 0.2)}`,
       },
     }}
   >
     <MicIcon sx={{ fontSize: 16 }} />
+  </IconButton>
+);
+
+const EditButton = () => (
+  <IconButton
+    size="small"
+    sx={{
+      ml: 0.75,
+      border: '1px solid',
+      borderColor: 'grey.400',
+      borderRadius: 1,
+      p: 0.5,
+      color: 'grey.600',
+      transition: 'all 0.2s',
+      '&:hover': {
+        bgcolor: (theme) => alpha(theme.palette.grey[600], 0.1),
+        borderColor: 'grey.600',
+        transform: 'translateY(-1px)',
+        boxShadow: (theme) => `0 2px 8px ${alpha(theme.palette.grey[600], 0.2)}`,
+      },
+    }}
+  >
+    <EditIcon sx={{ fontSize: 14 }} />
   </IconButton>
 );
 
@@ -158,7 +183,7 @@ export default function TreatmentPlanning({
                     variant="overline"
                     sx={{
                       fontWeight: 700,
-                      color: 'text.secondary',
+                      color: 'primary.main',
                       fontSize: '0.78rem',
                       letterSpacing: 1.2,
                     }}
@@ -166,6 +191,7 @@ export default function TreatmentPlanning({
                     Diagnosis & Intent
                   </Typography>
                   <MicButton />
+                  <EditButton />
                 </Box>
                 <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 2 }}>
                   <Table size="small">
@@ -274,7 +300,7 @@ export default function TreatmentPlanning({
                     variant="overline"
                     sx={{
                       fontWeight: 700,
-                      color: 'text.secondary',
+                      color: 'primary.main',
                       fontSize: '0.78rem',
                       letterSpacing: 1.2,
                     }}
@@ -282,6 +308,7 @@ export default function TreatmentPlanning({
                     Patient Fitness
                   </Typography>
                   <MicButton />
+                  <EditButton />
                 </Box>
                 <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 2 }}>
                   <Table size="small">
@@ -404,7 +431,7 @@ export default function TreatmentPlanning({
                     variant="overline"
                     sx={{
                       fontWeight: 700,
-                      color: 'text.secondary',
+                      color: 'primary.main',
                       fontSize: '0.78rem',
                       letterSpacing: 1.2,
                     }}
@@ -412,6 +439,7 @@ export default function TreatmentPlanning({
                     Treatment Strategy
                   </Typography>
                   <MicButton />
+                  <EditButton />
                 </Box>
                 <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 2 }}>
                   {patient.treatmentStrategy && (
@@ -514,7 +542,7 @@ export default function TreatmentPlanning({
                       variant="overline"
                       sx={{
                         fontWeight: 700,
-                        color: 'text.secondary',
+                        color: 'primary.main',
                         fontSize: '0.78rem',
                         letterSpacing: 1.2,
                       }}
@@ -589,13 +617,20 @@ export default function TreatmentPlanning({
                       {!planActivated && (
                         <Button
                           size="small"
+                          variant="outlined"
                           startIcon={<EditIcon sx={{ fontSize: 14 }} />}
                           onClick={onNavigateToProtocolSelection}
                           sx={{
                             textTransform: 'none',
                             fontWeight: 600,
                             fontSize: '0.78rem',
-                            color: 'text.secondary',
+                            color: 'warning.dark',
+                            borderColor: 'warning.main',
+                            bgcolor: (theme) => alpha(theme.palette.warning.main, 0.08),
+                            '&:hover': {
+                              bgcolor: (theme) => alpha(theme.palette.warning.main, 0.16),
+                              borderColor: 'warning.dark',
+                            },
                           }}
                         >
                           Change Protocol
@@ -674,7 +709,7 @@ export default function TreatmentPlanning({
                     variant="overline"
                     sx={{
                       fontWeight: 700,
-                      color: 'text.secondary',
+                      color: 'primary.main',
                       fontSize: '0.78rem',
                       letterSpacing: 1.2,
                     }}

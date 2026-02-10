@@ -67,6 +67,29 @@ const MicButton = () => (
   </IconButton>
 );
 
+const EditButton = () => (
+  <IconButton
+    size="small"
+    sx={{
+      ml: 0.75,
+      border: '1px solid',
+      borderColor: 'grey.400',
+      borderRadius: 1,
+      p: 0.5,
+      color: 'grey.600',
+      transition: 'all 0.2s',
+      '&:hover': {
+        bgcolor: (theme) => alpha(theme.palette.grey[600], 0.1),
+        borderColor: 'grey.600',
+        transform: 'translateY(-1px)',
+        boxShadow: (theme) => `0 2px 8px ${alpha(theme.palette.grey[600], 0.2)}`,
+      },
+    }}
+  >
+    <EditIcon sx={{ fontSize: 14 }} />
+  </IconButton>
+);
+
 const getRecistColor = (category: RECISTResponse) => {
   switch (category) {
     case 'Complete Response (CR)': return 'success';
@@ -162,7 +185,7 @@ export default function ResponseAssessment({ patient, hideContextBar, onTransiti
           >
             <Box>
               <Typography variant="overline" sx={{ fontWeight: 700, letterSpacing: 1.5, display: 'block', mb: 0.5, fontSize: '0.7rem' }}>
-                OVERALL RESPONSE — ASSESSMENT #{latestAssessment.assessmentNumber}
+                OVERALL RESPONSE â€” ASSESSMENT #{latestAssessment.assessmentNumber}
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 700 }}>
                 {latestAssessment.overallResponse}
@@ -204,6 +227,7 @@ export default function ResponseAssessment({ patient, hideContextBar, onTransiti
                 Imaging Response (RECIST 1.1)
               </Typography>
               <MicButton />
+              <EditButton />
             </Box>
 
             <Paper variant="outlined" sx={{ p: 0, borderRadius: 2, overflow: 'hidden' }}>
@@ -270,6 +294,7 @@ export default function ResponseAssessment({ patient, hideContextBar, onTransiti
                   Tumor Marker Trends
                 </Typography>
                 <MicButton />
+              <EditButton />
               </Box>
               <Grid container spacing={2}>
                 {latestAssessment.markerTrends.map((marker, index) => {
@@ -353,6 +378,7 @@ export default function ResponseAssessment({ patient, hideContextBar, onTransiti
                   Cumulative Toxicity Summary
                 </Typography>
                 <MicButton />
+              <EditButton />
               </Box>
               <Paper variant="outlined" sx={{ p: 3, borderRadius: 2, bgcolor: alpha('#ed6c02', 0.02) }}>
                 <Typography variant="body2" sx={{ mb: 2, lineHeight: 1.6 }}>
@@ -386,6 +412,7 @@ export default function ResponseAssessment({ patient, hideContextBar, onTransiti
                 Clinical Assessment
               </Typography>
               <MicButton />
+              <EditButton />
             </Box>
             <Paper variant="outlined" sx={{ p: 3, borderRadius: 2, mb: 4 }}>
               <Typography variant="body2" sx={{ lineHeight: 1.7, fontStyle: 'italic', color: 'text.primary' }}>
@@ -404,6 +431,7 @@ export default function ResponseAssessment({ patient, hideContextBar, onTransiti
                 Next Step Decision
               </Typography>
               <MicButton />
+              <EditButton />
             </Box>
             <Paper
               variant="outlined"
@@ -471,6 +499,7 @@ export default function ResponseAssessment({ patient, hideContextBar, onTransiti
                 Treatment Completed
               </Typography>
               <MicButton />
+              <EditButton />
             </Box>
             <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 2 }}>
               <Grid container spacing={2}>
@@ -502,7 +531,7 @@ export default function ResponseAssessment({ patient, hideContextBar, onTransiti
                   fullWidth
                   sx={{ fontWeight: 600, py: 1.5, textTransform: 'none', borderRadius: 2 }}
                   startIcon={<VisibilityIcon />}
-                  onClick={() => handleTransitionRequest('Observation', 'Complete/Partial Response — Moving to Surveillance protocol for ongoing monitoring.', 'success')}
+                  onClick={() => handleTransitionRequest('Observation', 'Complete/Partial Response â€” Moving to Surveillance protocol for ongoing monitoring.', 'success')}
                 >
                   Move to Surveillance
                 </Button>
@@ -512,7 +541,7 @@ export default function ResponseAssessment({ patient, hideContextBar, onTransiti
                   fullWidth
                   sx={{ fontWeight: 600, py: 1.5, textTransform: 'none', borderRadius: 2 }}
                   startIcon={<VerifiedUserIcon />}
-                  onClick={() => handleTransitionRequest('Maintenance', 'Stable disease / Partial response — Starting maintenance therapy.', 'default')}
+                  onClick={() => handleTransitionRequest('Maintenance', 'Stable disease / Partial response â€” Starting maintenance therapy.', 'default')}
                 >
                   Start Maintenance
                 </Button>
@@ -522,7 +551,7 @@ export default function ResponseAssessment({ patient, hideContextBar, onTransiti
                   fullWidth
                   sx={{ fontWeight: 600, py: 1.5, textTransform: 'none', borderRadius: 2 }}
                   startIcon={<EditIcon />}
-                  onClick={() => handleTransitionRequest('Treatment Planning', 'Change in treatment plan required — Returning to planning.', 'warning')}
+                  onClick={() => handleTransitionRequest('Treatment Planning', 'Change in treatment plan required â€” Returning to planning.', 'warning')}
                 >
                   Change Treatment Plan
                 </Button>
@@ -532,7 +561,7 @@ export default function ResponseAssessment({ patient, hideContextBar, onTransiti
                   fullWidth
                   sx={{ fontWeight: 600, py: 1.5, textTransform: 'none', borderRadius: 2 }}
                   startIcon={<SpaIcon />}
-                  onClick={() => handleTransitionRequest('Palliative', 'Patient unfit for further curative treatment — Transitioning to palliative care.', 'warning')}
+                  onClick={() => handleTransitionRequest('Palliative', 'Patient unfit for further curative treatment â€” Transitioning to palliative care.', 'warning')}
                 >
                   Palliative Transition
                 </Button>
