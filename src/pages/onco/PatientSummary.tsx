@@ -14,6 +14,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { alpha } from '@mui/material/styles';
 import { OncologyPatient, OncoStatus } from '../../types/oncology';
 import PatientContextBar from '../../components/onco/PatientContextBar';
+import ActionFooter from '../../components/onco/ActionFooter';
 
 interface PatientSummaryProps {
   patient: OncologyPatient;
@@ -457,6 +458,7 @@ export default function PatientSummary({ patient, hideContextBar }: PatientSumma
             )}
         </Grid>
       </Container>
+      <ActionFooter primaryLabel="Finish and Next Patient" />
     </Box>
   );
 }

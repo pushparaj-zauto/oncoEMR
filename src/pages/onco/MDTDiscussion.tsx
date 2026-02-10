@@ -19,6 +19,7 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import PersonIcon from '@mui/icons-material/Person';
 import { OncologyPatient } from '../../types/oncology';
 import PatientContextBar from '../../components/onco/PatientContextBar';
+import ActionFooter from '../../components/onco/ActionFooter';
 
 interface MDTDiscussionProps {
   patient: OncologyPatient;
@@ -354,50 +355,12 @@ export default function MDTDiscussion({
         </Grid>
       </Container>
 
-      {/* ─── Sticky Bottom Bar ─── */}
-      <Box
-        sx={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          bgcolor: 'background.paper',
-          borderTop: '1px solid',
-          borderColor: 'divider',
-          py: 0.75,
-          px: 3,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          zIndex: 1000,
-        }}
-      >
-        <Button
-          variant="text"
-          startIcon={<ArrowBackIcon sx={{ fontSize: 16 }} />}
-          onClick={onBack}
-          sx={{ textTransform: 'none', fontWeight: 600, fontSize: '0.85rem' }}
-        >
-          Back
-        </Button>
-
-        <Button
-          variant="contained"
-          color="primary"
-          endIcon={<ArrowForwardIcon sx={{ fontSize: 16 }} />}
-          onClick={onProceedToPlanning}
-          sx={{
-            px: 2.5,
-            py: 0.75,
-            fontWeight: 600,
-            borderRadius: 1.5,
-            textTransform: 'none',
-            fontSize: '0.85rem',
-          }}
-        >
-          Proceed to Treatment Planning
-        </Button>
-      </Box>
+      <ActionFooter
+        primaryLabel="Proceed to Treatment Planning"
+        onPrimaryClick={onProceedToPlanning}
+        primaryEndIcon={<ArrowForwardIcon sx={{ fontSize: 16 }} />}
+        primaryStartIcon={null}
+      />
     </Box>
   );
 }

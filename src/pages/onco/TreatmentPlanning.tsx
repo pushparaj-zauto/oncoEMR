@@ -24,6 +24,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import EditIcon from '@mui/icons-material/Edit';
 import MicIcon from '@mui/icons-material/Mic';
+import ActionFooter from '../../components/onco/ActionFooter';
 import { useState } from 'react';
 import { OncologyPatient } from '../../types/oncology';
 import PatientContextBar from '../../components/onco/PatientContextBar';
@@ -792,100 +793,41 @@ export default function TreatmentPlanning({
         </Grid>
       </Container>
 
-      {/* ─── Sticky Bottom Bar ─── */}
-      <Box
-        sx={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          bgcolor: 'background.paper',
-          borderTop: '1px solid',
-          borderColor: 'divider',
-          py: 0.75,
-          px: 3,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          zIndex: 1000,
-        }}
-      >
-        <Button
-          variant="text"
-          startIcon={<ArrowBackIcon sx={{ fontSize: 16 }} />}
-          onClick={onBack}
-          sx={{ textTransform: 'none', fontWeight: 600, fontSize: '0.85rem' }}
-        >
-          Back
-        </Button>
-
-        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-          {/* Primary CTA mirrors the card but in the sticky bar for visibility */}
-          {patient.treatmentStrategy?.systemicTherapy && !hasProtocol && !planActivated && (
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              endIcon={<ArrowForwardIcon sx={{ fontSize: 16 }} />}
-              onClick={onNavigateToProtocolSelection}
-              sx={{
-                px: 2.5,
-                py: 0.75,
-                fontWeight: 600,
-                borderRadius: 1.5,
-                textTransform: 'none',
-                fontSize: '0.85rem',
-              }}
-            >
-              Select Protocol
-            </Button>
-          )}
-
-          {patient.treatmentStrategy?.systemicTherapy &&
-            hasProtocol &&
-            !planActivated &&
-            patient.mdtDecision?.status === 'Approved' && (
-              <Button
-                variant="contained"
-                size="small"
-                startIcon={<PlayArrowIcon />}
-                onClick={handleActivatePlan}
-                sx={{
-                  px: 2.5,
-                  py: 0.75,
-                  fontWeight: 600,
-                  borderRadius: 1.5,
-                  textTransform: 'none',
-                  fontSize: '0.85rem',
-                  bgcolor: 'success.main',
-                  '&:hover': { bgcolor: 'success.dark' },
-                }}
-              >
-                Activate Protocol
-              </Button>
-            )}
-
-          {planActivated && (
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              endIcon={<ArrowForwardIcon sx={{ fontSize: 16 }} />}
-              onClick={onStartCycle}
-              sx={{
-                px: 2.5,
-                py: 0.75,
-                fontWeight: 600,
-                borderRadius: 1.5,
-                textTransform: 'none',
-                fontSize: '0.85rem',
-              }}
-            >
-              Start Cycle 1
-            </Button>
-          )}
-        </Box>
-      </Box>
+      <ActionFooter
+        primaryLabel={
+          planActivated
+            ? 'Start Cycle 1'
+            : patient.treatmentStrategy?.systemicTherapy && hasProtocol && !planActivated && patient.mdtDecision?.status === 'Approved'
+              ? 'Activate Protocol'
+              : patient.treatmentStrategy?.systemicTherapy && !hasProtocol && !planActivated
+                ? 'Select Protocol'
+                : 'Treatment Planning'
+        }
+        onPrimaryClick={
+          planActivated
+            ? onStartCycle
+            : patient.treatmentStrategy?.systemicTherapy && hasProtocol && !planActivated && patient.mdtDecision?.status === 'Approved'
+              ? handleActivatePlan
+              : patient.treatmentStrategy?.systemicTherapy && !hasProtocol && !planActivated
+                ? onNavigateToProtocolSelection
+                : undefined
+        }
+        primaryStartIcon={
+          patient.treatmentStrategy?.systemicTherapy && hasProtocol && !planActivated && patient.mdtDecision?.status === 'Approved'
+            ? <PlayArrowIcon sx={{ fontSize: 16 }} />
+            : undefined
+        }
+        primaryEndIcon={
+          !(patient.treatmentStrategy?.systemicTherapy && hasProtocol && !planActivated && patient.mdtDecision?.status === 'Approved')
+            ? <ArrowForwardIcon sx={{ fontSize: 16 }} />
+            : undefined
+        }
+        primaryColor={
+          patient.treatmentStrategy?.systemicTherapy && hasProtocol && !planActivated && patient.mdtDecision?.status === 'Approved'
+            ? 'success'
+            : 'primary'
+        }
+      />
 
       {/* Stage Transition Dialog */}
       <StageTransitionDialog

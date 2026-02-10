@@ -26,6 +26,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MicIcon from '@mui/icons-material/Mic';
 import HomeIcon from '@mui/icons-material/Home';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import ActionFooter from '../../components/onco/ActionFooter';
 import { useState } from 'react';
 import { OncologyPatient } from '../../types/oncology';
 import PatientContextBar from '../../components/onco/PatientContextBar';
@@ -287,98 +288,12 @@ export default function ProtocolCustomization({
         )}
       </Container>
 
-      {/* ─── Sticky Bottom Bar ─── */}
-      <Box
-        sx={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          bgcolor: 'background.paper',
-          borderTop: '1px solid',
-          borderColor: 'divider',
-          py: 0.75,
-          px: 3,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          zIndex: 1000,
-        }}
-      >
-        <Button
-          variant="text"
-          startIcon={<ArrowBackIcon sx={{ fontSize: 16 }} />}
-          onClick={onBack}
-          sx={{ textTransform: 'none', fontWeight: 600, fontSize: '0.85rem' }}
-        >
-          Back to Protocol List
-        </Button>
-
-        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-          <Fab
-            size="small"
-            sx={{
-              bgcolor: 'white',
-              border: '2px solid',
-              borderColor: 'primary.main',
-              color: 'primary.main',
-              width: 36,
-              height: 36,
-              minHeight: 36,
-              '&:hover': { bgcolor: 'grey.50' },
-            }}
-          >
-            <MicIcon sx={{ fontSize: '1rem' }} />
-          </Fab>
-
-          {!activated && (
-            <Button
-              variant="contained"
-              startIcon={<PlayArrowIcon sx={{ fontSize: 16 }} />}
-              onClick={() => setShowActivateDialog(true)}
-              sx={{
-                px: 2.5,
-                py: 0.75,
-                fontWeight: 600,
-                borderRadius: 1.5,
-                textTransform: 'none',
-                fontSize: '0.85rem',
-                bgcolor: 'success.main',
-                '&:hover': { bgcolor: 'success.dark' },
-              }}
-            >
-              Activate Protocol
-            </Button>
-          )}
-
-          {activated && (
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              startIcon={
-                <Box component="span" sx={{ fontSize: '0.9rem' }}>
-                  ✓
-                </Box>
-              }
-              sx={{
-                px: 2,
-                py: 0.5,
-                fontWeight: 600,
-                borderRadius: 1.5,
-                textTransform: 'none',
-                fontSize: '0.8rem',
-              }}
-            >
-              Finish and Next Patient
-            </Button>
-          )}
-
-          <Fab color="primary" size="small" sx={{ width: 36, height: 36, minHeight: 36 }}>
-            <HomeIcon sx={{ fontSize: '1rem' }} />
-          </Fab>
-        </Box>
-      </Box>
+      <ActionFooter
+        primaryLabel={activated ? 'Finish and Next Patient' : 'Activate Protocol'}
+        onPrimaryClick={activated ? undefined : () => setShowActivateDialog(true)}
+        primaryStartIcon={activated ? undefined : <PlayArrowIcon sx={{ fontSize: 16 }} />}
+        primaryColor={activated ? 'primary' : 'success'}
+      />
 
       {/* Stage Transition Dialog */}
       <StageTransitionDialog

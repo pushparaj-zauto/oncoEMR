@@ -24,6 +24,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MicIcon from '@mui/icons-material/Mic';
 import HomeIcon from '@mui/icons-material/Home';
+import ActionFooter from '../../components/onco/ActionFooter';
 import { useState } from 'react';
 import { OncologyPatient } from '../../types/oncology';
 import PatientContextBar from '../../components/onco/PatientContextBar';
@@ -256,73 +257,13 @@ export default function ProtocolSelection({
         </FormControl>
       </Container>
 
-      {/* ─── Sticky Bottom Bar ─── */}
-      <Box
-        sx={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          bgcolor: 'background.paper',
-          borderTop: '1px solid',
-          borderColor: 'divider',
-          py: 0.75,
-          px: 3,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          zIndex: 1000,
-        }}
-      >
-        <Button
-          variant="text"
-          startIcon={<ArrowBackIcon sx={{ fontSize: 16 }} />}
-          onClick={onBack}
-          sx={{ textTransform: 'none', fontWeight: 600, fontSize: '0.85rem' }}
-        >
-          Back to Planning
-        </Button>
-
-        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-          <Fab
-            size="small"
-            sx={{
-              bgcolor: 'white',
-              border: '2px solid',
-              borderColor: 'primary.main',
-              color: 'primary.main',
-              width: 36,
-              height: 36,
-              minHeight: 36,
-              '&:hover': { bgcolor: 'grey.50' },
-            }}
-          >
-            <MicIcon sx={{ fontSize: '1rem' }} />
-          </Fab>
-
-          <Button
-            variant="contained"
-            color="primary"
-            disabled={!selectedProtocol}
-            endIcon={<ArrowForwardIcon sx={{ fontSize: 16 }} />}
-            onClick={() => selectedProtocol && onContinue?.(selectedProtocol)}
-            sx={{
-              px: 2.5,
-              py: 0.75,
-              fontWeight: 600,
-              borderRadius: 1.5,
-              textTransform: 'none',
-              fontSize: '0.85rem',
-            }}
-          >
-            Customize & Activate
-          </Button>
-
-          <Fab color="primary" size="small" sx={{ width: 36, height: 36, minHeight: 36 }}>
-            <HomeIcon sx={{ fontSize: '1rem' }} />
-          </Fab>
-        </Box>
-      </Box>
+      <ActionFooter
+        primaryLabel="Customize & Activate"
+        primaryDisabled={!selectedProtocol}
+        onPrimaryClick={() => selectedProtocol && onContinue?.(selectedProtocol)}
+        primaryStartIcon={null}
+        primaryEndIcon={<ArrowForwardIcon sx={{ fontSize: 16 }} />}
+      />
     </Box>
   );
 }
