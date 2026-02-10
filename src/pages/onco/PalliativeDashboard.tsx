@@ -22,6 +22,7 @@ import {
   ListItemText,
 } from '@mui/material';
 import MicIcon from '@mui/icons-material/Mic';
+import EditIcon from '@mui/icons-material/Edit';
 import ActionFooter from '../../components/onco/ActionFooter';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import AccessibleIcon from '@mui/icons-material/Accessible';
@@ -60,6 +61,29 @@ const MicButton = () => (
     }}
   >
     <MicIcon sx={{ fontSize: 16 }} />
+  </IconButton>
+);
+
+const EditButton = () => (
+  <IconButton
+    size="small"
+    sx={{
+      ml: 0.75,
+      border: '1px solid',
+      borderColor: 'grey.400',
+      borderRadius: 1,
+      p: 0.5,
+      color: 'grey.600',
+      transition: 'all 0.2s',
+      '&:hover': {
+        bgcolor: (theme) => alpha(theme.palette.grey[600], 0.1),
+        borderColor: 'grey.600',
+        transform: 'translateY(-1px)',
+        boxShadow: (theme) => `0 2px 8px ${alpha(theme.palette.grey[600], 0.2)}`,
+      },
+    }}
+  >
+    <EditIcon sx={{ fontSize: 14 }} />
   </IconButton>
 );
 
@@ -114,7 +138,7 @@ export default function PalliativeDashboard({ patient, hideContextBar }: Palliat
             {/* Current Treatment */}
             {patient.currentProtocol && (
               <Box sx={{ mb: 4 }}>
-                <SectionHeader title="Current Treatment" action={<MicButton />} />
+                <SectionHeader title="Current Treatment" action={<><MicButton /><EditButton /></>} />
                 <Paper variant="outlined" sx={{ p: 3, borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
                   <Table size="small">
                     <TableBody>
@@ -153,7 +177,7 @@ export default function PalliativeDashboard({ patient, hideContextBar }: Palliat
 
             {/* Pain Score - Minimalistic */}
             <Box sx={{ mb: 4 }}>
-              <SectionHeader title="Pain Score (0–10)" action={<MicButton />} />
+              <SectionHeader title="Pain Score (0–10)" action={<><MicButton /><EditButton /></>} />
               <Paper variant="outlined" sx={{ p: 3, borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
                   {/* Compact pain score display */}
@@ -208,7 +232,7 @@ export default function PalliativeDashboard({ patient, hideContextBar }: Palliat
 
             {/* Care Goal - Clean */}
             <Box>
-              <SectionHeader title="Care Goal" color="info.dark" action={<MicButton />} />
+              <SectionHeader title="Care Goal" color="info.dark" action={<><MicButton /><EditButton /></>} />
               <Paper 
                 variant="outlined" 
                 sx={{ 
@@ -230,7 +254,7 @@ export default function PalliativeDashboard({ patient, hideContextBar }: Palliat
           <Grid item xs={12} md={4}>
             {/* Symptom Assessment */}
             <Box sx={{ mb: 4 }}>
-              <SectionHeader title="Symptom Assessment" action={<MicButton />} />
+              <SectionHeader title="Symptom Assessment" action={<><MicButton /><EditButton /></>} />
               <Paper variant="outlined" sx={{ p: 0, borderRadius: 2, border: '1px solid', borderColor: 'divider', overflow: 'hidden' }}>
                 {patient.qolMetrics?.symptoms && (
                   <List disablePadding>
@@ -274,7 +298,7 @@ export default function PalliativeDashboard({ patient, hideContextBar }: Palliat
 
             {/* Supportive Medications */}
             <Box>
-              <SectionHeader title="Supportive Medications" action={<MicButton />} />
+              <SectionHeader title="Supportive Medications" action={<><MicButton /><EditButton /></>} />
               <Paper variant="outlined" sx={{ p: 0, borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
                 <Table size="small">
                   <TableBody>
@@ -304,7 +328,7 @@ export default function PalliativeDashboard({ patient, hideContextBar }: Palliat
           <Grid item xs={12} md={4}>
             {/* Quality of Life */}
             <Box sx={{ mb: 4 }}>
-              <SectionHeader title="Quality of Life" color="success.dark" action={<MicButton />} />
+              <SectionHeader title="Quality of Life" color="success.dark" action={<><MicButton /><EditButton /></>} />
               <Paper variant="outlined" sx={{ p: 0, borderRadius: 2, border: '1px solid', borderColor: 'divider', overflow: 'hidden' }}>
                 {patient.qolMetrics && (
                   <List disablePadding>
@@ -389,7 +413,7 @@ export default function PalliativeDashboard({ patient, hideContextBar }: Palliat
 
             {/* Progress Notes */}
             <Box>
-              <SectionHeader title="Progress Notes" action={<MicButton />} />
+              <SectionHeader title="Progress Notes" action={<><MicButton /><EditButton /></>} />
               <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
                 <Typography variant="body2" sx={{ lineHeight: 1.7, color: 'text.primary' }}>
                   {patient.qolMetrics?.progressNote || 'No progress notes recorded.'}
