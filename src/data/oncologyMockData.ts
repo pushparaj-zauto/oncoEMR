@@ -5,92 +5,8 @@ import {
   VisitRecord,
 } from '../types/oncology';
 
-// 1. Diagnostic Evaluation - Suspected Lung Cancer
-export const mockOncoPatient1: OncologyPatient = {
-  id: 'ONC-001',
-  name: 'Mr. Selvaraj',
-  mrn: '240101',
-  age: 62,
-  gender: 'Male',
-  cancerSite: 'Lung',
-  histology: 'Suspected Adenocarcinoma',
-  stage: 'TBD',
-  tnmStage: 'cT4N2M1a',
-  ecogStatus: 1,
-  oncoStatus: 'Diagnostic Evaluation',
-  urgencyFlag: true,
-  chiefComplaint: 'Cough with blood-streaked sputum',
-  historyOfPresentIllness: '62yo male, chronic smoker (40PY), presenting with 3-week history of hemoptysis and 5kg weight loss. CT Chest showed 4.2cm RUL mass with pleural effusion.',
-  symptomDuration: '3 weeks',
-  alarmSymptoms: true,
-  
-  vitals: {
-    bp: '142/88',
-    hr: 86,
-    temp: 36.9,
-    resp: 22,
-    spo2: 95,
-    height: 175,
-    weight: 68,
-    bmi: 22.2
-  },
-
-  patientHistory: {
-    medical: ['Hypertension', 'COPD (GOLD Stage II)', 'Allergy: Penicillin'],
-    family: ['No history of lung cancer', 'Father: MI at 55'],
-    social: ['Current smoker', 'Retired railway clerk', 'Lives with spouse']
-  },
-  
-  diagnosticTracker: {
-    biopsy: 'Pending',
-    imaging: 'Done',
-    metastaticWorkup: 'Pending',
-    tumorMarkers: 'Pending',
-  },
-  
-  clinicalFindings: {
-    primaryLesion: '4.2 cm mass RUL',
-    nodes: 'Mediastinal lymphadenopathy',
-    suspectedMetastasis: true,
-  },
-  
-  provisionalAssessment: {
-    probableDiagnosis: 'Non-Small Cell Lung Cancer',
-    tentativeStage: 'Stage IVA',
-    resectable: 'Unlikely',
-  },
-  
-  comorbidities: {
-    diabetes: false,
-    cardiacDisease: true,
-    renalDisease: false,
-    priorCancer: false,
-    other: ['COPD'],
-  },
-  
-  alerts: [
-    {
-      type: 'Urgent Action',
-      message: 'Pleural fluid cytology pending - required for staging',
-    },
-    {
-      type: 'Suspected Advanced Disease',
-      message: 'Clinical features suggest metastatic disease (Pleural Effusion)'
-    }
-  ],
-  
-  mdtDecision: {
-    status: 'Pending',
-    date: '2026-02-02',
-    summary: 'Preliminary discussion: Likely Stage IV NSCLC. Await final biopsy and molecular markers before treatment planning.',
-    participants: ['Dr. Rao (Med Onco)', 'Dr. Sarah (Surg Onco)', 'Dr. Pathak (Pathology)']
-  },
-
-  diagnosisDate: '2026-02-01',
-};
-
-// 2. Treatment Planning - Breast Cancer
-export const mockOncoPatient2: OncologyPatient = {
+// 1. Treatment Planning - Breast Cancer
+export const mockOncoPatient5: OncologyPatient = {
   id: 'ONC-002',
   name: 'Mrs. Kavitha',
   mrn: '240102',
@@ -175,8 +91,8 @@ export const mockOncoPatient2: OncologyPatient = {
   diagnosisDate: '2026-01-25',
 };
 
-// 3. Active Treatment (Induction) - Colon Cancer
-export const mockOncoPatient3: OncologyPatient = {
+// 2. Active Treatment (Induction) - Colon Cancer
+export const mockOncoPatient2: OncologyPatient = {
   id: 'ONC-003',
   name: 'Mr. Kishore',
   mrn: '240103',
@@ -461,7 +377,7 @@ export const mockOncoPatient4: OncologyPatient = {
 };
 
 // 5. Maintenance - Lung Cancer (Targeted Therapy)
-export const mockOncoPatient5: OncologyPatient = {
+export const mockOncoPatient1: OncologyPatient = {
   id: 'ONC-005',
   name: 'Mr. Selvam',
   mrn: '240105',
@@ -862,193 +778,8 @@ export const mockOncoPatient5: OncologyPatient = {
   lastReviewDate: '2026-01-15',
 };
 
-// 6. Survivorship - Hodgkin Lymphoma
-export const mockOncoPatient6: OncologyPatient = {
-  id: 'ONC-006',
-  name: 'Ms. Lakshana',
-  mrn: '240106',
-  age: 26,
-  gender: 'Female',
-  cancerSite: 'Lymphoma',
-  histology: 'Hodgkin Lymphoma (Nodular Sclerosis)',
-  stage: 'Remission',
-  tnmStage: 'Stage IIA',
-  ecogStatus: 0,
-  treatmentIntent: 'Curative',
-  oncoStatus: 'Observation', // Changed to Observation for strict surveillance flow
-
-  chiefComplaint: 'Annual Surveillance',
-  historyOfPresentIllness: 'Completed 4 cycles ABVD in 2024. PET-CT complete metabolic response (Deauville 1). No B symptoms.',
-  symptomDuration: 'N/A',
-
-  vitals: {
-    bp: '110/65',
-    hr: 68,
-    temp: 36.7,
-    resp: 14,
-    spo2: 100,
-    height: 160,
-    weight: 56,
-    bmi: 21.9
-  },
-
-  patientHistory: {
-      medical: ['None'],
-      family: ['No history of lymphoma'],
-      social: ['Graduate Student', 'Single']
-  },
-
-  diagnosticTracker: {
-      biopsy: 'Confirmed',
-      imaging: 'Done',
-      metastaticWorkup: 'Done',
-      tumorMarkers: 'Normal'
-  },
-
-  clinicalFindings: {
-      primaryLesion: 'Resolved',
-      nodes: 'Non-palpable',
-      suspectedMetastasis: false
-  },
-  
-  provisionalAssessment: {
-    probableDiagnosis: 'Hodgkin Lymphoma (In Remission)',
-    tentativeStage: 'Remission (Prev Stage IIA)',
-    resectable: 'N/A',
-  },
-
-  // Historical context for survivorship
-  treatmentStrategy: {
-      surgery: false,
-      systemicTherapy: true,
-      radiation: false,
-      sequence: 'Completed ABVD x4'
-  },
-
-  comorbidities: {
-      diabetes: false,
-      cardiacDisease: false,
-      renalDisease: false,
-      priorCancer: false
-  },
-
-  alerts: [
-      {
-          type: 'Urgent Action',
-          message: 'Schedule Annual Echocardiogram (Doxorubicin exposure)'
-      }
-  ],
-
-  mdtDecision: {
-    status: 'Approved',
-    date: '2024-02-01',
-    summary: 'Complete Metabolic Response pending. Proceed to Surveillance. Annual review + Echo.',
-    participants: ['Dr. Rao (Med Onco)', 'Dr. Hematology']
-  },
-
-  surveillanceData: {
-    remissionDate: '2024-08-15',
-    treatmentCompleted: 'ABVD x4 cycles',
-    totalTreatmentDuration: '4 months',
-    schedules: [
-      { test: 'PET-CT', frequency: 'Annual', lastDone: '2025-08-15', nextDue: '2026-08-15', status: 'Up-to-date', result: 'Deauville 1 - Complete metabolic response' },
-      { test: 'CT Chest/Abdomen', frequency: 'Every 6 months', lastDone: '2026-01-20', nextDue: '2026-07-20', status: 'Up-to-date', result: 'No lymphadenopathy. No new lesions.' },
-      { test: 'CBC + ESR', frequency: 'Every 3 months', lastDone: '2026-01-20', nextDue: '2026-04-20', status: 'Up-to-date', result: 'All values normal' },
-      { test: 'Echocardiogram', frequency: 'Annual', lastDone: '2025-08-15', nextDue: '2026-08-15', status: 'Up-to-date', result: 'EF 62% - Normal' },
-      { test: 'Thyroid Function', frequency: 'Annual', lastDone: '2025-08-15', nextDue: '2026-08-15', status: 'Up-to-date', result: 'TSH 2.1 - Normal' },
-      { test: 'Mammogram', frequency: 'Annual (Post-chest RT)', lastDone: 'N/A', nextDue: '2026-08-15', status: 'Due', result: 'Not applicable (No RT given)' },
-    ],
-    lateToxicities: ['None identified'],
-    psychosocialNotes: 'Adjusting well. Returned to studies. Mild anxiety around scan dates (scanxiety). Offered counselling.',
-    functionalStatus: 'Fully independent. Resumed all activities.',
-    returnToWork: true,
-    nextClinicVisit: '2026-04-20',
-    yearsInSurveillance: 1.5,
-  },
-
-  visitHistory: [
-    { visitId: 'V001', date: '2024-02-10', stage: 'Diagnostic Evaluation', visitType: 'Initial Consultation', summary: 'Cervical lymphadenopathy. Excision biopsy planned.', doctor: 'Dr. Rao' },
-    { visitId: 'V002', date: '2024-02-20', stage: 'Diagnostic Evaluation', visitType: 'Biopsy Result', summary: 'Hodgkin Lymphoma confirmed (Nodular Sclerosis)', doctor: 'Dr. Pathak' },
-    { visitId: 'V003', date: '2024-03-01', stage: 'Treatment Planning', visitType: 'MDT Discussion', summary: 'Stage IIA. Plan: ABVD x4 -> PET-CT response', doctor: 'Dr. Hematology' },
-    { visitId: 'V004', date: '2024-03-15', stage: 'Induction', visitType: 'Cycle 1 Day 1', summary: 'Started ABVD. Anti-emetics given.', doctor: 'Dr. Rao' },
-    { visitId: 'V005', date: '2024-06-15', stage: 'Induction', visitType: 'Cycle 4 Day 1', summary: 'Final cycle. Tolerated well.', doctor: 'Dr. Rao' },
-    { visitId: 'V006', date: '2024-08-15', stage: 'Response Assessment', visitType: 'End-of-Treatment PET', summary: 'Deauville 1. Complete metabolic response.', doctor: 'Dr. Rao' },
-    { visitId: 'V007', date: '2025-02-15', stage: 'Observation', visitType: '6-Month Surveillance', summary: 'No symptoms. Labs normal. CT clear.', doctor: 'Dr. Rao' },
-    { visitId: 'V008', date: '2025-08-15', stage: 'Observation', visitType: 'Annual Surveillance', summary: 'PET-CT: Deauville 1. Echo: EF 62%. All clear.', doctor: 'Dr. Rao' },
-    { visitId: 'V009', date: '2026-02-01', stage: 'Observation', visitType: '18-Month Surveillance', summary: 'Annual review. No concerns. Continue surveillance.', doctor: 'Dr. Rao' },
-  ],
-
-  diagnosisDate: '2024-02-10',
-  lastReviewDate: '2026-02-01',
-};
-
-// 7. Generic EMR - Non-Oncology / Discharged
-export const mockOncoPatient7: OncologyPatient = {
-  id: 'GEN-001',
-  name: 'Mr. Krishnan',
-  mrn: '240107',
-  age: 34,
-  gender: 'Male',
-  cancerSite: 'Benign',
-  histology: 'Reactive Lymphadenitis',
-  stage: 'N/A',
-  tnmStage: 'N/A',
-  ecogStatus: 0,
-  oncoStatus: 'Discharged',
-  treatmentIntent: 'None',
-
-  chiefComplaint: 'Neck swelling',
-  historyOfPresentIllness: 'Referred for prolonged cervical lymphadenopathy. Excision biopsy performed.',
-  symptomDuration: '2 months',
-
-  vitals: {
-    bp: '120/80',
-    hr: 76,
-    temp: 37.0,
-    resp: 16,
-    spo2: 99,
-    height: 178,
-    weight: 80,
-    bmi: 25.2
-  },
-  
-  patientHistory: {
-      medical: ['None'],
-      family: ['None'],
-      social: ['Banker']
-  },
-
-  diagnosticTracker: {
-    biopsy: 'Confirmed Benign',
-    imaging: 'Done',
-    metastaticWorkup: 'Not Indicated', 
-    tumorMarkers: 'Normal',
-  },
-  
-  clinicalFindings: {
-    primaryLesion: 'Enlarged cervical LN',
-    nodes: 'Reactive features',
-    suspectedMetastasis: false,
-  },
-  
-  comorbidities: {
-      diabetes: false,
-      cardiacDisease: false,
-      renalDisease: false,
-      priorCancer: false
-  },
-
-  mdtDecision: {
-    status: 'Approved',
-    date: '2026-02-04',
-    summary: 'Benign pathology. No evidence of malignancy. Discharge to primary care.',
-  },
-
-  diagnosisDate: '2026-02-02',
-};
-
-// 8. Response Assessment - Colon Cancer Post-Chemo
-export const mockOncoPatient8: OncologyPatient = {
+// 6. Response Assessment - Colon Cancer Post-Chemo
+export const mockOncoPatient3: OncologyPatient = {
   id: 'ONC-008',
   name: 'Mrs. Meena',
   mrn: '240108',
@@ -1250,14 +981,11 @@ export const mockPendingActions: PendingAction[] = [
 ];
 
 export const allPatients: OncologyPatient[] = [
-  mockOncoPatient5, // Maintenance (5 steps)
-  mockOncoPatient3, // Induction (4 steps)
-  mockOncoPatient8, // Response Assessment (4 steps)
-  mockOncoPatient2, // Planning (3 steps)
-  mockOncoPatient6, // Observation (3 steps - Survivorship)
-  mockOncoPatient4, // Palliative (3 steps - Specialized)
-  mockOncoPatient1, // Diagnostic (2 steps)
-  mockOncoPatient7, // Discharged (2 steps)
+  mockOncoPatient1, // Mr. Selvam - Maintenance (Lung Cancer)
+  mockOncoPatient2, // Mr. Kishore - Induction (Colon Cancer)
+  mockOncoPatient3, // Mrs. Meena - Response Assessment (Colon Cancer)
+  mockOncoPatient4, // Mrs. Lakshmi - Palliative (Pancreatic Cancer)
+  mockOncoPatient5, // Mrs. Kavitha - Treatment Planning (Breast Cancer)
 ];
 
 // ─── Protocol Catalog for Protocol Selection ─────────────────────────────
