@@ -9,10 +9,8 @@ import {
   Stack,
   Divider,
   Avatar,
-  IconButton,
 } from '@mui/material';
 import { alpha } from '@mui/material/styles';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import GroupsIcon from '@mui/icons-material/Groups';
@@ -121,11 +119,6 @@ export default function MDTDiscussion({
       {!hideContextBar && <PatientContextBar patient={patient} />}
 
       <Container maxWidth="lg" sx={{ mt: 3, mb: 5 }}>
-        {/* ── Back arrow ── */}
-        <IconButton onClick={onBack} size="small" sx={{ mb: 2, ml: -1, color: 'text.secondary' }}>
-          <ArrowBackIcon fontSize="small" />
-        </IconButton>
-
         {/* ── Header ── */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
           <GroupsIcon sx={{ color: 'primary.main', fontSize: 26 }} />

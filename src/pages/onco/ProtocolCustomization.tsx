@@ -17,7 +17,6 @@ import {
   Fab,
   Snackbar,
   Alert,
-  IconButton,
 } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -89,14 +88,15 @@ export default function ProtocolCustomization({
       {!hideContextBar && <PatientContextBar patient={patient} />}
 
       <Container maxWidth="lg" sx={{ mt: 4, mb: 5 }}>
-        {/* Back arrow */}
-        <IconButton
+        {/* Back button */}
+        <Button
           onClick={onBack}
           size="small"
-          sx={{ mb: 2, ml: -1, color: 'text.secondary' }}
+          startIcon={<ArrowBackIcon sx={{ fontSize: 16 }} />}
+          sx={{ mb: 2, ml: -1, color: 'text.secondary', textTransform: 'none', fontWeight: 600 }}
         >
-          <ArrowBackIcon fontSize="small" />
-        </IconButton>
+          Back
+        </Button>
 
         {/* Header */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>

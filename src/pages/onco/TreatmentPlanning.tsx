@@ -18,7 +18,6 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -148,15 +147,6 @@ export default function TreatmentPlanning({
       {!hideContextBar && <PatientContextBar patient={patient} />}
 
       <Container maxWidth="xl" sx={{ mt: 3, mb: 5 }}>
-        {/* ── Back arrow ── */}
-        <IconButton
-          onClick={onBack}
-          size="small"
-          sx={{ mb: 2, ml: -1, color: 'text.secondary' }}
-        >
-          <ArrowBackIcon fontSize="small" />
-        </IconButton>
-
         <Grid container spacing={3}>
           {/* ═══════ Left column ═══════ */}
           <Grid item xs={12} md={8}>
