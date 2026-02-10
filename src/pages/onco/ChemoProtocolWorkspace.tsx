@@ -200,13 +200,13 @@ export default function ChemoProtocolWorkspace({ patient, hideContextBar, onComp
                                         <Typography variant="body2" fontWeight={600} color="primary.main">
                                             {patient.vitals?.height && patient.vitals?.weight 
                                                 ? (Math.sqrt((patient.vitals.height * patient.vitals.weight) / 3600)).toFixed(2) 
-                                                : 'â€”'} mÂ²
+                                                : '—'} m²
                                         </Typography>
                                     </Box>
                                     <Box>
                                         <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600, display: 'block', mb: 0.5 }}>HEIGHT / WEIGHT</Typography>
                                         <Typography variant="body2" fontWeight={500}>
-                                            {patient.vitals?.height || 'â€”'} cm / {patient.vitals?.weight || 'â€”'} kg
+                                            {patient.vitals?.height || '—'} cm / {patient.vitals?.weight || '—'} kg
                                         </Typography>
                                     </Box>
                                 </Stack>
@@ -398,7 +398,7 @@ export default function ChemoProtocolWorkspace({ patient, hideContextBar, onComp
                               {calculatedDose} mg
                             </Typography>
                           ) : (
-                            <Typography variant="body2" color="text.secondary">â€”</Typography>
+                            <Typography variant="body2" color="text.secondary">—</Typography>
                           )}
                         </TableCell>
                         <TableCell align="right" sx={{ py: 2 }}>

@@ -185,7 +185,7 @@ export default function ResponseAssessment({ patient, hideContextBar, onTransiti
           >
             <Box>
               <Typography variant="overline" sx={{ fontWeight: 700, letterSpacing: 1.5, display: 'block', mb: 0.5, fontSize: '0.7rem' }}>
-                OVERALL RESPONSE â€” ASSESSMENT #{latestAssessment.assessmentNumber}
+                OVERALL RESPONSE — ASSESSMENT #{latestAssessment.assessmentNumber}
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 700 }}>
                 {latestAssessment.overallResponse}
@@ -531,7 +531,7 @@ export default function ResponseAssessment({ patient, hideContextBar, onTransiti
                   fullWidth
                   sx={{ fontWeight: 600, py: 1.5, textTransform: 'none', borderRadius: 2 }}
                   startIcon={<VisibilityIcon />}
-                  onClick={() => handleTransitionRequest('Observation', 'Complete/Partial Response â€” Moving to Surveillance protocol for ongoing monitoring.', 'success')}
+                  onClick={() => handleTransitionRequest('Observation', 'Complete/Partial Response — moving to surveillance protocol for ongoing monitoring.', 'success')}
                 >
                   Move to Surveillance
                 </Button>
@@ -541,7 +541,7 @@ export default function ResponseAssessment({ patient, hideContextBar, onTransiti
                   fullWidth
                   sx={{ fontWeight: 600, py: 1.5, textTransform: 'none', borderRadius: 2 }}
                   startIcon={<VerifiedUserIcon />}
-                  onClick={() => handleTransitionRequest('Maintenance', 'Stable disease / Partial response â€” Starting maintenance therapy.', 'default')}
+                  onClick={() => handleTransitionRequest('Maintenance', 'Stable disease / partial response — starting maintenance therapy.', 'default')}
                 >
                   Start Maintenance
                 </Button>
@@ -551,7 +551,7 @@ export default function ResponseAssessment({ patient, hideContextBar, onTransiti
                   fullWidth
                   sx={{ fontWeight: 600, py: 1.5, textTransform: 'none', borderRadius: 2 }}
                   startIcon={<EditIcon />}
-                  onClick={() => handleTransitionRequest('Treatment Planning', 'Change in treatment plan required â€” Returning to planning.', 'warning')}
+                  onClick={() => handleTransitionRequest('Treatment Planning', 'Change in treatment plan required — returning to planning.', 'warning')}
                 >
                   Change Treatment Plan
                 </Button>
@@ -561,7 +561,7 @@ export default function ResponseAssessment({ patient, hideContextBar, onTransiti
                   fullWidth
                   sx={{ fontWeight: 600, py: 1.5, textTransform: 'none', borderRadius: 2 }}
                   startIcon={<SpaIcon />}
-                  onClick={() => handleTransitionRequest('Palliative', 'Patient unfit for further curative treatment â€” Transitioning to palliative care.', 'warning')}
+                  onClick={() => handleTransitionRequest('Palliative', 'Patient unfit for further curative treatment — transitioning to palliative care.', 'warning')}
                 >
                   Palliative Transition
                 </Button>
