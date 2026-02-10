@@ -95,13 +95,13 @@ export default function OncoPatientLayout() {
                   borderColor: 'grey.200',
                   display: 'inline-block'
                 }}>
-                   <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500, fontSize: '0.65rem' }}>
+                   <Typography variant="caption" sx={{ color: 'text.primary', fontWeight: 500, fontSize: '0.65rem' }}>
                       ID {patient.mrn}
                    </Typography>
                 </Box>
               </Box>
 
-              <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 400, display: 'block', mb: 0.5 }}>
+              <Typography variant="caption" sx={{ color: 'text.primary', fontWeight: 500, display: 'block', mb: 0.5 }}>
                   {patient.age}y • {patient.gender}
               </Typography>
 
@@ -127,8 +127,9 @@ export default function OncoPatientLayout() {
         </Box>
 
         {/* Navigation Menu */}
-        <List sx={{ px: 2, py: 2, flexGrow: 1 }}>
-          <Typography variant="overline" color="text.secondary" sx={{ fontWeight: 700, pl: 2, mb: 1, display: 'block' }}>
+        <Box sx={{ flexGrow: 1, overflow: 'auto', minHeight: 0 }}>
+        <List sx={{ px: 1.5, py: 1.5 }}>
+          <Typography variant="overline" color="text.secondary" sx={{ fontWeight: 700, pl: 1.5, mb: 0.5, display: 'block', fontSize: '0.65rem', letterSpacing: 1.2 }}>
             Clinical Journey
           </Typography>
           {menuItems.map((item) => {
@@ -193,15 +194,16 @@ export default function OncoPatientLayout() {
              if (!isAccessible) return null;
 
              return (
-              <ListItem key={item.path} disablePadding sx={{ mb: 1 }}>
+              <ListItem key={item.path} disablePadding sx={{ mb: 0.25 }}>
                 <ListItemButton 
                   onClick={() => navigate(item.path)}
                   selected={isActive}
                   sx={{ 
-                    borderRadius: 2,
-                    py: 1.5,
+                    borderRadius: 1.5,
+                    py: 1,
+                    px: 1.5,
                     bgcolor: isActive ? `${item.color}15` : 'transparent',
-                    color: isActive ? item.color : 'text.secondary',
+                    color: isActive ? item.color : 'text.primary',
                     '&.Mui-selected': {
                       bgcolor: `${item.color}15`,
                       color: item.color,
@@ -212,13 +214,13 @@ export default function OncoPatientLayout() {
                     }
                   }}
                 >
-                  <ListItemIcon sx={{ minWidth: 40, color: isActive ? item.color : 'text.secondary' }}>
+                  <ListItemIcon sx={{ minWidth: 34, color: isActive ? item.color : 'text.primary', '& .MuiSvgIcon-root': { fontSize: '1.2rem' } }}>
                     {item.icon}
                   </ListItemIcon>
                   <ListItemText 
                     primary={item.label} 
                     primaryTypographyProps={{ 
-                      fontSize: '0.875rem', 
+                      fontSize: '0.8rem', 
                       fontWeight: isActive ? 600 : 500 
                     }} 
                   />
@@ -227,6 +229,7 @@ export default function OncoPatientLayout() {
             );
           })}
         </List>
+        </Box>
 
         <Box sx={{ p: 2, borderTop: '1px solid', borderColor: 'divider', bgcolor: 'grey.50' }}>
             <Typography variant="caption" color="text.secondary" align="center" display="block">
