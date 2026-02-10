@@ -8,6 +8,7 @@ export type OncoStatus =
   | 'Induction'
   | 'Consolidation'
   | 'Maintenance'
+  | 'Response Assessment'
   | 'Palliative'
   | 'Observation'
   | 'Discharged';
@@ -220,10 +221,85 @@ export interface OncologyPatient {
   comorbidities?: Comorbidity;
   alerts?: Alert[];
   
+  // Response Assessment
+  responseAssessments?: ResponseAssessment[];
+  
+  // Surveillance
+  surveillanceData?: SurveillanceData;
+  
+  // Visit History
+  visitHistory?: VisitRecord[];
+  
   // Metadata
   diagnosisDate?: string;
   treatmentStartDate?: string;
   lastReviewDate?: string;
+}
+
+export type RECISTResponse = 'Complete Response (CR)' | 'Partial Response (PR)' | 'Stable Disease (SD)' | 'Progressive Disease (PD)' | 'Not Evaluable (NE)';
+
+export interface ScanResult {
+  type: string; // CT, PET-CT, MRI etc.
+  date: string;
+  site: string;
+  baseline: string;
+  current: string;
+  changePercent: number; // negative = shrinkage
+  recistCategory: RECISTResponse;
+}
+
+export interface MarkerTrend {
+  name: string;
+  baseline: number;
+  current: number;
+  unit: string;
+  trend: 'Rising' | 'Falling' | 'Stable';
+  normal?: { min: number; max: number };
+}
+
+export interface ResponseAssessment {
+  assessmentDate: string;
+  assessmentNumber: number;
+  scanResults: ScanResult[];
+  markerTrends: MarkerTrend[];
+  overallResponse: RECISTResponse;
+  clinicalBenefit: boolean;
+  toxicitySummary: string;
+  cumulativeToxicity: string[];
+  doctorAssessment: string;
+  nextStep: 'Continue Treatment' | 'Proceed to Surgery' | 'Switch to Surveillance' | 'Change Regimen' | 'Palliative Transition' | 'MDT Review';
+  nextStepDetails: string;
+}
+
+export interface SurveillanceSchedule {
+  test: string;
+  frequency: string;
+  lastDone: string;
+  nextDue: string;
+  status: 'Up-to-date' | 'Due' | 'Overdue';
+  result?: string;
+}
+
+export interface SurveillanceData {
+  remissionDate: string;
+  treatmentCompleted: string;
+  totalTreatmentDuration: string;
+  schedules: SurveillanceSchedule[];
+  lateToxicities: string[];
+  psychosocialNotes: string;
+  functionalStatus: string;
+  returnToWork: boolean;
+  nextClinicVisit: string;
+  yearsInSurveillance: number;
+}
+
+export interface VisitRecord {
+  visitId: string;
+  date: string;
+  stage: OncoStatus;
+  visitType: string; // 'Cycle 1 Day 1', 'MDT Review', 'Follow-up', etc.
+  summary: string;
+  doctor: string;
 }
 
 export interface DiagnosticEvent {

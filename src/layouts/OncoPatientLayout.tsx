@@ -6,7 +6,9 @@ import PersonIcon from '@mui/icons-material/Person';
 import ScienceIcon from '@mui/icons-material/Science'; // Diagnostic
 import AssignmentIcon from '@mui/icons-material/Assignment'; // Planning
 import MedicationLiquidIcon from '@mui/icons-material/MedicationLiquid'; // Chemo
+import AssessmentIcon from '@mui/icons-material/Assessment'; // Response Assessment
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'; // Maintenance
+import VisibilityIcon from '@mui/icons-material/Visibility'; // Surveillance
 import SpaIcon from '@mui/icons-material/Spa'; // Palliative
 import MonitorHeartIcon from '@mui/icons-material/MonitorHeart'; // Vitals/Overview
 import { allPatients } from '../data/oncologyMockData';
@@ -34,7 +36,9 @@ export default function OncoPatientLayout() {
     { label: 'Diagnostic Findings', icon: <ScienceIcon />, path: 'diagnostic', color: '#ff9800' },
     { label: 'Treatment Planning', icon: <AssignmentIcon />, path: 'planning', color: '#2196f3' },
     { label: 'Chemo Protocol', icon: <MedicationLiquidIcon />, path: 'chemo', color: '#7c4dff' },
+    { label: 'Response Assessment', icon: <AssessmentIcon />, path: 'response', color: '#e91e63'},
     { label: 'Maintenance Review', icon: <VerifiedUserIcon />, path: 'maintenance', color: '#4caf50' },
+    { label: 'Surveillance', icon: <VisibilityIcon />, path: 'surveillance', color: '#009688' },
     { label: 'Palliative Care', icon: <SpaIcon />, path: 'palliative', color: '#00bcd4' },
   ];
 
@@ -146,12 +150,12 @@ export default function OncoPatientLayout() {
                // Hide Palliative tab for non-palliative patients
                if (item.path === 'palliative') return null;
 
-               // Progressive Unlocking
+               // Progressive Unlocking based on state machine
                switch (patient.oncoStatus) {
                  case 'Discharged':
                  case 'Diagnostic Evaluation':
                    // Only Summary & Diagnostic allowed
-                   isAccessible = false; // logic handled by base foundation check above
+                   isAccessible = false;
                    break;
                    
                  case 'Treatment Planning':
@@ -163,15 +167,20 @@ export default function OncoPatientLayout() {
                    // Can see Planning & Chemo
                    isAccessible = item.path === 'planning' || item.path === 'chemo';
                    break;
+                 
+                 case 'Response Assessment':
+                   // Can see Planning, Chemo, and Response Assessment
+                   isAccessible = item.path === 'planning' || item.path === 'chemo' || item.path === 'response';
+                   break;
                    
                  case 'Maintenance':
-                   // Can see everything including Maintenance (e.g. Oral Chemo)
-                   isAccessible = true;
+                   // Can see everything except Surveillance
+                   isAccessible = item.path !== 'surveillance';
                    break;
 
                  case 'Observation':
-                   // Survivorship/Remission - Block Planning/Chemo, show Maintenance(Surveillance)
-                   isAccessible = item.path === 'maintenance';
+                   // Survivorship/Remission - Show Response + Surveillance
+                   isAccessible = item.path === 'surveillance' || item.path === 'response';
                    break;
                    
                  default:

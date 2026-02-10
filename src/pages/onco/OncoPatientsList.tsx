@@ -19,12 +19,16 @@ export default function OncoPatientsList() {
       case 'Induction':
       case 'Consolidation':
         return `/onco/patient-view/${patient.id}/chemo`;
+      case 'Response Assessment':
+        return `/onco/patient-view/${patient.id}/response`;
       case 'Maintenance':
         return `/onco/patient-view/${patient.id}/maintenance`;
+      case 'Observation':
+        return `/onco/patient-view/${patient.id}/surveillance`;
       case 'Palliative':
         return `/onco/patient-view/${patient.id}/palliative`;
       case 'Discharged':
-        return `/onco/patient-view/${patient.id}/diagnostic`; // Or a specific discharge summary page if it exists, otherwise diagnostic/summary default
+        return `/onco/patient-view/${patient.id}/diagnostic`;
       default:
         return `/onco/patient-view/${patient.id}/diagnostic`;
     }
@@ -39,7 +43,11 @@ export default function OncoPatientsList() {
       case 'Induction':
       case 'Consolidation':
         return 'primary';
+      case 'Response Assessment':
+        return 'secondary';
       case 'Maintenance':
+        return 'success';
+      case 'Observation':
         return 'success';
       case 'Palliative':
         return 'secondary';

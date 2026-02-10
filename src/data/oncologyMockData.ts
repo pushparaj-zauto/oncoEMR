@@ -2,6 +2,7 @@ import {
   OncologyPatient,
   DiagnosticEvent,
   PendingAction,
+  VisitRecord,
 } from '../types/oncology';
 
 // 1. Diagnostic Evaluation - Suspected Lung Cancer
@@ -779,6 +780,38 @@ export const mockOncoPatient6: OncologyPatient = {
     participants: ['Dr. Rao (Med Onco)', 'Dr. Hematology']
   },
 
+  surveillanceData: {
+    remissionDate: '2024-08-15',
+    treatmentCompleted: 'ABVD x4 cycles',
+    totalTreatmentDuration: '4 months',
+    schedules: [
+      { test: 'PET-CT', frequency: 'Annual', lastDone: '2025-08-15', nextDue: '2026-08-15', status: 'Up-to-date', result: 'Deauville 1 - Complete metabolic response' },
+      { test: 'CT Chest/Abdomen', frequency: 'Every 6 months', lastDone: '2026-01-20', nextDue: '2026-07-20', status: 'Up-to-date', result: 'No lymphadenopathy. No new lesions.' },
+      { test: 'CBC + ESR', frequency: 'Every 3 months', lastDone: '2026-01-20', nextDue: '2026-04-20', status: 'Up-to-date', result: 'All values normal' },
+      { test: 'Echocardiogram', frequency: 'Annual', lastDone: '2025-08-15', nextDue: '2026-08-15', status: 'Up-to-date', result: 'EF 62% - Normal' },
+      { test: 'Thyroid Function', frequency: 'Annual', lastDone: '2025-08-15', nextDue: '2026-08-15', status: 'Up-to-date', result: 'TSH 2.1 - Normal' },
+      { test: 'Mammogram', frequency: 'Annual (Post-chest RT)', lastDone: 'N/A', nextDue: '2026-08-15', status: 'Due', result: 'Not applicable (No RT given)' },
+    ],
+    lateToxicities: ['None identified'],
+    psychosocialNotes: 'Adjusting well. Returned to studies. Mild anxiety around scan dates (scanxiety). Offered counselling.',
+    functionalStatus: 'Fully independent. Resumed all activities.',
+    returnToWork: true,
+    nextClinicVisit: '2026-04-20',
+    yearsInSurveillance: 1.5,
+  },
+
+  visitHistory: [
+    { visitId: 'V001', date: '2024-02-10', stage: 'Diagnostic Evaluation', visitType: 'Initial Consultation', summary: 'Cervical lymphadenopathy. Excision biopsy planned.', doctor: 'Dr. Rao' },
+    { visitId: 'V002', date: '2024-02-20', stage: 'Diagnostic Evaluation', visitType: 'Biopsy Result', summary: 'Hodgkin Lymphoma confirmed (Nodular Sclerosis)', doctor: 'Dr. Pathak' },
+    { visitId: 'V003', date: '2024-03-01', stage: 'Treatment Planning', visitType: 'MDT Discussion', summary: 'Stage IIA. Plan: ABVD x4 -> PET-CT response', doctor: 'Dr. Hematology' },
+    { visitId: 'V004', date: '2024-03-15', stage: 'Induction', visitType: 'Cycle 1 Day 1', summary: 'Started ABVD. Anti-emetics given.', doctor: 'Dr. Rao' },
+    { visitId: 'V005', date: '2024-06-15', stage: 'Induction', visitType: 'Cycle 4 Day 1', summary: 'Final cycle. Tolerated well.', doctor: 'Dr. Rao' },
+    { visitId: 'V006', date: '2024-08-15', stage: 'Response Assessment', visitType: 'End-of-Treatment PET', summary: 'Deauville 1. Complete metabolic response.', doctor: 'Dr. Rao' },
+    { visitId: 'V007', date: '2025-02-15', stage: 'Observation', visitType: '6-Month Surveillance', summary: 'No symptoms. Labs normal. CT clear.', doctor: 'Dr. Rao' },
+    { visitId: 'V008', date: '2025-08-15', stage: 'Observation', visitType: 'Annual Surveillance', summary: 'PET-CT: Deauville 1. Echo: EF 62%. All clear.', doctor: 'Dr. Rao' },
+    { visitId: 'V009', date: '2026-02-01', stage: 'Observation', visitType: '18-Month Surveillance', summary: 'Annual review. No concerns. Continue surveillance.', doctor: 'Dr. Rao' },
+  ],
+
   diagnosisDate: '2024-02-10',
   lastReviewDate: '2026-02-01',
 };
@@ -848,6 +881,191 @@ export const mockOncoPatient7: OncologyPatient = {
   diagnosisDate: '2026-02-02',
 };
 
+// 8. Response Assessment - Colon Cancer Post-Chemo
+export const mockOncoPatient8: OncologyPatient = {
+  id: 'ONC-008',
+  name: 'Mrs. Meena',
+  mrn: '240108',
+  age: 52,
+  gender: 'Female',
+  cancerSite: 'Colon',
+  histology: 'Adenocarcinoma',
+  stage: 'III',
+  tnmStage: 'pT3N2M0',
+  ecogStatus: 1,
+  treatmentIntent: 'Curative',
+  oncoStatus: 'Response Assessment',
+
+  chiefComplaint: 'Post-chemo assessment visit',
+  historyOfPresentIllness: 'Completed 12 cycles of mFOLFOX6 adjuvant chemo for Stage III colon cancer post-hemicolectomy. Now presenting for response assessment with restaging CT and tumor markers.',
+  symptomDuration: 'N/A',
+  
+  vitals: {
+    bp: '126/78',
+    hr: 74,
+    temp: 36.6,
+    resp: 16,
+    spo2: 98,
+    height: 158,
+    weight: 55,
+    bmi: 22.0
+  },
+
+  patientHistory: {
+    medical: ['Hypertension (controlled)', 'Allergy: Iodinated contrast'],
+    family: ['Mother - Colon Ca at 60'],
+    social: ['Homemaker', 'Non-smoker', 'Married, 3 children']
+  },
+
+  diagnosticTracker: {
+    biopsy: 'Confirmed',
+    imaging: 'Done',
+    metastaticWorkup: 'Done',
+    tumorMarkers: 'Done',
+  },
+
+  clinicalFindings: {
+    primaryLesion: 'Resected (Right Hemicolectomy)',
+    nodes: '4/18 Positive (Pre-treatment)',
+    suspectedMetastasis: false,
+  },
+
+  provisionalAssessment: {
+    probableDiagnosis: 'Colon Adenocarcinoma (Post-Treatment)',
+    tentativeStage: 'Stage III (ypT0N0 post-chemo)',
+    resectable: 'Resected',
+  },
+
+  mdtDecision: {
+    status: 'Approved',
+    date: '2025-06-15',
+    summary: 'Surgery (Done) -> Adjuvant FOLFOX x12 (Done) -> Response Assessment -> Surveillance',
+    participants: ['Dr. Rao (Med Onco)', 'Dr. Sarah (Surg Onco)', 'Dr. Pathak (Pathology)']
+  },
+
+  treatmentStrategy: {
+    surgery: true,
+    systemicTherapy: true,
+    radiation: false,
+    sequence: 'Surgery -> Adjuvant Chemo -> Response Assessment',
+  },
+
+  currentProtocol: {
+    name: 'mFOLFOX6 (Completed)',
+    cycles: 12,
+    cycleFrequency: 14,
+    startDate: '2025-07-01',
+    drugs: [
+      { name: 'Oxaliplatin', doseBasis: 'BSA', dose: '85 mg/m²', day: 'D1', status: 'Given' },
+      { name: 'Leucovorin', doseBasis: 'BSA', dose: '400 mg/m²', day: 'D1', status: 'Given' },
+      { name: '5-FU Bolus', doseBasis: 'BSA', dose: '400 mg/m²', day: 'D1', status: 'Given' },
+      { name: '5-FU Infusion', doseBasis: 'BSA', dose: '2400 mg/m²', day: 'D1-D2', status: 'Given' },
+    ],
+    maintenanceRationale: 'Adjuvant therapy completed',
+    timeOnTherapy: '6 Months',
+    totalExposure: '12 Cycles',
+    doseInterruptions: 'Cycle 10 delayed 1 week (neutropenia)',
+    stopCriteria: ['Completed all planned cycles']
+  },
+
+  responseAssessments: [
+    {
+      assessmentDate: '2026-01-28',
+      assessmentNumber: 1,
+      scanResults: [
+        {
+          type: 'CT Abdomen + Pelvis',
+          date: '2026-01-25',
+          site: 'Surgical bed (Right colon)',
+          baseline: 'Post-op changes',
+          current: 'No recurrence at surgical site',
+          changePercent: 0,
+          recistCategory: 'Complete Response (CR)',
+        },
+        {
+          type: 'CT Chest',
+          date: '2026-01-25',
+          site: 'Lungs',
+          baseline: 'Clear',
+          current: 'No pulmonary metastases',
+          changePercent: 0,
+          recistCategory: 'Complete Response (CR)',
+        },
+        {
+          type: 'CT Abdomen + Pelvis',
+          date: '2026-01-25',
+          site: 'Liver',
+          baseline: 'No lesions',
+          current: 'No hepatic metastases',
+          changePercent: 0,
+          recistCategory: 'Complete Response (CR)',
+        },
+      ],
+      markerTrends: [
+        {
+          name: 'CEA',
+          baseline: 18.5,
+          current: 2.1,
+          unit: 'ng/mL',
+          trend: 'Falling',
+          normal: { min: 0, max: 5 },
+        },
+        {
+          name: 'CA 19-9',
+          baseline: 45.0,
+          current: 12.0,
+          unit: 'U/mL',
+          trend: 'Falling',
+          normal: { min: 0, max: 37 },
+        },
+      ],
+      overallResponse: 'Complete Response (CR)',
+      clinicalBenefit: true,
+      toxicitySummary: 'Residual Grade 1 peripheral neuropathy (Oxaliplatin). Resolved neutropenia. No ongoing GI toxicity.',
+      cumulativeToxicity: ['Peripheral neuropathy (Grade 1)', 'Fatigue (resolved)', 'Neutropenia (resolved)'],
+      doctorAssessment: 'Excellent response. No evidence of residual or recurrent disease on imaging. Tumor markers normalized. Recommend transition to surveillance protocol.',
+      nextStep: 'Switch to Surveillance',
+      nextStepDetails: 'Begin surveillance protocol: CT every 6 months x 2 years, then annually. CEA every 3 months. Colonoscopy at 1 year post-surgery.',
+    }
+  ],
+
+  cycleOutcomes: [
+    { cycleNumber: 1, response: 'N/A (Adjuvant)', toxicity: 'Grade 1', toxicityDescription: 'Mild nausea', decision: 'Proceed', date: '2025-07-01', qolImpact: 'Stable' },
+    { cycleNumber: 6, response: 'N/A (Adjuvant)', toxicity: 'Grade 1', toxicityDescription: 'Cold sensitivity, fatigue', decision: 'Proceed', date: '2025-09-09', qolImpact: 'Stable' },
+    { cycleNumber: 10, response: 'N/A (Adjuvant)', toxicity: 'Grade 2', toxicityDescription: 'Neutropenia - delayed 1 week', decision: 'Dose delay', date: '2025-11-18', qolImpact: 'Worsened' },
+    { cycleNumber: 12, response: 'N/A (Adjuvant)', toxicity: 'Grade 1', toxicityDescription: 'Peripheral neuropathy persisting', decision: 'Completed', date: '2025-12-30', qolImpact: 'Stable' },
+  ],
+
+  comorbidities: {
+    diabetes: false,
+    cardiacDisease: false,
+    renalDisease: false,
+    priorCancer: false,
+  },
+
+  alerts: [
+    {
+      type: 'Urgent Action',
+      message: 'Schedule transition to surveillance protocol'
+    }
+  ],
+
+  visitHistory: [
+    { visitId: 'V001', date: '2025-05-20', stage: 'Diagnostic Evaluation', visitType: 'Initial Consultation', summary: 'New referral for colon mass found on colonoscopy', doctor: 'Dr. Rao' },
+    { visitId: 'V002', date: '2025-06-01', stage: 'Diagnostic Evaluation', visitType: 'Biopsy Review', summary: 'Adenocarcinoma confirmed. Staging workup ordered.', doctor: 'Dr. Pathak' },
+    { visitId: 'V003', date: '2025-06-15', stage: 'Treatment Planning', visitType: 'MDT Discussion', summary: 'MDT approved: Surgery -> Adjuvant FOLFOX', doctor: 'Dr. Rao' },
+    { visitId: 'V004', date: '2025-06-22', stage: 'Treatment Planning', visitType: 'Surgery', summary: 'Right hemicolectomy. 4/18 LN positive.', doctor: 'Dr. Sarah' },
+    { visitId: 'V005', date: '2025-07-01', stage: 'Induction', visitType: 'Cycle 1 Day 1', summary: 'Started mFOLFOX6. Tolerated well.', doctor: 'Dr. Rao' },
+    { visitId: 'V006', date: '2025-09-09', stage: 'Induction', visitType: 'Cycle 6 Day 1', summary: 'Mid-treatment review. Cold sensitivity developing.', doctor: 'Dr. Rao' },
+    { visitId: 'V007', date: '2025-12-30', stage: 'Induction', visitType: 'Cycle 12 Day 1', summary: 'Final cycle completed. Grade 1 neuropathy persists.', doctor: 'Dr. Rao' },
+    { visitId: 'V008', date: '2026-01-28', stage: 'Response Assessment', visitType: 'Restaging Assessment', summary: 'CT + markers: Complete response. Recommend surveillance.', doctor: 'Dr. Rao' },
+  ],
+
+  diagnosisDate: '2025-05-20',
+  treatmentStartDate: '2025-07-01',
+  lastReviewDate: '2026-01-28',
+};
+
 
 // Diagnostic Events Timeline
 export const mockDiagnosticEvents: DiagnosticEvent[] = [
@@ -868,6 +1086,7 @@ export const mockPendingActions: PendingAction[] = [
 export const allPatients: OncologyPatient[] = [
   mockOncoPatient5, // Maintenance (5 steps)
   mockOncoPatient3, // Induction (4 steps)
+  mockOncoPatient8, // Response Assessment (4 steps)
   mockOncoPatient2, // Planning (3 steps)
   mockOncoPatient6, // Observation (3 steps - Survivorship)
   mockOncoPatient4, // Palliative (3 steps - Specialized)

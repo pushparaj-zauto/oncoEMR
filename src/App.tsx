@@ -14,6 +14,8 @@ import TreatmentPlanning from './pages/onco/TreatmentPlanning';
 import ChemoProtocolWorkspace from './pages/onco/ChemoProtocolWorkspace';
 import MaintenanceReview from './pages/onco/MaintenanceReview';
 import PalliativeDashboard from './pages/onco/PalliativeDashboard';
+import ResponseAssessment from './pages/onco/ResponseAssessment';
+import SurveillanceDashboard from './pages/onco/SurveillanceDashboard';
 import {
   allPatients,
   mockDiagnosticEvents,
@@ -122,6 +124,20 @@ const PalliativeWrapper = () => {
   return <PalliativeDashboard patient={patient} hideContextBar />;
 };
 
+const ResponseWrapper = () => {
+  const { patientId } = useParams();
+  const patient = allPatients.find(p => p.id === patientId);
+  if (!patient) return null;
+  return <ResponseAssessment patient={patient} hideContextBar />;
+};
+
+const SurveillanceWrapper = () => {
+  const { patientId } = useParams();
+  const patient = allPatients.find(p => p.id === patientId);
+  if (!patient) return null;
+  return <SurveillanceDashboard patient={patient} hideContextBar />;
+};
+
 const SummaryWrapper = () => {
   const { patientId } = useParams();
   const patient = allPatients.find(p => p.id === patientId);
@@ -156,7 +172,9 @@ function App() {
              <Route path="diagnostic" element={<DiagnosticWrapper />} />
              <Route path="planning" element={<PlanningWrapper />} />
              <Route path="chemo" element={<ChemoWrapper />} />
+             <Route path="response" element={<ResponseWrapper />} />
              <Route path="maintenance" element={<MaintenanceWrapper />} />
+             <Route path="surveillance" element={<SurveillanceWrapper />} />
              <Route path="palliative" element={<PalliativeWrapper />} />
           </Route>
         </Routes>
