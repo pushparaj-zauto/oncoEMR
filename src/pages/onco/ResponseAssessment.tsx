@@ -17,6 +17,7 @@ import {
   IconButton,
   Alert,
   LinearProgress,
+  Snackbar,
 } from '@mui/material';
 import MicIcon from '@mui/icons-material/Mic';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -30,13 +31,20 @@ import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
+import EditIcon from '@mui/icons-material/Edit';
+import SpaIcon from '@mui/icons-material/Spa';
 import { alpha } from '@mui/material/styles';
-import { OncologyPatient, RECISTResponse } from '../../types/oncology';
+import { useState } from 'react';
+import { OncologyPatient, RECISTResponse, OncoStatus } from '../../types/oncology';
 import PatientContextBar from '../../components/onco/PatientContextBar';
+import StageTransitionDialog from '../../components/onco/StageTransitionDialog';
 
 interface ResponseAssessmentProps {
   patient: OncologyPatient;
   hideContextBar?: boolean;
+  onTransition?: (targetStage: OncoStatus, reason: string) => void;
 }
 
 const MicButton = () => (
@@ -91,8 +99,27 @@ const getTrendIcon = (trend: string) => {
   }
 };
 
-export default function ResponseAssessment({ patient, hideContextBar }: ResponseAssessmentProps) {
+export default function ResponseAssessment({ patient, hideContextBar, onTransition }: ResponseAssessmentProps) {
   const latestAssessment = patient.responseAssessments?.[patient.responseAssessments.length - 1];
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [pendingTransition, setPendingTransition] = useState<{ target: OncoStatus; reason: string; variant: 'default' | 'warning' | 'success' } | null>(null);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+
+  const handleTransitionRequest = (target: OncoStatus, reason: string, variant: 'default' | 'warning' | 'success' = 'default') => {
+    setPendingTransition({ target, reason, variant });
+    setDialogOpen(true);
+  };
+
+  const handleConfirmTransition = () => {
+    if (pendingTransition) {
+      onTransition?.(pendingTransition.target, pendingTransition.reason);
+      setSnackbarMessage(`Patient moved to ${pendingTransition.target}`);
+      setShowSnackbar(true);
+    }
+    setDialogOpen(false);
+    setPendingTransition(null);
+  };
 
   if (!latestAssessment) {
     return (
@@ -466,25 +493,61 @@ export default function ResponseAssessment({ patient, hideContextBar }: Response
               </Grid>
             </Paper>
 
-            {/* Action Buttons */}
-            <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
-              <Button
-                variant="contained"
-                color="success"
-                fullWidth
-                sx={{ fontWeight: 600, py: 1.5, textTransform: 'none', borderRadius: 2 }}
-                startIcon={<ArrowForwardIcon />}
-              >
-                Move to Surveillance
-              </Button>
-              <Button
-                variant="outlined"
-                color="primary"
-                fullWidth
-                sx={{ fontWeight: 600, py: 1.5, textTransform: 'none', borderRadius: 2 }}
-              >
-                Request MDT Review
-              </Button>
+            {/* Action Buttons - Decision Workflow */}
+            <Box sx={{ mt: 3 }}>
+              <Typography variant="overline" sx={{ fontWeight: 700, color: 'text.secondary', fontSize: '0.75rem', letterSpacing: 1, mb: 1.5, display: 'block' }}>
+                CLINICAL DECISION ACTIONS
+              </Typography>
+              <Stack spacing={1.5}>
+                <Button
+                  variant="contained"
+                  color="success"
+                  fullWidth
+                  sx={{ fontWeight: 600, py: 1.5, textTransform: 'none', borderRadius: 2 }}
+                  startIcon={<VisibilityIcon />}
+                  onClick={() => handleTransitionRequest('Observation', 'Complete/Partial Response — Moving to Surveillance protocol for ongoing monitoring.', 'success')}
+                >
+                  Move to Surveillance
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  sx={{ fontWeight: 600, py: 1.5, textTransform: 'none', borderRadius: 2 }}
+                  startIcon={<VerifiedUserIcon />}
+                  onClick={() => handleTransitionRequest('Maintenance', 'Stable disease / Partial response — Starting maintenance therapy.', 'default')}
+                >
+                  Start Maintenance
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="warning"
+                  fullWidth
+                  sx={{ fontWeight: 600, py: 1.5, textTransform: 'none', borderRadius: 2 }}
+                  startIcon={<EditIcon />}
+                  onClick={() => handleTransitionRequest('Treatment Planning', 'Change in treatment plan required — Returning to planning.', 'warning')}
+                >
+                  Change Treatment Plan
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  fullWidth
+                  sx={{ fontWeight: 600, py: 1.5, textTransform: 'none', borderRadius: 2 }}
+                  startIcon={<SpaIcon />}
+                  onClick={() => handleTransitionRequest('Palliative', 'Patient unfit for further curative treatment — Transitioning to palliative care.', 'warning')}
+                >
+                  Palliative Transition
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  fullWidth
+                  sx={{ fontWeight: 600, py: 1.5, textTransform: 'none', borderRadius: 2 }}
+                >
+                  Request MDT Review
+                </Button>
+              </Stack>
             </Box>
           </Grid>
         </Grid>
@@ -527,6 +590,32 @@ export default function ResponseAssessment({ patient, hideContextBar }: Response
           </Fab>
         </Box>
       </Box>
+
+      {/* Stage Transition Dialog */}
+      {pendingTransition && (
+        <StageTransitionDialog
+          open={dialogOpen}
+          onClose={() => { setDialogOpen(false); setPendingTransition(null); }}
+          onConfirm={handleConfirmTransition}
+          currentStage={patient.oncoStatus}
+          targetStage={pendingTransition.target}
+          patientName={patient.name}
+          details={pendingTransition.reason}
+          variant={pendingTransition.variant}
+        />
+      )}
+
+      {/* Success Snackbar */}
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={4000}
+        onClose={() => setShowSnackbar(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert severity="success" variant="filled" onClose={() => setShowSnackbar(false)} sx={{ fontWeight: 600 }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

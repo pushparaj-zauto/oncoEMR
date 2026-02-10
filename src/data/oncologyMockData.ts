@@ -1093,3 +1093,210 @@ export const allPatients: OncologyPatient[] = [
   mockOncoPatient1, // Diagnostic (2 steps)
   mockOncoPatient7, // Discharged (2 steps)
 ];
+
+// ─── Protocol Catalog for Protocol Selection ─────────────────────────────
+export interface ProtocolCatalogEntry {
+  id: string;
+  name: string;
+  description: string;
+  intent: string;
+  evidence: string;
+  toxicity: 'Low' | 'Low–Moderate' | 'Moderate' | 'Moderate–High' | 'High';
+  recommended?: boolean;
+  drugs: string[];
+  cycles: string;
+  frequency: string;
+  notes?: string;
+  cancerSites: string[]; // Which cancer sites this protocol applies to
+}
+
+export const protocolCatalog: ProtocolCatalogEntry[] = [
+  // Lung Cancer Protocols
+  {
+    id: 'LUNG-001',
+    name: 'Osimertinib (Tagrisso)',
+    description: 'First-line EGFR TKI for EGFR-mutated advanced NSCLC. Oral daily therapy with excellent CNS penetration.',
+    intent: 'Disease Control',
+    evidence: 'NCCN Category 1',
+    toxicity: 'Low–Moderate',
+    recommended: true,
+    drugs: ['Osimertinib 80mg PO Daily'],
+    cycles: 'Continuous',
+    frequency: 'Daily (30-day review)',
+    notes: 'Preferred for EGFR Exon 19 del / L858R. Monitor for pneumonitis & cardiac toxicity.',
+    cancerSites: ['Lung'],
+  },
+  {
+    id: 'LUNG-002',
+    name: 'Carboplatin + Pemetrexed',
+    description: 'Platinum doublet chemotherapy for non-squamous NSCLC without actionable mutations.',
+    intent: 'Disease Control',
+    evidence: 'NCCN Category 1',
+    toxicity: 'Moderate–High',
+    drugs: ['Carboplatin AUC 5', 'Pemetrexed 500 mg/m²'],
+    cycles: '4–6 cycles',
+    frequency: 'Every 21 days',
+    notes: 'Consider pembrolizumab combination if PD-L1 ≥ 50%.',
+    cancerSites: ['Lung'],
+  },
+  {
+    id: 'LUNG-003',
+    name: 'Pembrolizumab + Chemotherapy',
+    description: 'Immunotherapy combined with platinum doublet for advanced NSCLC regardless of PD-L1 status.',
+    intent: 'Disease Control',
+    evidence: 'NCCN Category 1',
+    toxicity: 'Moderate–High',
+    drugs: ['Pembrolizumab 200mg', 'Carboplatin AUC 5', 'Pemetrexed 500 mg/m²'],
+    cycles: '4 cycles chemo + maintenance',
+    frequency: 'Every 21 days',
+    notes: 'Maintenance pembrolizumab + pemetrexed after 4 cycles.',
+    cancerSites: ['Lung'],
+  },
+
+  // Breast Cancer Protocols
+  {
+    id: 'BREAST-001',
+    name: 'AC-T (Dose-Dense)',
+    description: 'Dose-dense Doxorubicin/Cyclophosphamide followed by Paclitaxel. Standard neoadjuvant/adjuvant for ER+/HER2- breast cancer.',
+    intent: 'Curative',
+    evidence: 'NCCN Category 1',
+    toxicity: 'Moderate–High',
+    recommended: true,
+    drugs: ['Doxorubicin 60 mg/m²', 'Cyclophosphamide 600 mg/m²', '→ Paclitaxel 175 mg/m²'],
+    cycles: '4 AC + 4 T',
+    frequency: 'Every 14 days (with G-CSF)',
+    notes: 'Preferred for Luminal B / high-risk ER+ breast cancer. Follow with endocrine therapy.',
+    cancerSites: ['Breast'],
+  },
+  {
+    id: 'BREAST-002',
+    name: 'TC (Docetaxel + Cyclophosphamide)',
+    description: 'Non-anthracycline regimen for lower-risk breast cancer or patients with cardiac concerns.',
+    intent: 'Curative',
+    evidence: 'NCCN Category 2A',
+    toxicity: 'Moderate',
+    drugs: ['Docetaxel 75 mg/m²', 'Cyclophosphamide 600 mg/m²'],
+    cycles: '4 cycles',
+    frequency: 'Every 21 days',
+    notes: 'Consider for patients with pre-existing cardiac risk.',
+    cancerSites: ['Breast'],
+  },
+  {
+    id: 'BREAST-003',
+    name: 'CMF (Classic)',
+    description: 'Cyclophosphamide, Methotrexate, 5-Fluorouracil. Lower-intensity option for elderly or frail patients.',
+    intent: 'Curative',
+    evidence: 'NCCN Category 2A',
+    toxicity: 'Low–Moderate',
+    drugs: ['Cyclophosphamide', 'Methotrexate', '5-FU'],
+    cycles: '6 cycles',
+    frequency: 'Every 28 days',
+    notes: 'Lower efficacy but better tolerability for frail patients.',
+    cancerSites: ['Breast'],
+  },
+
+  // Colon Cancer Protocols
+  {
+    id: 'COLON-001',
+    name: 'mFOLFOX6',
+    description: 'Modified FOLFOX6 — standard adjuvant regimen for Stage III colon cancer after surgery.',
+    intent: 'Curative',
+    evidence: 'NCCN Category 1',
+    toxicity: 'Moderate',
+    recommended: true,
+    drugs: ['Oxaliplatin 85 mg/m²', 'Leucovorin 400 mg/m²', '5-FU Bolus 400 mg/m²', '5-FU Infusion 2400 mg/m²'],
+    cycles: '12 cycles (6 months)',
+    frequency: 'Every 14 days',
+    notes: 'Monitor for neuropathy. Consider 3-month course for low-risk Stage III.',
+    cancerSites: ['Colon'],
+  },
+  {
+    id: 'COLON-002',
+    name: 'CAPOX (XELOX)',
+    description: 'Capecitabine + Oxaliplatin. Oral alternative to FOLFOX for adjuvant colon cancer treatment.',
+    intent: 'Curative',
+    evidence: 'NCCN Category 1',
+    toxicity: 'Moderate',
+    drugs: ['Oxaliplatin 130 mg/m²', 'Capecitabine 1000 mg/m² BD D1-14'],
+    cycles: '8 cycles (6 months)',
+    frequency: 'Every 21 days',
+    notes: 'Oral 5-FU prodrug. Good for patients preferring fewer infusions.',
+    cancerSites: ['Colon'],
+  },
+  {
+    id: 'COLON-003',
+    name: 'Capecitabine Monotherapy',
+    description: 'Single-agent oral fluoropyrimidine for patients unfit for oxaliplatin-based regimens.',
+    intent: 'Curative',
+    evidence: 'NCCN Category 2A',
+    toxicity: 'Low–Moderate',
+    drugs: ['Capecitabine 1250 mg/m² BD D1-14'],
+    cycles: '8 cycles',
+    frequency: 'Every 21 days',
+    notes: 'Consider for elderly or patients with neuropathy risk.',
+    cancerSites: ['Colon'],
+  },
+
+  // Pancreas Cancer Protocols
+  {
+    id: 'PANC-001',
+    name: 'Gemcitabine + Nab-Paclitaxel',
+    description: 'First-line regimen for metastatic pancreatic adenocarcinoma. Better tolerated than FOLFIRINOX.',
+    intent: 'Palliative',
+    evidence: 'NCCN Category 1',
+    toxicity: 'Moderate–High',
+    recommended: true,
+    drugs: ['Gemcitabine 1000 mg/m²', 'Nab-Paclitaxel 125 mg/m²'],
+    cycles: '6 cycles',
+    frequency: 'D1, D8, D15 q28d',
+    notes: 'Monitor for myelosuppression. Dose adjust for neutropenia.',
+    cancerSites: ['Pancreas'],
+  },
+  {
+    id: 'PANC-002',
+    name: 'FOLFIRINOX',
+    description: 'Intensive multi-drug regimen for fit patients with metastatic pancreatic cancer.',
+    intent: 'Palliative',
+    evidence: 'NCCN Category 1',
+    toxicity: 'High',
+    drugs: ['Oxaliplatin 85 mg/m²', 'Irinotecan 180 mg/m²', 'Leucovorin 400 mg/m²', '5-FU 2400 mg/m²'],
+    cycles: '12 cycles',
+    frequency: 'Every 14 days',
+    notes: 'Only for ECOG 0-1. Higher response rate but more toxic.',
+    cancerSites: ['Pancreas'],
+  },
+
+  // Lymphoma Protocols
+  {
+    id: 'LYMPH-001',
+    name: 'ABVD',
+    description: 'Standard first-line regimen for Hodgkin Lymphoma. Well-established with high cure rates.',
+    intent: 'Curative',
+    evidence: 'NCCN Category 1',
+    toxicity: 'Moderate',
+    recommended: true,
+    drugs: ['Doxorubicin 25 mg/m²', 'Bleomycin 10 units/m²', 'Vinblastine 6 mg/m²', 'Dacarbazine 375 mg/m²'],
+    cycles: '4–6 cycles',
+    frequency: 'Every 28 days (D1, D15)',
+    notes: 'PET-adapted therapy. Monitor pulmonary function (Bleomycin).',
+    cancerSites: ['Lymphoma'],
+  },
+  {
+    id: 'LYMPH-002',
+    name: 'AVD + Brentuximab',
+    description: 'Brentuximab vedotin combined with AVD for advanced Hodgkin Lymphoma.',
+    intent: 'Curative',
+    evidence: 'NCCN Category 1',
+    toxicity: 'Moderate–High',
+    drugs: ['Brentuximab Vedotin 1.2 mg/kg', 'Doxorubicin', 'Vinblastine', 'Dacarbazine'],
+    cycles: '6 cycles',
+    frequency: 'Every 28 days (D1, D15)',
+    notes: 'Alternative for Stage III-IV HL. Higher neuropathy risk.',
+    cancerSites: ['Lymphoma'],
+  },
+];
+
+// Helper to get protocols for a specific cancer site
+export function getProtocolsForCancerSite(site: string): ProtocolCatalogEntry[] {
+  return protocolCatalog.filter(p => p.cancerSites.some(s => s.toLowerCase() === site.toLowerCase()));
+}

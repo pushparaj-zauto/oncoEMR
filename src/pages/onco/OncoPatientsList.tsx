@@ -2,13 +2,12 @@ import { Box, Container, Typography, Grid, Paper, Chip, Button } from '@mui/mate
 import { useNavigate } from 'react-router-dom';
 import PersonIcon from '@mui/icons-material/Person';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { allPatients } from '../../data/oncologyMockData';
 import { OncologyPatient } from '../../types/oncology';
+import { usePatientStore } from '../../context/PatientStoreContext';
 
 export default function OncoPatientsList() {
   const navigate = useNavigate();
-
-  const patients: OncologyPatient[] = allPatients;
+  const { patients } = usePatientStore();
 
   const getRouteForPatient = (patient: OncologyPatient): string => {
     switch (patient.oncoStatus) {

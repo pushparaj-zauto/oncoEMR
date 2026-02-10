@@ -14,7 +14,9 @@ import {
   ListItemText,
   Divider,
   Stack,
-  useTheme
+  useTheme,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import MicIcon from '@mui/icons-material/Mic';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -25,13 +27,19 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import EventIcon from '@mui/icons-material/Event';
 import EditIcon from '@mui/icons-material/Edit';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import SpaIcon from '@mui/icons-material/Spa';
 import { alpha } from '@mui/material/styles';
-import { OncologyPatient } from '../../types/oncology';
+import { useState } from 'react';
+import { OncologyPatient, OncoStatus } from '../../types/oncology';
 import PatientContextBar from '../../components/onco/PatientContextBar';
+import StageTransitionDialog from '../../components/onco/StageTransitionDialog';
 
 interface MaintenanceReviewProps {
   patient: OncologyPatient;
   hideContextBar?: boolean;
+  onTransition?: (targetStage: OncoStatus, reason: string) => void;
 }
 
 // Reusing the MicButton from DiagnosticEvaluation for consistency
@@ -78,8 +86,28 @@ const DataField = ({ label, value, highlight = false }: { label: string, value: 
     </Box>
 );
 
-export default function MaintenanceReview({ patient, hideContextBar }: MaintenanceReviewProps) {
+export default function MaintenanceReview({ patient, hideContextBar, onTransition }: MaintenanceReviewProps) {
   const theme = useTheme();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [pendingTransition, setPendingTransition] = useState<{ target: OncoStatus; reason: string; variant: 'default' | 'warning' | 'success' } | null>(null);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+
+  const handleTransitionRequest = (target: OncoStatus, reason: string, variant: 'default' | 'warning' | 'success' = 'default') => {
+    setPendingTransition({ target, reason, variant });
+    setDialogOpen(true);
+  };
+
+  const handleConfirmTransition = () => {
+    if (pendingTransition) {
+      onTransition?.(pendingTransition.target, pendingTransition.reason);
+      setSnackbarMessage(`Patient moved to ${pendingTransition.target}`);
+      setShowSnackbar(true);
+    }
+    setDialogOpen(false);
+    setPendingTransition(null);
+  };
+
   // Build review history from the last 4 cycle outcomes + add a pending next review
   const cycleOutcomes = patient.cycleOutcomes || [];
   const lastFourCycles = cycleOutcomes.slice(-3); // Last 3 completed cycles
@@ -383,6 +411,55 @@ export default function MaintenanceReview({ patient, hideContextBar }: Maintenan
                          </Button>
                     </Box>
                 </Paper>
+
+                {/* ─── Maintenance Decision Actions ─── */}
+                <Paper
+                  elevation={0}
+                  sx={{
+                    mt: 3,
+                    p: 2.5,
+                    borderRadius: 3,
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    bgcolor: 'white',
+                  }}
+                >
+                  <Typography variant="overline" sx={{ fontWeight: 700, color: 'text.secondary', fontSize: '0.75rem', letterSpacing: 1, mb: 2, display: 'block' }}>
+                    MAINTENANCE DECISION
+                  </Typography>
+                  <Stack spacing={1.5}>
+                    <Button
+                      variant="contained"
+                      color="success"
+                      fullWidth
+                      startIcon={<RefreshIcon />}
+                      onClick={() => handleTransitionRequest('Maintenance', 'Maintenance therapy continuing — stable disease, no progression.', 'success')}
+                      sx={{ fontWeight: 600, py: 1.25, textTransform: 'none', borderRadius: 2 }}
+                    >
+                      Continue Maintenance
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="warning"
+                      fullWidth
+                      startIcon={<WarningAmberIcon />}
+                      onClick={() => handleTransitionRequest('Treatment Planning', 'Disease progression detected during maintenance — returning to Treatment Planning for regimen change.', 'warning')}
+                      sx={{ fontWeight: 600, py: 1.25, textTransform: 'none', borderRadius: 2 }}
+                    >
+                      Mark Progression
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      fullWidth
+                      startIcon={<SpaIcon />}
+                      onClick={() => handleTransitionRequest('Palliative', 'Stopping maintenance due to unacceptable toxicity — transitioning to palliative/supportive care.', 'warning')}
+                      sx={{ fontWeight: 600, py: 1.25, textTransform: 'none', borderRadius: 2 }}
+                    >
+                      Stop for Toxicity
+                    </Button>
+                  </Stack>
+                </Paper>
             </Grid>
 
         </Grid>
@@ -507,6 +584,32 @@ export default function MaintenanceReview({ patient, hideContextBar }: Maintenan
           </Fab>
         </Box>
       </Box>
+
+      {/* Stage Transition Dialog */}
+      {pendingTransition && (
+        <StageTransitionDialog
+          open={dialogOpen}
+          onClose={() => { setDialogOpen(false); setPendingTransition(null); }}
+          onConfirm={handleConfirmTransition}
+          currentStage={patient.oncoStatus}
+          targetStage={pendingTransition.target}
+          patientName={patient.name}
+          details={pendingTransition.reason}
+          variant={pendingTransition.variant}
+        />
+      )}
+
+      {/* Success Snackbar */}
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={4000}
+        onClose={() => setShowSnackbar(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert severity="success" variant="filled" onClose={() => setShowSnackbar(false)} sx={{ fontWeight: 600 }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

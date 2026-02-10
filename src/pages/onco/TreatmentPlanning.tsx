@@ -18,6 +18,8 @@ import {
   Stack,
   Fab,
   IconButton,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import MicIcon from '@mui/icons-material/Mic';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -26,13 +28,19 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import HomeIcon from '@mui/icons-material/Home';
 import { useState } from 'react';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { OncologyPatient } from '../../types/oncology';
 import PatientContextBar from '../../components/onco/PatientContextBar';
+import ProtocolSelector, { ProtocolOption } from '../../components/onco/ProtocolSelector';
+import StageTransitionDialog from '../../components/onco/StageTransitionDialog';
+import { getProtocolsForCancerSite } from '../../data/oncologyMockData';
 import { alpha } from '@mui/material/styles';
 
 interface TreatmentPlanningProps {
   patient: OncologyPatient;
   hideContextBar?: boolean;
+  onActivatePlan?: () => void;
+  onSelectProtocol?: (protocol: ProtocolOption) => void;
 }
 
 const MicButton = () => (
@@ -58,8 +66,32 @@ const MicButton = () => (
     </IconButton>
   );
 
-export default function TreatmentPlanning({ patient, hideContextBar }: TreatmentPlanningProps) {
+export default function TreatmentPlanning({ patient, hideContextBar, onActivatePlan, onSelectProtocol }: TreatmentPlanningProps) {
   const [intent, setIntent] = useState(patient.treatmentIntent || '');
+  const [showActivateDialog, setShowActivateDialog] = useState(false);
+  const [selectedProtocol, setSelectedProtocol] = useState<ProtocolOption | null>(null);
+  const [planActivated, setPlanActivated] = useState(
+    patient.oncoStatus === 'Induction' || patient.oncoStatus === 'Consolidation' || patient.oncoStatus === 'Maintenance' || patient.oncoStatus === 'Response Assessment' || patient.oncoStatus === 'Observation'
+  );
+  const [showSnackbar, setShowSnackbar] = useState(false);
+
+  const availableProtocols = getProtocolsForCancerSite(patient.cancerSite);
+
+  const handleProtocolSelect = (protocol: ProtocolOption) => {
+    setSelectedProtocol(protocol);
+    onSelectProtocol?.(protocol);
+  };
+
+  const handleActivatePlan = () => {
+    setShowActivateDialog(true);
+  };
+
+  const handleConfirmActivation = () => {
+    setShowActivateDialog(false);
+    setPlanActivated(true);
+    setShowSnackbar(true);
+    onActivatePlan?.();
+  };
 
   const handleIntentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newVal = (event.target as HTMLInputElement).value;
@@ -360,19 +392,19 @@ export default function TreatmentPlanning({ patient, hideContextBar }: Treatment
                         <TableCell sx={{ color: 'text.secondary', fontWeight: 500, borderBottom: 'none', pl: 0 }}>Regimen Name</TableCell>
                         <TableCell sx={{ borderBottom: 'none' }}>
                         <Typography variant="body2" fontWeight={600}>
-                            {patient.currentProtocol?.name || 'Standard Protocol'}
+                            {selectedProtocol?.name || patient.currentProtocol?.name || 'Standard Protocol'}
                         </Typography>
                         </TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell sx={{ color: 'text.secondary', fontWeight: 500, borderBottom: 'none', pl: 0 }}>Planned Cycles</TableCell>
                         <TableCell sx={{ borderBottom: 'none' }}>
-                        {patient.currentProtocol?.cycles || 6} cycles
+                        {selectedProtocol?.cycles || `${patient.currentProtocol?.cycles || 6} cycles`}
                         </TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell sx={{ color: 'text.secondary', fontWeight: 500, borderBottom: 'none', pl: 0 }}>Cycle Frequency</TableCell>
-                        <TableCell sx={{ borderBottom: 'none' }}>Every {patient.currentProtocol?.cycleFrequency || 21} days</TableCell>
+                        <TableCell sx={{ borderBottom: 'none' }}>{selectedProtocol?.frequency || `Every ${patient.currentProtocol?.cycleFrequency || 21} days`}</TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell sx={{ color: 'text.secondary', fontWeight: 500, borderBottom: 'none', pl: 0 }}>Dose Intent</TableCell>
@@ -383,6 +415,19 @@ export default function TreatmentPlanning({ patient, hideContextBar }: Treatment
                     </TableBody>
                 </Table>
                 </Paper>
+              </Box>
+            )}
+
+            {/* Protocol Selector - Only shown when not yet activated */}
+            {patient.treatmentStrategy?.systemicTherapy && !planActivated && availableProtocols.length > 0 && (
+              <Box sx={{ mt: 4 }}>
+                <ProtocolSelector
+                  protocols={availableProtocols}
+                  selectedProtocolId={selectedProtocol?.id}
+                  onSelect={handleProtocolSelect}
+                  cancerSite={patient.cancerSite}
+                  stage={patient.stage}
+                />
               </Box>
             )}
           </Grid>
@@ -477,9 +522,9 @@ export default function TreatmentPlanning({ patient, hideContextBar }: Treatment
               sx={{
                 p: 3,
                 mt: 4,
-                bgcolor: patient.mdtDecision?.status === 'Approved' ? (theme) => alpha(theme.palette.success.main, 0.1) : (theme) => alpha(theme.palette.grey[300], 0.3),
+                bgcolor: planActivated ? (theme) => alpha(theme.palette.success.main, 0.1) : patient.mdtDecision?.status === 'Approved' ? (theme) => alpha(theme.palette.success.main, 0.1) : (theme) => alpha(theme.palette.grey[300], 0.3),
                 textAlign: 'center',
-                borderColor: patient.mdtDecision?.status === 'Approved' ? 'success.main' : 'divider'
+                borderColor: planActivated ? 'success.main' : patient.mdtDecision?.status === 'Approved' ? 'success.main' : 'divider'
               }}
             >
               <Typography variant="overline" sx={{ fontWeight: 700, mb: 1, display: 'block', fontSize: '0.85rem', letterSpacing: 1.2, color: 'text.primary' }}>
@@ -487,25 +532,30 @@ export default function TreatmentPlanning({ patient, hideContextBar }: Treatment
               </Typography>
               <Chip
                 label={
-                  patient.mdtDecision?.status === 'Approved'
+                  planActivated
+                    ? 'ACTIVATED — Treatment In Progress'
+                    : patient.mdtDecision?.status === 'Approved'
                     ? 'MDT APPROVED - Ready to Activate'
                     : patient.mdtDecision?.status === 'Modified'
                     ? 'MODIFIED - Pending Review'
                     : 'DRAFT - Under Planning'
                 }
+                icon={planActivated ? <CheckCircleIcon /> : undefined}
                 sx={{
                   bgcolor: 'white',
-                  color: patient.mdtDecision?.status === 'Approved' ? 'success.main' : 'grey.700',
+                  color: planActivated ? 'success.main' : patient.mdtDecision?.status === 'Approved' ? 'success.main' : 'grey.700',
                   fontWeight: 600,
                   border: '1px solid',
-                  borderColor: patient.mdtDecision?.status === 'Approved' ? 'success.main' : 'grey.400'
+                  borderColor: planActivated ? 'success.main' : patient.mdtDecision?.status === 'Approved' ? 'success.main' : 'grey.400'
                 }}
               />
 
-              {patient.mdtDecision?.status === 'Approved' && (
+              {patient.mdtDecision?.status === 'Approved' && !planActivated && (
                 <Button
                   variant="contained"
                   size="large"
+                  startIcon={<PlayArrowIcon />}
+                  onClick={handleActivatePlan}
                   sx={{
                     mt: 2,
                     bgcolor: 'success.main',
@@ -517,6 +567,11 @@ export default function TreatmentPlanning({ patient, hideContextBar }: Treatment
                 >
                   Activate Treatment Plan
                 </Button>
+              )}
+              {planActivated && (
+                <Typography variant="body2" color="success.dark" sx={{ mt: 1.5, fontWeight: 500 }}>
+                  Treatment plan has been activated. Patient moved to Active Treatment.
+                </Typography>
               )}
             </Paper>
           </Grid>
@@ -641,6 +696,30 @@ export default function TreatmentPlanning({ patient, hideContextBar }: Treatment
           </Fab>
         </Box>
       </Box>
+
+      {/* Stage Transition Dialog */}
+      <StageTransitionDialog
+        open={showActivateDialog}
+        onClose={() => setShowActivateDialog(false)}
+        onConfirm={handleConfirmActivation}
+        currentStage={patient.oncoStatus}
+        targetStage="Induction"
+        patientName={patient.name}
+        details={`Protocol: ${selectedProtocol?.name || patient.currentProtocol?.name || 'Selected Protocol'}. MDT Decision: ${patient.mdtDecision?.status || 'Pending'}. This will activate the treatment plan and move the patient to Active Treatment.`}
+        variant="success"
+      />
+
+      {/* Success Snackbar */}
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={4000}
+        onClose={() => setShowSnackbar(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert severity="success" variant="filled" onClose={() => setShowSnackbar(false)} sx={{ fontWeight: 600 }}>
+          Treatment Plan Activated — Patient moved to Active Treatment
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

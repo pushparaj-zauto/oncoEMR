@@ -1,5 +1,5 @@
 import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
-import { BrowserRouter, Routes, Route, Navigate, useParams } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useParams, useNavigate } from 'react-router-dom';
 import PatientDashboard from './pages/PatientDashboard';
 import PatientsList from './pages/PatientsList';
 // Layouts
@@ -17,10 +17,11 @@ import PalliativeDashboard from './pages/onco/PalliativeDashboard';
 import ResponseAssessment from './pages/onco/ResponseAssessment';
 import SurveillanceDashboard from './pages/onco/SurveillanceDashboard';
 import {
-  allPatients,
   mockDiagnosticEvents,
   mockPendingActions,
 } from './data/oncologyMockData';
+import { PatientStoreProvider, usePatientStore } from './context/PatientStoreContext';
+import { OncoStatus } from './types/oncology';
 
 const theme = createTheme({
   palette: {
@@ -91,56 +92,123 @@ const theme = createTheme({
 // Wrappers for Dynamic Patient Data
 const DiagnosticWrapper = () => {
   const { patientId } = useParams();
-  const patient = allPatients.find(p => p.id === patientId);
+  const { getPatient } = usePatientStore();
+  const patient = getPatient(patientId!);
   if (!patient) return null;
   return <DiagnosticEvaluation patient={patient} diagnosticEvents={mockDiagnosticEvents} pendingActions={mockPendingActions} hideContextBar />;
 };
 
 const PlanningWrapper = () => {
   const { patientId } = useParams();
-  const patient = allPatients.find(p => p.id === patientId);
+  const navigate = useNavigate();
+  const { getPatient, activateTreatmentPlan } = usePatientStore();
+  const patient = getPatient(patientId!);
   if (!patient) return null;
-  return <TreatmentPlanning patient={patient} hideContextBar />;
+  return (
+    <TreatmentPlanning
+      patient={patient}
+      hideContextBar
+      onActivatePlan={() => {
+        activateTreatmentPlan(patientId!);
+        // Navigate to chemo tab after activation
+        setTimeout(() => navigate(`/onco/patient-view/${patientId}/chemo`), 500);
+      }}
+    />
+  );
 };
 
 const ChemoWrapper = () => {
   const { patientId } = useParams();
-  const patient = allPatients.find(p => p.id === patientId);
+  const navigate = useNavigate();
+  const { getPatient, completeCycle, transitionStage } = usePatientStore();
+  const patient = getPatient(patientId!);
   if (!patient) return null;
-  return <ChemoProtocolWorkspace patient={patient} hideContextBar />;
+  return (
+    <ChemoProtocolWorkspace
+      patient={patient}
+      hideContextBar
+      onCompleteCycle={(cycleNumber) => completeCycle(patientId!, cycleNumber)}
+      onRequestResponseAssessment={() => {
+        transitionStage(patientId!, 'Response Assessment', 'Moved from active treatment to response assessment');
+        setTimeout(() => navigate(`/onco/patient-view/${patientId}/response`), 500);
+      }}
+    />
+  );
 };
 
 const MaintenanceWrapper = () => {
   const { patientId } = useParams();
-  const patient = allPatients.find(p => p.id === patientId);
+  const navigate = useNavigate();
+  const { getPatient, transitionStage } = usePatientStore();
+  const patient = getPatient(patientId!);
   if (!patient) return null;
-  return <MaintenanceReview patient={patient} hideContextBar />;
+  return (
+    <MaintenanceReview
+      patient={patient}
+      hideContextBar
+      onTransition={(targetStage: OncoStatus, reason: string) => {
+        transitionStage(patientId!, targetStage, reason);
+        const pathMap: Record<string, string> = {
+          'Treatment Planning': 'planning',
+          'Palliative': 'palliative',
+          'Maintenance': 'maintenance',
+        };
+        const path = pathMap[targetStage];
+        if (path && path !== 'maintenance') {
+          setTimeout(() => navigate(`/onco/patient-view/${patientId}/${path}`), 500);
+        }
+      }}
+    />
+  );
 };
 
 const PalliativeWrapper = () => {
   const { patientId } = useParams();
-  const patient = allPatients.find(p => p.id === patientId);
+  const { getPatient } = usePatientStore();
+  const patient = getPatient(patientId!);
   if (!patient) return null;
   return <PalliativeDashboard patient={patient} hideContextBar />;
 };
 
 const ResponseWrapper = () => {
   const { patientId } = useParams();
-  const patient = allPatients.find(p => p.id === patientId);
+  const navigate = useNavigate();
+  const { getPatient, transitionStage } = usePatientStore();
+  const patient = getPatient(patientId!);
   if (!patient) return null;
-  return <ResponseAssessment patient={patient} hideContextBar />;
+  return (
+    <ResponseAssessment
+      patient={patient}
+      hideContextBar
+      onTransition={(targetStage: OncoStatus, reason: string) => {
+        transitionStage(patientId!, targetStage, reason);
+        const pathMap: Record<string, string> = {
+          'Observation': 'surveillance',
+          'Maintenance': 'maintenance',
+          'Treatment Planning': 'planning',
+          'Palliative': 'palliative',
+        };
+        const path = pathMap[targetStage];
+        if (path) {
+          setTimeout(() => navigate(`/onco/patient-view/${patientId}/${path}`), 500);
+        }
+      }}
+    />
+  );
 };
 
 const SurveillanceWrapper = () => {
   const { patientId } = useParams();
-  const patient = allPatients.find(p => p.id === patientId);
+  const { getPatient } = usePatientStore();
+  const patient = getPatient(patientId!);
   if (!patient) return null;
   return <SurveillanceDashboard patient={patient} hideContextBar />;
 };
 
 const SummaryWrapper = () => {
   const { patientId } = useParams();
-  const patient = allPatients.find(p => p.id === patientId);
+  const { getPatient } = usePatientStore();
+  const patient = getPatient(patientId!);
   if (!patient) return null;
   return <PatientSummary patient={patient} hideContextBar />;
 };
@@ -149,36 +217,38 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <BrowserRouter>
-        <Routes>
-          {/* Main App Layout Routes */}
-          <Route element={<MainLayout />}>
-             {/* General EMR Routes */}
-             <Route path="/" element={<OncoPatientsList />} />
-             <Route path="/day-care" element={<Navigate to="/" replace />} />
-             <Route path="/in-patient" element={<Navigate to="/" replace />} />
-             <Route path="/emergency" element={<Navigate to="/" replace />} />
-             <Route path="/patients" element={<PatientsList />} />
-             <Route path="/patient/:patientId" element={<PatientDashboard />} />
-             
-             {/* Oncology EMR Routes - List View */}
-             <Route path="/onco" element={<OncoPatientsList />} />
-          </Route>
+      <PatientStoreProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* Main App Layout Routes */}
+            <Route element={<MainLayout />}>
+               {/* General EMR Routes */}
+               <Route path="/" element={<OncoPatientsList />} />
+               <Route path="/day-care" element={<Navigate to="/" replace />} />
+               <Route path="/in-patient" element={<Navigate to="/" replace />} />
+               <Route path="/emergency" element={<Navigate to="/" replace />} />
+               <Route path="/patients" element={<PatientsList />} />
+               <Route path="/patient/:patientId" element={<PatientDashboard />} />
+               
+               {/* Oncology EMR Routes - List View */}
+               <Route path="/onco" element={<OncoPatientsList />} />
+            </Route>
 
-          {/* Full Screen Patient Journey Layout */}
-          <Route path="/onco/patient-view/:patientId" element={<OncoPatientLayout />}>
-             <Route index element={<Navigate to="summary" replace />} />
-             <Route path="summary" element={<SummaryWrapper />} />
-             <Route path="diagnostic" element={<DiagnosticWrapper />} />
-             <Route path="planning" element={<PlanningWrapper />} />
-             <Route path="chemo" element={<ChemoWrapper />} />
-             <Route path="response" element={<ResponseWrapper />} />
-             <Route path="maintenance" element={<MaintenanceWrapper />} />
-             <Route path="surveillance" element={<SurveillanceWrapper />} />
-             <Route path="palliative" element={<PalliativeWrapper />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+            {/* Full Screen Patient Journey Layout */}
+            <Route path="/onco/patient-view/:patientId" element={<OncoPatientLayout />}>
+               <Route index element={<Navigate to="summary" replace />} />
+               <Route path="summary" element={<SummaryWrapper />} />
+               <Route path="diagnostic" element={<DiagnosticWrapper />} />
+               <Route path="planning" element={<PlanningWrapper />} />
+               <Route path="chemo" element={<ChemoWrapper />} />
+               <Route path="response" element={<ResponseWrapper />} />
+               <Route path="maintenance" element={<MaintenanceWrapper />} />
+               <Route path="surveillance" element={<SurveillanceWrapper />} />
+               <Route path="palliative" element={<PalliativeWrapper />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </PatientStoreProvider>
     </ThemeProvider>
   );
 }

@@ -11,7 +11,7 @@ import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'; // Maintenance
 import VisibilityIcon from '@mui/icons-material/Visibility'; // Surveillance
 import SpaIcon from '@mui/icons-material/Spa'; // Palliative
 import MonitorHeartIcon from '@mui/icons-material/MonitorHeart'; // Vitals/Overview
-import { allPatients } from '../data/oncologyMockData';
+import { usePatientStore } from '../context/PatientStoreContext';
 
 export default function OncoPatientLayout() {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ export default function OncoPatientLayout() {
     }
   }, [location.pathname]);
   
-  const patient = allPatients.find(p => p.id === patientId);
+  const patient = usePatientStore().getPatient(patientId!);
 
   if (!patient) {
     return <Box sx={{ p: 4 }}>Patient not found</Box>;

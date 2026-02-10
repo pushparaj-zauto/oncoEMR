@@ -17,6 +17,8 @@ import {
   Divider,
   Tooltip,
   IconButton,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import MicIcon from '@mui/icons-material/Mic';
@@ -29,12 +31,17 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PauseCircleIcon from '@mui/icons-material/PauseCircle';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import PendingIcon from '@mui/icons-material/Pending';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import AssessmentIcon from '@mui/icons-material/Assessment';
 import { OncologyPatient } from '../../types/oncology';
 import PatientContextBar from '../../components/onco/PatientContextBar';
+import StageTransitionDialog from '../../components/onco/StageTransitionDialog';
 
 interface ChemoProtocolWorkspaceProps {
   patient: OncologyPatient;
   hideContextBar?: boolean;
+  onCompleteCycle?: (cycleNumber: number) => void;
+  onRequestResponseAssessment?: () => void;
 }
 
 const MicButton = () => (
@@ -60,8 +67,11 @@ const MicButton = () => (
   </IconButton>
 );
 
-export default function ChemoProtocolWorkspace({ patient, hideContextBar }: ChemoProtocolWorkspaceProps) {
+export default function ChemoProtocolWorkspace({ patient, hideContextBar, onCompleteCycle, onRequestResponseAssessment }: ChemoProtocolWorkspaceProps) {
   const [selectedCycle, setSelectedCycle] = useState(0);
+  const [showResponseDialog, setShowResponseDialog] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   if (!patient.currentProtocol) {
     return <Typography sx={{ p: 3 }}>No active protocol</Typography>;
@@ -69,6 +79,25 @@ export default function ChemoProtocolWorkspace({ patient, hideContextBar }: Chem
 
   const currentCycle = selectedCycle + 1;
   const cycleOutcome = patient.cycleOutcomes?.find((c) => c.cycleNumber === currentCycle);
+  const completedCycles = patient.cycleOutcomes?.length || 0;
+  const allCyclesComplete = completedCycles >= patient.currentProtocol.cycles;
+
+  const handleCompleteCycle = () => {
+    onCompleteCycle?.(currentCycle);
+    setSnackbarMessage(`Cycle ${currentCycle} marked as complete`);
+    setShowSnackbar(true);
+  };
+
+  const handleRequestResponseAssessment = () => {
+    setShowResponseDialog(true);
+  };
+
+  const handleConfirmResponseTransition = () => {
+    setShowResponseDialog(false);
+    onRequestResponseAssessment?.();
+    setSnackbarMessage('Patient moved to Response Assessment');
+    setShowSnackbar(true);
+  };
 
   return (
     <Box sx={{ overflowX: 'hidden', width: '100%', pb: 10 }}>
@@ -554,8 +583,14 @@ export default function ChemoProtocolWorkspace({ patient, hideContextBar }: Chem
                     <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
                       This cycle has not been administered yet.
                     </Typography>
-                    <Button variant="contained" disableElevation>
-                      Start Administration
+                    <Button
+                      variant="contained"
+                      disableElevation
+                      startIcon={<PlayArrowIcon />}
+                      onClick={handleCompleteCycle}
+                      sx={{ fontWeight: 600, borderRadius: 2 }}
+                    >
+                      Complete Cycle {currentCycle}
                     </Button>
                   </Box>
                 )}
@@ -566,6 +601,66 @@ export default function ChemoProtocolWorkspace({ patient, hideContextBar }: Chem
 
 
       </Container>
+
+      {/* Response Assessment Prompt - shown when cycles are significantly progressed */}
+      {completedCycles >= Math.floor(patient.currentProtocol.cycles * 0.5) && (
+        <Container maxWidth="xl" sx={{ mb: 4 }}>
+          <Paper
+            variant="outlined"
+            sx={{
+              p: 3,
+              borderRadius: 2,
+              border: '2px solid',
+              borderColor: allCyclesComplete ? 'success.main' : 'info.main',
+              bgcolor: allCyclesComplete ? alpha('#4caf50', 0.04) : alpha('#2196f3', 0.04),
+              textAlign: 'center',
+            }}
+          >
+            <AssessmentIcon sx={{ fontSize: 32, color: allCyclesComplete ? 'success.main' : 'info.main', mb: 1 }} />
+            <Typography variant="h6" fontWeight={600} sx={{ mb: 0.5 }}>
+              {allCyclesComplete ? 'All Cycles Complete' : `${completedCycles}/${patient.currentProtocol.cycles} Cycles Completed`}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              {allCyclesComplete
+                ? 'All planned cycles have been completed. Ready for response assessment.'
+                : 'Treatment progressing. You can request interim or end-of-treatment response assessment.'}
+            </Typography>
+            <Button
+              variant="contained"
+              color={allCyclesComplete ? 'success' : 'info'}
+              startIcon={<AssessmentIcon />}
+              onClick={handleRequestResponseAssessment}
+              sx={{ fontWeight: 600, borderRadius: 2, px: 4 }}
+            >
+              {allCyclesComplete ? 'Proceed to Response Assessment' : 'Request Interim Assessment'}
+            </Button>
+          </Paper>
+        </Container>
+      )}
+
+      {/* Stage Transition Dialog */}
+      <StageTransitionDialog
+        open={showResponseDialog}
+        onClose={() => setShowResponseDialog(false)}
+        onConfirm={handleConfirmResponseTransition}
+        currentStage={patient.oncoStatus}
+        targetStage="Response Assessment"
+        patientName={patient.name}
+        details={`${completedCycles} of ${patient.currentProtocol.cycles} cycles completed. Protocol: ${patient.currentProtocol.name}. This will move the patient to Response Assessment for imaging and marker evaluation.`}
+        variant="default"
+      />
+
+      {/* Success Snackbar */}
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={3000}
+        onClose={() => setShowSnackbar(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert severity="success" variant="filled" onClose={() => setShowSnackbar(false)} sx={{ fontWeight: 600 }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
       
       {/* Bottom Action Bar */}
       <Box
