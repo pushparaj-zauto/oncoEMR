@@ -11,6 +11,9 @@ import OncoPatientsList from './pages/onco/OncoPatientsList';
 import DiagnosticEvaluation from './pages/onco/DiagnosticEvaluation';
 import PatientSummary from './pages/onco/PatientSummary';
 import TreatmentPlanning from './pages/onco/TreatmentPlanning';
+import ProtocolSelection from './pages/onco/ProtocolSelection';
+import ProtocolCustomization from './pages/onco/ProtocolCustomization';
+import MDTDiscussion from './pages/onco/MDTDiscussion';
 import ChemoProtocolWorkspace from './pages/onco/ChemoProtocolWorkspace';
 import MaintenanceReview from './pages/onco/MaintenanceReview';
 import PalliativeDashboard from './pages/onco/PalliativeDashboard';
@@ -19,6 +22,8 @@ import SurveillanceDashboard from './pages/onco/SurveillanceDashboard';
 import {
   mockDiagnosticEvents,
   mockPendingActions,
+  ProtocolCatalogEntry,
+  getProtocolsForCancerSite,
 } from './data/oncologyMockData';
 import { PatientStoreProvider, usePatientStore } from './context/PatientStoreContext';
 import { OncoStatus } from './types/oncology';
@@ -98,6 +103,22 @@ const DiagnosticWrapper = () => {
   return <DiagnosticEvaluation patient={patient} diagnosticEvents={mockDiagnosticEvents} pendingActions={mockPendingActions} hideContextBar />;
 };
 
+const MDTDiscussionWrapper = () => {
+  const { patientId } = useParams();
+  const navigate = useNavigate();
+  const { getPatient } = usePatientStore();
+  const patient = getPatient(patientId!);
+  if (!patient) return null;
+  return (
+    <MDTDiscussion
+      patient={patient}
+      hideContextBar
+      onBack={() => navigate(`/onco/patient-view/${patientId}/diagnostic`)}
+      onProceedToPlanning={() => navigate(`/onco/patient-view/${patientId}/planning`)}
+    />
+  );
+};
+
 const PlanningWrapper = () => {
   const { patientId } = useParams();
   const navigate = useNavigate();
@@ -108,9 +129,60 @@ const PlanningWrapper = () => {
     <TreatmentPlanning
       patient={patient}
       hideContextBar
+      onBack={() => navigate(`/onco/patient-view/${patientId}/mdt`)}
       onActivatePlan={() => {
         activateTreatmentPlan(patientId!);
-        // Navigate to chemo tab after activation
+        setTimeout(() => navigate(`/onco/patient-view/${patientId}/chemo`), 500);
+      }}
+      onNavigateToProtocolSelection={() =>
+        navigate(`/onco/patient-view/${patientId}/protocol-select`)
+      }
+      onStartCycle={() => navigate(`/onco/patient-view/${patientId}/chemo`)}
+    />
+  );
+};
+
+const ProtocolSelectionWrapper = () => {
+  const { patientId } = useParams();
+  const navigate = useNavigate();
+  const { getPatient } = usePatientStore();
+  const patient = getPatient(patientId!);
+  if (!patient) return null;
+  return (
+    <ProtocolSelection
+      patient={patient}
+      hideContextBar
+      onBack={() => navigate(`/onco/patient-view/${patientId}/planning`)}
+      onContinue={(protocol: ProtocolCatalogEntry) => {
+        // Store protocol id in URL state via search params
+        navigate(`/onco/patient-view/${patientId}/protocol-customize?pid=${protocol.id}`);
+      }}
+    />
+  );
+};
+
+const ProtocolCustomizationWrapper = () => {
+  const { patientId } = useParams();
+  const navigate = useNavigate();
+  const { getPatient, activateTreatmentPlan } = usePatientStore();
+  const patient = getPatient(patientId!);
+
+  // Read protocol id from query param
+  const searchParams = new URLSearchParams(window.location.search);
+  const protocolId = searchParams.get('pid') || '';
+
+  const protocols = patient ? getProtocolsForCancerSite(patient.cancerSite) : [];
+  const protocol = protocols.find((p: ProtocolCatalogEntry) => p.id === protocolId) || protocols[0];
+
+  if (!patient || !protocol) return null;
+  return (
+    <ProtocolCustomization
+      patient={patient}
+      protocol={protocol}
+      hideContextBar
+      onBack={() => navigate(`/onco/patient-view/${patientId}/protocol-select`)}
+      onActivate={() => {
+        activateTreatmentPlan(patientId!);
         setTimeout(() => navigate(`/onco/patient-view/${patientId}/chemo`), 500);
       }}
     />
@@ -239,7 +311,10 @@ function App() {
                <Route index element={<Navigate to="summary" replace />} />
                <Route path="summary" element={<SummaryWrapper />} />
                <Route path="diagnostic" element={<DiagnosticWrapper />} />
+               <Route path="mdt" element={<MDTDiscussionWrapper />} />
                <Route path="planning" element={<PlanningWrapper />} />
+               <Route path="protocol-select" element={<ProtocolSelectionWrapper />} />
+               <Route path="protocol-customize" element={<ProtocolCustomizationWrapper />} />
                <Route path="chemo" element={<ChemoWrapper />} />
                <Route path="response" element={<ResponseWrapper />} />
                <Route path="maintenance" element={<MaintenanceWrapper />} />

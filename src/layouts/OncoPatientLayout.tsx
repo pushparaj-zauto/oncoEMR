@@ -5,6 +5,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import PersonIcon from '@mui/icons-material/Person';
 import ScienceIcon from '@mui/icons-material/Science'; // Diagnostic
 import AssignmentIcon from '@mui/icons-material/Assignment'; // Planning
+import GroupsIcon from '@mui/icons-material/Groups'; // MDT Discussion
 import MedicationLiquidIcon from '@mui/icons-material/MedicationLiquid'; // Chemo
 import AssessmentIcon from '@mui/icons-material/Assessment'; // Response Assessment
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'; // Maintenance
@@ -34,6 +35,7 @@ export default function OncoPatientLayout() {
   const menuItems = [
     { label: 'Summary', icon: <MonitorHeartIcon />, path: 'summary', color: '#e91e63' },
     { label: 'Diagnostic Findings', icon: <ScienceIcon />, path: 'diagnostic', color: '#ff9800' },
+    { label: 'MDT Discussion', icon: <GroupsIcon />, path: 'mdt', color: '#795548' },
     { label: 'Treatment Planning', icon: <AssignmentIcon />, path: 'planning', color: '#2196f3' },
     { label: 'Chemo Protocol', icon: <MedicationLiquidIcon />, path: 'chemo', color: '#7c4dff' },
     { label: 'Response Assessment', icon: <AssessmentIcon />, path: 'response', color: '#e91e63'},
@@ -159,18 +161,18 @@ export default function OncoPatientLayout() {
                    break;
                    
                  case 'Treatment Planning':
-                   isAccessible = item.path === 'planning';
+                   isAccessible = item.path === 'mdt' || item.path === 'planning';
                    break;
                    
                  case 'Induction':
                  case 'Consolidation':
-                   // Can see Planning & Chemo
-                   isAccessible = item.path === 'planning' || item.path === 'chemo';
+                   // Can see MDT, Planning & Chemo
+                   isAccessible = item.path === 'mdt' || item.path === 'planning' || item.path === 'chemo';
                    break;
                  
                  case 'Response Assessment':
-                   // Can see Planning, Chemo, and Response Assessment
-                   isAccessible = item.path === 'planning' || item.path === 'chemo' || item.path === 'response';
+                   // Can see MDT, Planning, Chemo, and Response Assessment
+                   isAccessible = item.path === 'mdt' || item.path === 'planning' || item.path === 'chemo' || item.path === 'response';
                    break;
                    
                  case 'Maintenance':
