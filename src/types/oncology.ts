@@ -49,6 +49,12 @@ export interface ClinicalFindings {
   suspectedMetastasis: boolean;
 }
 
+export interface Histopathology {
+  type: string;
+  grade: string;
+  margins: string;
+}
+
 export interface ProvisionalAssessment {
   probableDiagnosis: string;
   tentativeStage: string;
@@ -206,6 +212,7 @@ export interface OncologyPatient {
   diagnosticTracker?: DiagnosticTracker;
   clinicalFindings?: ClinicalFindings;
   provisionalAssessment?: ProvisionalAssessment;
+  histopathology?: Histopathology;
   
   // Planning & Treatment
   mdtDecision?: MDTDecision;

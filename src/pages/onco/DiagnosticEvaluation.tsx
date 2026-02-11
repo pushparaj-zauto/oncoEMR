@@ -282,7 +282,7 @@ export default function DiagnosticEvaluation({
                         </Stack>
                     </Box>
                     
-                    <Box sx={{ p: 2 }}>
+                    <Box sx={{ p: 2 }}>  
                         {patient.diagnosticTracker && (
                             <Stack spacing={0}>
                             {Object.entries(patient.diagnosticTracker).map(([key, status], index) => (
@@ -405,6 +405,37 @@ export default function DiagnosticEvaluation({
               </Paper>
             </Box>
 
+            {/* Histopathology */}
+            {patient.histopathology && (
+              <Box sx={{ mt: 4 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                  <Typography variant="overline" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2 }}>
+                    Histopathology
+                  </Typography>
+                  <MicButton />
+                  <EditButton />
+                </Box>
+                <Paper variant="outlined" sx={{ p: 3, borderRadius: 2 }}>
+                  <Stack spacing={2}>
+                    <Box>
+                      <Typography variant="caption" color="text.secondary" display="block" gutterBottom>Type</Typography>
+                      <Typography variant="body1" fontWeight={500}>{patient.histopathology.type}</Typography>
+                    </Box>
+                    <Divider />
+                    <Box>
+                      <Typography variant="caption" color="text.secondary" display="block" gutterBottom>Grade</Typography>
+                      <Typography variant="body2">{patient.histopathology.grade}</Typography>
+                    </Box>
+                    <Divider />
+                    <Box>
+                      <Typography variant="caption" color="text.secondary" display="block" gutterBottom>Margins</Typography>
+                      <Typography variant="body2">{patient.histopathology.margins}</Typography>
+                    </Box>
+                  </Stack>
+                </Paper>
+              </Box>
+            )}
+
             {/* Provisional Assessment */}
             <Box sx={{ mt: 4 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -429,7 +460,9 @@ export default function DiagnosticEvaluation({
                             <Grid item xs={6}>
                                 <Paper variant="outlined" sx={{ p: 1.5, bgcolor: 'background.paper', textAlign: 'center' }}>
                                     <Typography variant="caption" color="text.secondary" display="block">Tentative Stage</Typography>
-                                    <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>{patient.provisionalAssessment.tentativeStage}</Typography>
+                                    <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                                      {patient.tnmStage ? `${patient.tnmStage} (${patient.provisionalAssessment.tentativeStage})` : patient.provisionalAssessment.tentativeStage}
+                                    </Typography>
                                 </Paper>
                             </Grid>
                              <Grid item xs={6}>

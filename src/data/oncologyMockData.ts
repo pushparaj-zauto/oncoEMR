@@ -45,7 +45,7 @@ export const mockOncoPatient5: OncologyPatient = {
   diagnosticTracker: {
     biopsy: 'Confirmed',
     imaging: 'Done',
-    metastaticWorkup: 'Done',
+    metastaticWorkup: 'Pending',
     tumorMarkers: 'Done',
   },
   
@@ -59,6 +59,12 @@ export const mockOncoPatient5: OncologyPatient = {
     probableDiagnosis: 'Breast Cancer (Luminal B)',
     tentativeStage: 'Stage IIIA',
     resectable: 'Yes (post-neoadjuvant)',
+  },
+  
+  histopathology: {
+    type: 'Invasive Ductal Carcinoma',
+    grade: 'Grade II',
+    margins: 'Not applicable (pre-surgery)',
   },
   
   mdtDecision: {
@@ -146,6 +152,12 @@ export const mockOncoPatient2: OncologyPatient = {
     probableDiagnosis: 'Colon Adenocarcinoma',
     tentativeStage: 'Stage III',
     resectable: 'Yes (Resected)',
+  },
+  
+  histopathology: {
+    type: 'Adenocarcinoma',
+    grade: 'Moderately differentiated',
+    margins: 'Clear',
   },
 
   mdtDecision: {
@@ -296,6 +308,12 @@ export const mockOncoPatient4: OncologyPatient = {
     probableDiagnosis: 'Metastatic Pancreatic Adenocarcinoma',
     tentativeStage: 'Stage IV',
     resectable: 'No (Unresectable)',
+  },
+  
+  histopathology: {
+    type: 'Ductal Adenocarcinoma',
+    grade: 'Poorly differentiated',
+    margins: 'Not applicable',
   },
 
   mdtDecision: {
@@ -504,6 +522,12 @@ export const mockOncoPatient1: OncologyPatient = {
     probableDiagnosis: 'Lung Adenocarcinoma',
     tentativeStage: 'Stage IV',
     resectable: 'No',
+  },
+  
+  histopathology: {
+    type: 'Adenocarcinoma (EGFR Exon 19 del)',
+    grade: 'Moderately differentiated',
+    margins: 'Not applicable (unresectable)',
   },
 
   currentProtocol: {
@@ -924,6 +948,12 @@ export const mockOncoPatient3: OncologyPatient = {
     tentativeStage: 'Stage III (ypT0N0 post-chemo)',
     resectable: 'Resected',
   },
+  
+  histopathology: {
+    type: 'Adenocarcinoma',
+    grade: 'Moderately differentiated',
+    margins: 'Clear',
+  },
 
   mdtDecision: {
     status: 'Approved',
@@ -1056,20 +1086,21 @@ export const mockOncoPatient3: OncologyPatient = {
 };
 
 
-// Diagnostic Events Timeline
+// Diagnostic Events Timeline (for Mrs. Kavitha - Treatment Planning)
 export const mockDiagnosticEvents: DiagnosticEvent[] = [
-  { type: 'CT Chest', date: '2026-01-12', result: '4.5 cm mass right upper lobe', status: 'Done' },
-  { type: 'Biopsy', date: '2026-01-14', result: 'Adenocarcinoma confirmed', status: 'Done' },
-  { type: 'PET Scan', date: '2026-01-18', result: 'Hypermetabolic lesion, SUV 8.5', status: 'Done' },
-  { type: 'Liver Imaging', date: '2026-01-20', status: 'Pending' },
+  { type: 'Mammogram', date: '2026-01-10', result: 'BIRADS 5 - Highly suspicious mass LUQ', status: 'Done' },
+  { type: 'Core Biopsy', date: '2026-01-14', result: 'Invasive Ductal Carcinoma, ER+/PR+, HER2-', status: 'Done' },
+  { type: 'Breast MRI', date: '2026-01-18', result: '5.5 cm mass, nipple involvement', status: 'Done' },
+  { type: 'CT Chest/Abdomen', date: '2026-01-22', result: 'Axillary node, liver imaging suboptimal', status: 'Done' },
+  { type: 'Liver MRI', date: '2026-02-08', status: 'Pending' },
 ];
 
-// Pending Actions
+// Pending Actions (for Mrs. Kavitha - Treatment Planning)
 export const mockPendingActions: PendingAction[] = [
   { action: 'Complete metastatic workup - Liver MRI pending', priority: 'High' },
-  { action: 'Schedule MDT discussion after pending reports', priority: 'High' },
-  { action: 'Baseline cardiac evaluation', priority: 'Medium' },
-  { action: 'Genetic counseling referral', priority: 'Low' },
+  { action: 'Fertility preservation counseling before chemo', priority: 'High' },
+  { action: 'Baseline cardiac echo (for anthracycline)', priority: 'Medium' },
+  { action: 'Genetic testing (BRCA) - family history positive', priority: 'Medium' },
 ];
 
 export const allPatients: OncologyPatient[] = [
