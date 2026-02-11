@@ -10,27 +10,7 @@ export default function OncoPatientsList() {
   const { patients } = usePatientStore();
 
   const getRouteForPatient = (patient: OncologyPatient): string => {
-    switch (patient.oncoStatus) {
-      case 'Diagnostic Evaluation':
-        return `/onco/patient-view/${patient.id}/diagnostic`;
-      case 'Treatment Planning':
-        return `/onco/patient-view/${patient.id}/planning`;
-      case 'Induction':
-      case 'Consolidation':
-        return `/onco/patient-view/${patient.id}/chemo`;
-      case 'Response Assessment':
-        return `/onco/patient-view/${patient.id}/response`;
-      case 'Maintenance':
-        return `/onco/patient-view/${patient.id}/maintenance`;
-      case 'Observation':
-        return `/onco/patient-view/${patient.id}/surveillance`;
-      case 'Palliative':
-        return `/onco/patient-view/${patient.id}/palliative`;
-      case 'Discharged':
-        return `/onco/patient-view/${patient.id}/diagnostic`;
-      default:
-        return `/onco/patient-view/${patient.id}/diagnostic`;
-    }
+    return `/onco/patient-view/${patient.id}/summary`;
   };
 
   const getStatusColor = (status: string) => {
