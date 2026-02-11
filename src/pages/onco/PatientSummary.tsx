@@ -1,4 +1,5 @@
 import { Box, Container, Grid, Paper, Typography, Divider, Chip, IconButton, Stack, List, ListItem, ListItemText, LinearProgress } from '@mui/material';
+import { useNavigate, useParams } from 'react-router-dom';
 import MicIcon from '@mui/icons-material/Mic';
 import EditIcon from '@mui/icons-material/Edit';
 import ScienceIcon from '@mui/icons-material/Science';
@@ -74,6 +75,9 @@ const EditButton = () => (
 );
 
 export default function PatientSummary({ patient, hideContextBar }: PatientSummaryProps) {
+  const navigate = useNavigate();
+  const { patientId } = useParams();
+
   // Define the oncology journey stages (state machine)
   const journeyStages: { key: string; label: string; icon: React.ReactNode; color: string; statuses: OncoStatus[] }[] = [
     { key: 'diagnostic', label: 'Diagnostic', icon: <ScienceIcon sx={{ fontSize: 16 }} />, color: '#ff9800', statuses: ['Diagnostic Evaluation'] },
@@ -221,6 +225,10 @@ export default function PatientSummary({ patient, hideContextBar }: PatientSumma
             {/* === Oncology Snapshot Cards === */}
             <Grid item xs={12} md={3}>
                 <Paper 
+                  onClick={() => {
+                    const targetTab = patient.currentProtocol ? 'chemo' : 'planning';
+                    navigate(`/onco/patient-view/${patientId}/${targetTab}`);
+                  }}
                   sx={{ 
                     p: 0, 
                     borderRadius: 2.5, 
@@ -228,8 +236,13 @@ export default function PatientSummary({ patient, hideContextBar }: PatientSumma
                     overflow: 'hidden',
                     border: '1px solid',
                     borderColor: alpha('#7c4dff', 0.15),
-                    transition: 'box-shadow 0.2s',
-                    '&:hover': { boxShadow: `0 4px 20px ${alpha('#7c4dff', 0.12)}` }
+                    transition: 'all 0.2s',
+                    cursor: 'pointer',
+                    '&:hover': { 
+                      boxShadow: `0 4px 20px ${alpha('#7c4dff', 0.12)}`,
+                      transform: 'translateY(-2px)',
+                      borderColor: alpha('#7c4dff', 0.3)
+                    }
                   }}
                 >
                   <Box sx={{ 
@@ -331,6 +344,7 @@ export default function PatientSummary({ patient, hideContextBar }: PatientSumma
 
             <Grid item xs={12} md={3}>
                 <Paper 
+                  onClick={() => navigate(`/onco/patient-view/${patientId}/response`)}
                   sx={{ 
                     p: 0, 
                     borderRadius: 2.5, 
@@ -338,8 +352,13 @@ export default function PatientSummary({ patient, hideContextBar }: PatientSumma
                     overflow: 'hidden',
                     border: '1px solid',
                     borderColor: alpha('#e91e63', 0.15),
-                    transition: 'box-shadow 0.2s',
-                    '&:hover': { boxShadow: `0 4px 20px ${alpha('#e91e63', 0.12)}` }
+                    transition: 'all 0.2s',
+                    cursor: 'pointer',
+                    '&:hover': { 
+                      boxShadow: `0 4px 20px ${alpha('#e91e63', 0.12)}`,
+                      transform: 'translateY(-2px)',
+                      borderColor: alpha('#e91e63', 0.3)
+                    }
                   }}
                 >
                   <Box sx={{ 
@@ -519,6 +538,7 @@ export default function PatientSummary({ patient, hideContextBar }: PatientSumma
 
             <Grid item xs={12} md={3}>
                 <Paper 
+                  onClick={() => navigate(`/onco/patient-view/${patientId}/planning`)}
                   sx={{ 
                     p: 0, 
                     borderRadius: 2.5, 
@@ -526,8 +546,13 @@ export default function PatientSummary({ patient, hideContextBar }: PatientSumma
                     overflow: 'hidden',
                     border: '1px solid',
                     borderColor: alpha('#009688', 0.15),
-                    transition: 'box-shadow 0.2s',
-                    '&:hover': { boxShadow: `0 4px 20px ${alpha('#009688', 0.12)}` }
+                    transition: 'all 0.2s',
+                    cursor: 'pointer',
+                    '&:hover': { 
+                      boxShadow: `0 4px 20px ${alpha('#009688', 0.12)}`,
+                      transform: 'translateY(-2px)',
+                      borderColor: alpha('#009688', 0.3)
+                    }
                   }}
                 >
                   <Box sx={{ 
@@ -598,6 +623,7 @@ export default function PatientSummary({ patient, hideContextBar }: PatientSumma
 
             <Grid item xs={12} md={3}>
                 <Paper 
+                  onClick={() => navigate(`/onco/patient-view/${patientId}/diagnostic`)}
                   sx={{ 
                     p: 0, 
                     borderRadius: 2.5, 
@@ -605,8 +631,13 @@ export default function PatientSummary({ patient, hideContextBar }: PatientSumma
                     overflow: 'hidden',
                     border: '1px solid',
                     borderColor: alpha('#ff9800', 0.15),
-                    transition: 'box-shadow 0.2s',
-                    '&:hover': { boxShadow: `0 4px 20px ${alpha('#ff9800', 0.12)}` }
+                    transition: 'all 0.2s',
+                    cursor: 'pointer',
+                    '&:hover': { 
+                      boxShadow: `0 4px 20px ${alpha('#ff9800', 0.12)}`,
+                      transform: 'translateY(-2px)',
+                      borderColor: alpha('#ff9800', 0.3)
+                    }
                   }}
                 >
                   <Box sx={{ 
