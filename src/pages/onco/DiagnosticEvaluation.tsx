@@ -1,25 +1,13 @@
 import {
   Box,
   Container,
-  Grid,
-  Paper,
   Typography,
   Chip,
   Stack,
   Alert,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  Divider,
+  Button,
   Avatar,
   Tooltip,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  Button,
-  Fab,
   IconButton,
 } from '@mui/material';
 import MicIcon from '@mui/icons-material/Mic';
@@ -40,26 +28,21 @@ interface DiagnosticEvaluationProps {
   hideContextBar?: boolean;
 }
 
+/* ── Tiny icon buttons for mic / edit ── */
 const MicButton = () => (
-  <IconButton 
-    size="small" 
-    sx={{ 
-        ml: 1.5,
-        border: '1px solid',
-        borderColor: 'primary.main', 
-        borderRadius: 1, 
-        p: 0.5,
-        color: 'primary.main',
-        transition: 'all 0.2s',
-        '&:hover': {
-            bgcolor: (theme) => alpha(theme.palette.primary.main, 0.1),
-            borderColor: 'primary.dark',
-            transform: 'translateY(-1px)',
-            boxShadow: (theme) => `0 2px 8px ${alpha(theme.palette.primary.main, 0.2)}`
-        }
+  <IconButton
+    size="small"
+    sx={{
+      ml: 1,
+      border: '1px solid',
+      borderColor: 'primary.main',
+      borderRadius: 1,
+      p: 0.3,
+      color: 'primary.main',
+      '&:hover': { bgcolor: (theme) => alpha(theme.palette.primary.main, 0.08) },
     }}
   >
-    <MicIcon sx={{ fontSize: 16 }} />
+    <MicIcon sx={{ fontSize: 14 }} />
   </IconButton>
 );
 
@@ -67,23 +50,59 @@ const EditButton = () => (
   <IconButton
     size="small"
     sx={{
-      ml: 0.75,
+      ml: 0.5,
       border: '1px solid',
       borderColor: 'grey.400',
       borderRadius: 1,
-      p: 0.5,
-      color: 'grey.600',
-      transition: 'all 0.2s',
-      '&:hover': {
-        bgcolor: (theme) => alpha(theme.palette.grey[600], 0.1),
-        borderColor: 'grey.600',
-        transform: 'translateY(-1px)',
-        boxShadow: (theme) => `0 2px 8px ${alpha(theme.palette.grey[600], 0.2)}`,
-      },
+      p: 0.3,
+      color: 'grey.500',
+      '&:hover': { bgcolor: (theme) => alpha(theme.palette.grey[500], 0.08) },
     }}
   >
-    <EditIcon sx={{ fontSize: 14 }} />
+    <EditIcon sx={{ fontSize: 13 }} />
   </IconButton>
+);
+
+/* ── Reusable section header ── */
+const SectionLabel = ({ label, color = 'primary.main', warning = false }: { label: string; color?: string; warning?: boolean }) => (
+  <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+    <Typography
+      variant="overline"
+      sx={{
+        fontWeight: 700,
+        color: warning ? 'warning.dark' : color,
+        fontSize: '0.75rem',
+        letterSpacing: 1.5,
+        lineHeight: 1,
+      }}
+    >
+      {label}
+    </Typography>
+    <MicButton />
+    <EditButton />
+  </Box>
+);
+
+/* ── Compact key-value row ── */
+const KVRow = ({ label, value, chip }: { label: string; value?: React.ReactNode; chip?: React.ReactNode }) => (
+  <Box
+    sx={{
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      py: 0.6,
+      minHeight: 28,
+    }}
+  >
+    <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 500, minWidth: 110, flexShrink: 0 }}>
+      {label}
+    </Typography>
+    {chip || (
+      <Typography variant="body2" color="text.primary" sx={{ fontWeight: 500, textAlign: 'right' }}>
+        {value}
+      </Typography>
+    )}
+  </Box>
 );
 
 export default function DiagnosticEvaluation({
@@ -96,11 +115,11 @@ export default function DiagnosticEvaluation({
     switch (status) {
       case 'Done':
       case 'Confirmed':
-        return <CheckCircleIcon sx={{ color: 'success.main', fontSize: '1.2rem' }} />;
+        return <CheckCircleIcon sx={{ color: 'success.main', fontSize: '1rem' }} />;
       case 'Pending':
-        return <PendingIcon sx={{ color: 'warning.main', fontSize: '1.2rem' }} />;
+        return <PendingIcon sx={{ color: 'warning.main', fontSize: '1rem' }} />;
       case 'Not done':
-        return <ErrorIcon sx={{ color: 'error.main', fontSize: '1.2rem' }} />;
+        return <ErrorIcon sx={{ color: 'error.main', fontSize: '1rem' }} />;
       default:
         return null;
     }
@@ -120,398 +139,430 @@ export default function DiagnosticEvaluation({
     }
   };
 
+  const getButtonLabel = (actionText: string) => {
+    if (actionText.toLowerCase().includes('schedule') || actionText.toLowerCase().includes('mdt')) return 'Schedule';
+    if (actionText.toLowerCase().includes('referral') || actionText.toLowerCase().includes('counseling')) return 'Refer';
+    if (actionText.toLowerCase().includes('workup') || actionText.toLowerCase().includes('mri') || actionText.toLowerCase().includes('evaluation')) return 'Order';
+    return 'Review';
+  };
+
   return (
     <Box sx={{ pb: 10 }}>
-      {/* Global Patient Context Bar */}
       {!hideContextBar && <PatientContextBar patient={patient} />}
 
-      <Container maxWidth="xl" sx={{ mt: 4, mb: 5 }}>
-        {/* Alerts Panel - Full Width */}
+      <Container maxWidth="xl" sx={{ mt: 2, mb: 4 }}>
+        {/* ─── Alert Banner ─── */}
         {patient.alerts && patient.alerts.length > 0 && (
-          <Box sx={{ mb: 4 }}>
-            {patient.alerts.map((alert, index) => (
+          <Box sx={{ mb: 2 }}>
+            {patient.alerts.map((alert, idx) => (
               <Alert
-                key={index}
+                key={idx}
                 severity="error"
-                icon={<WarningIcon />}
-                sx={{ mb: 1, fontWeight: 500, borderRadius: 2 }}
+                icon={<WarningIcon sx={{ fontSize: 18 }} />}
+                sx={{ py: 0.5, fontWeight: 500, borderRadius: 1.5, fontSize: '0.85rem' }}
               >
                 <strong>{alert.type}:</strong> {alert.message}
               </Alert>
             ))}
           </Box>
         )}
-        <Grid container spacing={4}>
-          {/* Left Column - Patient Snapshot & Problem Summary */}
-          <Grid item xs={12} md={4}>
-            
-            <Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Typography variant="overline" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2 }}>
-                  Problem Summary
-                </Typography>
-                <MicButton />
-                <EditButton />
-              </Box>
-              <Paper variant="outlined" sx={{ p: 3, borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
-                <Table size="small">
-                    <TableBody>
-                    <TableRow>
-                        <TableCell sx={{ width: '40%', borderBottom: 'none', pl: 0 }}>
-                        <Typography variant="subtitle2" color="text.secondary">Chief Complaint</Typography>
-                        </TableCell>
-                        <TableCell sx={{ borderBottom: 'none' }}>
-                        <Typography variant="body2" color="text.primary" fontWeight={500}>{patient.chiefComplaint}</Typography>
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell sx={{ borderBottom: 'none', pl: 0 }}>
-                        <Typography variant="subtitle2" color="text.secondary">Duration</Typography>
-                        </TableCell>
-                        <TableCell sx={{ borderBottom: 'none' }}>
-                        <Typography variant="body2" color="text.primary">{patient.symptomDuration}</Typography>
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell sx={{ borderBottom: 'none', pl: 0 }}>
-                        <Typography variant="subtitle2" color="text.secondary">Alarm Symptoms</Typography>
-                        </TableCell>
-                        <TableCell sx={{ borderBottom: 'none' }}>
-                        <Chip 
-                            label={patient.alarmSymptoms ? 'Yes' : 'No'} 
-                            size="small" 
-                            color={patient.alarmSymptoms ? 'error' : 'success'} 
-                            variant={patient.alarmSymptoms ? 'filled' : 'outlined'}
-                        />
-                        </TableCell>
-                    </TableRow>
-                    </TableBody>
-                </Table>
-              </Paper>
-            </Box>
 
-             {/* Pending Actions */}
-             <Box sx={{ mt: 4 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                  <Typography variant="overline" sx={{ fontWeight: 700, color: 'warning.dark', fontSize: '0.85rem', letterSpacing: 1.2 }}>
-                      Pending Actions
-                  </Typography>
-                  <MicButton />
-                <EditButton />
-                </Box>
-                <Paper variant="outlined" sx={{ borderRadius: 2, borderColor: 'warning.light', bgcolor: alpha('#ed6c02', 0.02) }}>
-                    <List dense>
-                        {pendingActions.map((action, index) => {
-                        const getButtonLabel = (actionText: string) => {
-                            if (actionText.toLowerCase().includes('schedule') || actionText.toLowerCase().includes('mdt')) return 'Schedule';
-                            if (actionText.toLowerCase().includes('referral') || actionText.toLowerCase().includes('counseling')) return 'Refer';
-                            if (actionText.toLowerCase().includes('workup') || actionText.toLowerCase().includes('mri') || actionText.toLowerCase().includes('evaluation')) return 'Order';
-                            return 'Review';
-                        };
-                        return (
-                        <Box key={index}>
-                            <ListItem sx={{ py: 1.5 }}>
-                            <ListItemIcon sx={{ minWidth: 36 }}>
-                                <Tooltip title={action.priority}>
-                                <Avatar 
-                                    sx={{ 
-                                    width: 24, 
-                                    height: 24, 
-                                    bgcolor: action.priority === 'High' ? 'error.main' : action.priority === 'Medium' ? 'warning.main' : 'grey.400',
-                                    fontSize: '0.75rem',
-                                    fontWeight: 700
-                                    }}
-                                >
-                                    {action.priority[0]}
-                                </Avatar>
-                                </Tooltip>
-                            </ListItemIcon>
-                            <ListItemText 
-                                primary={<Typography variant="body2" sx={{ fontWeight: 500 }}>{action.action}</Typography>} 
-                            />
-                            <Button
-                                variant="outlined"
-                                size="small"
-                                sx={{
-                                    ml: 1,
-                                    textTransform: 'none',
-                                    fontSize: '0.7rem',
-                                    py: 0.25,
-                                    px: 1.5,
-                                    minWidth: 'auto',
-                                    borderRadius: 1,
-                                    fontWeight: 600,
-                                }}
-                            >
-                                {getButtonLabel(action.action)}
-                            </Button>
-                            </ListItem>
-                            {index < pendingActions.length - 1 && <Divider component="li" variant="inset" sx={{ ml: 6 }} />}
-                        </Box>
-                        );
-                        })}
-                    </List>
-                </Paper>
-             </Box>
-          </Grid>
+        {/* ═══════════════════════════════════════════════════════════════
+            ROW 1 — Problem  |  Clinical Findings  |  Diagnostic Status
+        ═══════════════════════════════════════════════════════════════ */}
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr' },
+            gap: 2.5,
+            mb: 2.5,
+          }}
+        >
+          {/* ── Col 1: Problem Summary ── */}
+          <Box
+            sx={{
+              p: 2,
+              bgcolor: 'background.paper',
+              borderRadius: 2,
+              boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+            }}
+          >
+            <SectionLabel label="Problem Summary" />
+            <KVRow label="Chief Complaint" value={patient.chiefComplaint} />
+            <KVRow label="Duration" value={patient.symptomDuration} />
+            <KVRow
+              label="Alarm Symptoms"
+              chip={
+                <Chip
+                  label={patient.alarmSymptoms ? 'Yes' : 'No'}
+                  size="small"
+                  color={patient.alarmSymptoms ? 'error' : 'success'}
+                  variant={patient.alarmSymptoms ? 'filled' : 'outlined'}
+                  sx={{ height: 20, fontSize: '0.7rem' }}
+                />
+              }
+            />
+          </Box>
 
-          {/* Middle Column - Diagnostic Status Tracker */}
-          <Grid item xs={12} md={4}>
-            <Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                  <Typography
-                      variant="overline"
-                      sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2 }}
-                  >
-                      Diagnostic Status
-                  </Typography>
-                  <MicButton />
-                <EditButton />
-                </Box>
-                <Paper variant="outlined" sx={{ p: 0, borderRadius: 2, overflow: 'hidden' }}>
-                    <Box sx={{ bgcolor: 'primary.50', p: 1.5, borderBottom: '1px solid', borderColor: 'divider', textAlign: 'center' }}>
-                         <Stack direction="row" spacing={2} justifyContent="center">
-                            <Stack direction="row" spacing={0.5} alignItems="center">
-                            <CheckCircleIcon sx={{ fontSize: 14, color: 'success.main' }} />
-                            <Typography variant="caption" color="text.secondary">Done</Typography>
-                            </Stack>
-                            <Stack direction="row" spacing={0.5} alignItems="center">
-                            <PendingIcon sx={{ fontSize: 14, color: 'warning.main' }} />
-                            <Typography variant="caption" color="text.secondary">Pending</Typography>
-                            </Stack>
-                        </Stack>
-                    </Box>
-                    
-                    <Box sx={{ p: 2 }}>  
-                        {patient.diagnosticTracker && (
-                            <Stack spacing={0}>
-                            {Object.entries(patient.diagnosticTracker).map(([key, status], index) => (
-                                <Box 
-                                key={key} 
-                                sx={{ 
-                                    display: 'flex', 
-                                    justifyContent: 'space-between', 
-                                    alignItems: 'center', 
-                                    py: 1.5, 
-                                    borderBottom: index < Object.keys(patient.diagnosticTracker!).length - 1 ? '1px dashed' : 'none',
-                                    borderColor: 'divider',
-                                }}
-                                >
-                                <Typography variant="body2" sx={{ textTransform: 'capitalize', fontWeight: 500, color: 'text.primary' }}>
-                                    {key.replace(/([A-Z])/g, ' $1').trim()}
-                                </Typography>
-                                <Stack direction="row" spacing={1} alignItems="center">
-                                    {getStatusIcon(status)}
-                                    <Chip 
-                                        label={status} 
-                                        size="small" 
-                                        variant="outlined" 
-                                        color={getStatusColor(status) as any} 
-                                        sx={{ height: 20, fontSize: '0.7rem' }}
-                                    />
-                                </Stack>
-                                </Box>
-                            ))}
-                            </Stack>
-                        )}
-                    </Box>
-                </Paper>
-            </Box>
-
-            {/* Diagnostic Events Timeline */}
-            <Box sx={{ mt: 4 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Typography variant="overline" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2 }}>
-                  Timeline
-                </Typography>
-                <MicButton />
-                <EditButton />
-              </Box>
-              <Paper variant="outlined" sx={{ p: 0, borderRadius: 2 }}>
-                <List disablePadding>
-                    {diagnosticEvents.map((event, index) => (
-                    <Box key={index}>
-                        <ListItem alignItems="flex-start" sx={{ py: 2, px: 3 }}>
-                        <ListItemIcon sx={{ minWidth: 40, mt: 0.5 }}>{getStatusIcon(event.status)}</ListItemIcon>
-                        <ListItemText
-                            primary={
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
-                                    <Typography variant="body2" sx={{ fontWeight: 600 }}>{event.type}</Typography>
-                                    <Typography variant="caption" color="text.secondary">{event.date}</Typography>
-                                </Box>
-                            }
-                            secondary={
-                            event.result && (
-                                <Typography variant="body2" color="text.primary" sx={{ mt: 0.5, lineHeight: 1.4 }}>
-                                    {event.result}
-                                </Typography>
-                            )
-                            }
-                        />
-                        </ListItem>
-                        {index < diagnosticEvents.length - 1 && <Divider component="li" />}
-                    </Box>
-                    ))}
-                </List>
-              </Paper>
-            </Box>
-          </Grid>
-
-          {/* Right Column - Clinical & Assessment */}
-          <Grid item xs={12} md={4}>
-            {/* Clinical Findings */}
-            <Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                    <Typography variant="overline" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2 }}>
-                        Clinical Findings
-                    </Typography>
-                    <MicButton />
-                <EditButton />
-                </Box>
-
-              <Paper variant="outlined" sx={{ p: 3, borderRadius: 2 }}>
-                {patient.clinicalFindings ? (
-                    <Stack spacing={2}>
-                         <Box>
-                             <Typography variant="caption" color="text.secondary" display="block" gutterBottom>Primary Lesion</Typography>
-                             <Typography variant="body1" fontWeight={500}>{patient.clinicalFindings.primaryLesion}</Typography>
-                         </Box>
-                         <Divider />
-                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                             <Box>
-                                <Typography variant="caption" color="text.secondary" display="block" gutterBottom>Nodes</Typography>
-                                <Typography variant="body2">{patient.clinicalFindings.nodes}</Typography>
-                             </Box>
-                             <Chip 
-                                label={patient.clinicalFindings.nodes === 'Present' || patient.clinicalFindings.nodes.includes('Present') || patient.clinicalFindings.nodes.includes('pathy') ? 'Significant' : 'Normal'} 
-                                size="small" 
-                                color={patient.clinicalFindings.nodes.includes('Present') || patient.clinicalFindings.nodes.includes('pathy') ? 'warning' : 'default'}
-                                variant="outlined"
-                            />
-                         </Box>
-                          <Divider />
-                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                             <Typography variant="body2" color="text.secondary">Suspected Metastasis</Typography>
-                             <Chip 
-                                label={patient.clinicalFindings.suspectedMetastasis ? 'Yes' : 'No'} 
-                                size="small" 
-                                color={patient.clinicalFindings.suspectedMetastasis ? 'error' : 'success'} 
-                            />
-                         </Box>
+          {/* ── Col 2: Clinical Findings ── */}
+          <Box
+            sx={{
+              p: 2,
+              bgcolor: 'background.paper',
+              borderRadius: 2,
+              boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+            }}
+          >
+            <SectionLabel label="Clinical Findings" />
+            {patient.clinicalFindings ? (
+              <>
+                <KVRow label="Primary Lesion" value={patient.clinicalFindings.primaryLesion} />
+                <KVRow
+                  label="Nodes"
+                  chip={
+                    <Stack direction="row" spacing={0.5} alignItems="center">
+                      <Typography variant="body2" sx={{ fontWeight: 500, fontSize: '0.82rem' }}>
+                        {patient.clinicalFindings.nodes}
+                      </Typography>
+                      <Chip
+                        label={
+                          patient.clinicalFindings.nodes === 'Present' ||
+                          patient.clinicalFindings.nodes.includes('Present') ||
+                          patient.clinicalFindings.nodes.includes('pathy')
+                            ? 'Significant'
+                            : 'Normal'
+                        }
+                        size="small"
+                        color={
+                          patient.clinicalFindings.nodes.includes('Present') ||
+                          patient.clinicalFindings.nodes.includes('pathy')
+                            ? 'warning'
+                            : 'default'
+                        }
+                        variant="outlined"
+                        sx={{ height: 18, fontSize: '0.65rem', '& .MuiChip-label': { px: 0.6 } }}
+                      />
                     </Stack>
-                ) : (
-                    <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic' }}>No findings recorded.</Typography>
-                )}
-              </Paper>
-            </Box>
+                  }
+                />
+                <KVRow
+                  label="Metastasis"
+                  chip={
+                    <Chip
+                      label={patient.clinicalFindings.suspectedMetastasis ? 'Yes' : 'No'}
+                      size="small"
+                      color={patient.clinicalFindings.suspectedMetastasis ? 'error' : 'success'}
+                      sx={{ height: 20, fontSize: '0.7rem' }}
+                    />
+                  }
+                />
+              </>
+            ) : (
+              <Typography variant="caption" color="text.secondary" fontStyle="italic">
+                No findings recorded.
+              </Typography>
+            )}
+          </Box>
 
+          {/* ── Col 3: Diagnostic Status ── */}
+          <Box
+            sx={{
+              p: 2,
+              bgcolor: 'background.paper',
+              borderRadius: 2,
+              boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+            }}
+          >
+            <SectionLabel label="Diagnostic Status" />
+            {patient.diagnosticTracker && (
+              <Stack spacing={0}>
+                {Object.entries(patient.diagnosticTracker).map(([key, status]) => (
+                  <Box
+                    key={key}
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      py: 0.6,
+                    }}
+                  >
+                    <Typography variant="body2" sx={{ textTransform: 'capitalize', fontWeight: 500, fontSize: '0.82rem' }}>
+                      {key.replace(/([A-Z])/g, ' $1').trim()}
+                    </Typography>
+                    <Stack direction="row" spacing={0.5} alignItems="center">
+                      {getStatusIcon(status)}
+                      <Chip
+                        label={status}
+                        size="small"
+                        variant="outlined"
+                        color={getStatusColor(status) as any}
+                        sx={{ height: 18, fontSize: '0.65rem', '& .MuiChip-label': { px: 0.8 } }}
+                      />
+                    </Stack>
+                  </Box>
+                ))}
+              </Stack>
+            )}
+          </Box>
+        </Box>
+
+        {/* ═══════════════════════════════════════════════════════════════
+            ROW 2 — Histopathology+Assessment  |  Pending Actions  |  Timeline
+        ═══════════════════════════════════════════════════════════════ */}
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1.2fr' },
+            gap: 2.5,
+          }}
+        >
+          {/* ── Col 1: Histopathology + Provisional Assessment ── */}
+          <Box
+            sx={{
+              bgcolor: 'background.paper',
+              borderRadius: 2,
+              boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'hidden',
+            }}
+          >
             {/* Histopathology */}
             {patient.histopathology && (
-              <Box sx={{ mt: 4 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                  <Typography variant="overline" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2 }}>
-                    Histopathology
-                  </Typography>
-                  <MicButton />
-                  <EditButton />
-                </Box>
-                <Paper variant="outlined" sx={{ p: 3, borderRadius: 2 }}>
-                  <Stack spacing={2}>
-                    <Box>
-                      <Typography variant="caption" color="text.secondary" display="block" gutterBottom>Type</Typography>
-                      <Typography variant="body1" fontWeight={500}>{patient.histopathology.type}</Typography>
-                    </Box>
-                    <Divider />
-                    <Box>
-                      <Typography variant="caption" color="text.secondary" display="block" gutterBottom>Grade</Typography>
-                      <Typography variant="body2">{patient.histopathology.grade}</Typography>
-                    </Box>
-                    <Divider />
-                    <Box>
-                      <Typography variant="caption" color="text.secondary" display="block" gutterBottom>Margins</Typography>
-                      <Typography variant="body2">{patient.histopathology.margins}</Typography>
-                    </Box>
-                  </Stack>
-                </Paper>
+              <Box sx={{ p: 2, pb: 1.5 }}>
+                <SectionLabel label="Histopathology" />
+                <KVRow label="Type" value={patient.histopathology.type} />
+                <KVRow label="Grade" value={patient.histopathology.grade} />
+                <KVRow label="Margins" value={patient.histopathology.margins} />
               </Box>
             )}
 
             {/* Provisional Assessment */}
-            <Box sx={{ mt: 4 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                    <Typography variant="overline" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.85rem', letterSpacing: 1.2 }}>
-                        Provisional Assessment
-                    </Typography>
-                    <MicButton />
-                <EditButton />
+            <Box
+              sx={{
+                p: 2,
+                bgcolor: (theme) => alpha(theme.palette.primary.main, 0.03),
+                flexGrow: 1,
+              }}
+            >
+              <SectionLabel label="Provisional Assessment" />
+              {patient.provisionalAssessment ? (
+                <>
+                  <Typography variant="caption" color="primary" sx={{ fontWeight: 600, display: 'block', mb: 0.2, fontSize: '0.7rem' }}>
+                    Probable Diagnosis
+                  </Typography>
+                  <Typography variant="subtitle1" sx={{ fontWeight: 600, fontSize: '0.95rem', mb: 1.5, lineHeight: 1.3 }}>
+                    {patient.provisionalAssessment.probableDiagnosis}
+                  </Typography>
+                  <Box
+                    sx={{
+                      display: 'grid',
+                      gridTemplateColumns: '1fr 1fr',
+                      gap: 1,
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        border: '1px solid',
+                        borderColor: 'divider',
+                        borderRadius: 1.5,
+                        p: 1,
+                        textAlign: 'center',
+                        bgcolor: 'background.paper',
+                      }}
+                    >
+                      <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: '0.65rem' }}>
+                        Tentative Stage
+                      </Typography>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 700, fontSize: '0.8rem', lineHeight: 1.4 }}>
+                        {patient.tnmStage
+                          ? `${patient.tnmStage} (${patient.provisionalAssessment.tentativeStage})`
+                          : patient.provisionalAssessment.tentativeStage}
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        border: '1px solid',
+                        borderColor: 'divider',
+                        borderRadius: 1.5,
+                        p: 1,
+                        textAlign: 'center',
+                        bgcolor: 'background.paper',
+                      }}
+                    >
+                      <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: '0.65rem' }}>
+                        Resectable?
+                      </Typography>
+                      <Typography
+                        variant="subtitle2"
+                        sx={{
+                          fontWeight: 700,
+                          fontSize: '0.85rem',
+                          color:
+                            patient.provisionalAssessment.resectable === 'Yes'
+                              ? 'success.main'
+                              : patient.provisionalAssessment.resectable === 'No'
+                              ? 'error.main'
+                              : 'warning.main',
+                        }}
+                      >
+                        {patient.provisionalAssessment.resectable}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </>
+              ) : (
+                <Typography variant="caption" color="text.secondary" fontStyle="italic">
+                  No assessment recorded.
+                </Typography>
+              )}
+            </Box>
+          </Box>
+
+          {/* ── Col 2: Pending Actions ── */}
+          <Box
+            sx={{
+              bgcolor: 'background.paper',
+              borderRadius: 2,
+              boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'hidden',
+            }}
+          >
+            <Box sx={{ p: 2, pb: 1 }}>
+              <SectionLabel label="Pending Actions" warning />
+            </Box>
+            <Box sx={{ flexGrow: 1 }}>
+              {pendingActions.map((action, idx) => (
+                <Box
+                  key={idx}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1,
+                    px: 2,
+                    py: 1,
+                    bgcolor: idx % 2 === 0 ? alpha('#ed6c02', 0.03) : 'transparent',
+                    '&:hover': { bgcolor: alpha('#ed6c02', 0.06) },
+                  }}
+                >
+                  <Tooltip title={action.priority}>
+                    <Avatar
+                      sx={{
+                        width: 22,
+                        height: 22,
+                        bgcolor:
+                          action.priority === 'High'
+                            ? 'error.main'
+                            : action.priority === 'Medium'
+                            ? 'warning.main'
+                            : 'grey.400',
+                        fontSize: '0.65rem',
+                        fontWeight: 700,
+                        flexShrink: 0,
+                      }}
+                    >
+                      {action.priority[0]}
+                    </Avatar>
+                  </Tooltip>
+                  <Typography variant="body2" sx={{ flex: 1, fontWeight: 500, fontSize: '0.82rem', lineHeight: 1.3 }}>
+                    {action.action}
+                  </Typography>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    sx={{
+                      textTransform: 'none',
+                      fontSize: '0.65rem',
+                      py: 0.15,
+                      px: 1,
+                      minWidth: 'auto',
+                      borderRadius: 1,
+                      fontWeight: 600,
+                      flexShrink: 0,
+                    }}
+                  >
+                    {getButtonLabel(action.action)}
+                  </Button>
                 </Box>
-              
-              <Paper variant="outlined" sx={{ p: 3, borderRadius: 2, bgcolor: (theme) => alpha(theme.palette.primary.main, 0.02), borderColor:  (theme) => alpha(theme.palette.primary.main, 0.2) }}>
-                {patient.provisionalAssessment ? (
-                     <Stack spacing={2}>
-                        <Box>
-                            <Typography variant="caption" color="primary" display="block" gutterBottom sx={{ fontWeight: 600 }}>Probable Diagnosis</Typography>
-                            <Typography variant="h6" color="text.primary" sx={{ fontSize: '1.1rem' }}>
-                                {patient.provisionalAssessment.probableDiagnosis}
-                            </Typography>
-                        </Box>
-                        
-                        <Grid container spacing={2}>
-                            <Grid item xs={6}>
-                                <Paper variant="outlined" sx={{ p: 1.5, bgcolor: 'background.paper', textAlign: 'center' }}>
-                                    <Typography variant="caption" color="text.secondary" display="block">Tentative Stage</Typography>
-                                    <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-                                      {patient.tnmStage ? `${patient.tnmStage} (${patient.provisionalAssessment.tentativeStage})` : patient.provisionalAssessment.tentativeStage}
-                                    </Typography>
-                                </Paper>
-                            </Grid>
-                             <Grid item xs={6}>
-                                <Paper variant="outlined" sx={{ p: 1.5, bgcolor: 'background.paper', textAlign: 'center' }}>
-                                    <Typography variant="caption" color="text.secondary" display="block">Resectable?</Typography>
-                                    <Typography 
-                                        variant="subtitle2" 
-                                        sx={{ 
-                                            fontWeight: 600, 
-                                            color: patient.provisionalAssessment.resectable === 'Yes' ? 'success.main' : 
-                                                   patient.provisionalAssessment.resectable === 'No' ? 'error.main' : 'warning.main'
-                                        }}
-                                    >
-                                        {patient.provisionalAssessment.resectable}
-                                    </Typography>
-                                </Paper>
-                            </Grid>
-                        </Grid>
-                   </Stack>
-                ) : (
-                   <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic' }}>No assessment recorded.</Typography>
-                )}
-              </Paper>
+              ))}
             </Box>
 
-            {/* Comorbidity Risk */}
+            {/* ── Comorbidities ── */}
             {patient.comorbidities && (
-               <Box sx={{ mt: 4 }}>
-                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                   <Typography variant="overline" sx={{ fontWeight: 700, color: 'text.secondary', fontSize: '0.8rem', letterSpacing: 1 }}>
-                    Comorbidities
-                   </Typography>
-                   <MicButton />
-                <EditButton />
-                 </Box>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                  {patient.comorbidities.diabetes && <Chip label="Diabetes" size="small" variant="outlined" />}
-                  {patient.comorbidities.cardiacDisease && <Chip label="Cardiac Disease" size="small" variant="outlined" />}
-                  {patient.comorbidities.renalDisease && <Chip label="Renal Disease" size="small" variant="outlined" />}
-                  {patient.comorbidities.priorCancer && <Chip label="Prior Cancer" size="small" variant="outlined" />}
-                  {!patient.comorbidities.diabetes && !patient.comorbidities.cardiacDisease && !patient.comorbidities.renalDisease && !patient.comorbidities.priorCancer && (
-                    <Typography variant="caption" color="text.secondary">No major comorbidities</Typography>
-                  )}
+              <Box sx={{ px: 2, py: 1.5, mt: 'auto' }}>
+                <Typography variant="overline" sx={{ fontWeight: 600, color: 'text.secondary', fontSize: '0.7rem', letterSpacing: 1 }}>
+                  Comorbidities
+                </Typography>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 0.5 }}>
+                  {patient.comorbidities.diabetes && <Chip label="Diabetes" size="small" variant="outlined" sx={{ height: 20, fontSize: '0.65rem' }} />}
+                  {patient.comorbidities.cardiacDisease && <Chip label="Cardiac" size="small" variant="outlined" sx={{ height: 20, fontSize: '0.65rem' }} />}
+                  {patient.comorbidities.renalDisease && <Chip label="Renal" size="small" variant="outlined" sx={{ height: 20, fontSize: '0.65rem' }} />}
+                  {patient.comorbidities.priorCancer && <Chip label="Prior Ca" size="small" variant="outlined" sx={{ height: 20, fontSize: '0.65rem' }} />}
+                  {!patient.comorbidities.diabetes &&
+                    !patient.comorbidities.cardiacDisease &&
+                    !patient.comorbidities.renalDisease &&
+                    !patient.comorbidities.priorCancer && (
+                      <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.72rem' }}>
+                        No major comorbidities
+                      </Typography>
+                    )}
                 </Box>
               </Box>
             )}
-          </Grid>
-        </Grid>
+          </Box>
 
+          {/* ── Col 3: Diagnostic Timeline ── */}
+          <Box
+            sx={{
+              bgcolor: 'background.paper',
+              borderRadius: 2,
+              boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+              overflow: 'hidden',
+            }}
+          >
+            <Box sx={{ px: 2, pt: 2, pb: 1 }}>
+              <SectionLabel label="Timeline" />
+            </Box>
+            {diagnosticEvents.map((event, idx) => (
+              <Box
+                key={idx}
+                sx={{
+                  display: 'flex',
+                  gap: 1.5,
+                  px: 2,
+                  py: 1,
+                  position: 'relative',
+                  '&:hover': { bgcolor: 'action.hover' },
+                }}
+              >
+                {/* Timeline dot + line */}
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', pt: 0.3 }}>
+                  {getStatusIcon(event.status)}
+                  {idx < diagnosticEvents.length - 1 && (
+                    <Box sx={{ width: 1.5, flexGrow: 1, bgcolor: 'divider', mt: 0.5, borderRadius: 1 }} />
+                  )}
+                </Box>
+                <Box sx={{ flex: 1, minWidth: 0 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                    <Typography variant="body2" sx={{ fontWeight: 600, fontSize: '0.82rem' }}>
+                      {event.type}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary" sx={{ flexShrink: 0, ml: 1, fontSize: '0.72rem' }}>
+                      {event.date}
+                    </Typography>
+                  </Box>
+                  {event.result && (
+                    <Typography variant="caption" color="text.secondary" sx={{ lineHeight: 1.3, display: 'block', mt: 0.2 }}>
+                      {event.result}
+                    </Typography>
+                  )}
+                </Box>
+              </Box>
+            ))}
+          </Box>
+        </Box>
       </Container>
       <ActionFooter primaryLabel="Finish and Next Patient" />
     </Box>
