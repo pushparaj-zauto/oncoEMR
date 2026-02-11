@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Paper, Typography, Divider, Chip, IconButton, Stack, List, ListItem, ListItemText } from '@mui/material';
+import { Box, Container, Grid, Paper, Typography, Divider, Chip, IconButton, Stack, List, ListItem, ListItemText, LinearProgress } from '@mui/material';
 import MicIcon from '@mui/icons-material/Mic';
 import EditIcon from '@mui/icons-material/Edit';
 import ScienceIcon from '@mui/icons-material/Science';
@@ -11,6 +11,12 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+import TrendingDownIcon from '@mui/icons-material/TrendingDown';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
+import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
+import BiotechIcon from '@mui/icons-material/Biotech';
 import { alpha } from '@mui/material/styles';
 import { OncologyPatient, OncoStatus } from '../../types/oncology';
 import PatientContextBar from '../../components/onco/PatientContextBar';
@@ -209,6 +215,519 @@ export default function PatientSummary({ patient, hideContextBar }: PatientSumma
                             );
                         })}
                     </Box>
+                </Paper>
+            </Grid>
+
+            {/* === Oncology Snapshot Cards === */}
+            <Grid item xs={12} md={3}>
+                <Paper 
+                  sx={{ 
+                    p: 0, 
+                    borderRadius: 2.5, 
+                    height: '100%',
+                    overflow: 'hidden',
+                    border: '1px solid',
+                    borderColor: alpha('#7c4dff', 0.15),
+                    transition: 'box-shadow 0.2s',
+                    '&:hover': { boxShadow: `0 4px 20px ${alpha('#7c4dff', 0.12)}` }
+                  }}
+                >
+                  <Box sx={{ 
+                    px: 2, py: 1.25, 
+                    bgcolor: alpha('#7c4dff', 0.06),
+                    borderBottom: '1px solid',
+                    borderColor: alpha('#7c4dff', 0.1),
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: 1 
+                  }}>
+                    <LocalHospitalIcon sx={{ fontSize: 18, color: '#7c4dff' }} />
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#7c4dff', fontSize: '0.75rem', letterSpacing: 0.5 }}>
+                      Current Treatment
+                    </Typography>
+                  </Box>
+                  <Box sx={{ px: 2, py: 1.5 }}>
+                    {patient.currentProtocol ? (
+                      <>
+                        <Typography variant="body2" sx={{ fontWeight: 700, color: 'text.primary', mb: 0.75, fontSize: '0.85rem' }}>
+                          {patient.currentProtocol.name}
+                        </Typography>
+                        {patient.currentProtocol.drugs.map((drug, i) => (
+                          <Typography key={i} variant="caption" sx={{ display: 'block', color: 'text.secondary', lineHeight: 1.6, fontSize: '0.72rem' }}>
+                            {drug.name} {drug.dose} — {drug.day}
+                          </Typography>
+                        ))}
+                        <Divider sx={{ my: 1.25 }} />
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                          <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.68rem' }}>Time on therapy</Typography>
+                          <Typography variant="caption" sx={{ fontWeight: 600, fontSize: '0.72rem' }}>
+                            {patient.currentProtocol.timeOnTherapy || `${patient.currentProtocol.cycles} cycles`}
+                          </Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                          <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.68rem' }}>Intent</Typography>
+                          <Chip 
+                            label={patient.treatmentIntent || 'Curative'} 
+                            size="small" 
+                            sx={{ 
+                              height: 18, fontSize: '0.62rem', fontWeight: 600, 
+                              bgcolor: patient.treatmentIntent === 'Palliative' ? alpha('#ff9800', 0.12) : alpha('#4caf50', 0.12),
+                              color: patient.treatmentIntent === 'Palliative' ? '#e65100' : '#2e7d32',
+                              border: '1px solid',
+                              borderColor: patient.treatmentIntent === 'Palliative' ? alpha('#ff9800', 0.3) : alpha('#4caf50', 0.3),
+                            }} 
+                          />
+                        </Box>
+                        {patient.currentProtocol.doseInterruptions && (
+                          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.68rem' }}>Dose interruptions</Typography>
+                            <Typography variant="caption" sx={{ fontWeight: 600, fontSize: '0.72rem', color: patient.currentProtocol.doseInterruptions === 'None' ? 'success.main' : 'warning.main' }}>
+                              {patient.currentProtocol.doseInterruptions}
+                            </Typography>
+                          </Box>
+                        )}
+                      </>
+                    ) : (
+                      <Box sx={{ py: 0.5 }}>
+                        {patient.mdtDecision?.status === 'Approved' ? (
+                          <>
+                            <Chip 
+                              label="MDT Approved" 
+                              size="small" 
+                              sx={{ 
+                                height: 20, fontSize: '0.65rem', fontWeight: 700, mb: 1,
+                                bgcolor: alpha('#4caf50', 0.1), color: '#2e7d32',
+                                border: '1px solid', borderColor: alpha('#4caf50', 0.3)
+                              }} 
+                            />
+                            <Typography variant="body2" sx={{ fontWeight: 600, fontSize: '0.78rem', mb: 0.75, color: 'text.primary' }}>
+                              {patient.treatmentStrategy?.sequence || 'Pending'}
+                            </Typography>
+                            <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary', fontSize: '0.68rem', lineHeight: 1.5, mb: 1 }}>
+                              {patient.mdtDecision.summary}
+                            </Typography>
+                            <Divider sx={{ my: 1 }} />
+                            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                              {patient.treatmentStrategy?.surgery && <Chip label="Surgery" size="small" sx={{ height: 18, fontSize: '0.6rem', fontWeight: 600, bgcolor: alpha('#2196f3', 0.1), color: '#1565c0' }} />}
+                              {patient.treatmentStrategy?.systemicTherapy && <Chip label="Systemic" size="small" sx={{ height: 18, fontSize: '0.6rem', fontWeight: 600, bgcolor: alpha('#7c4dff', 0.1), color: '#7c4dff' }} />}
+                              {patient.treatmentStrategy?.radiation && <Chip label="Radiation" size="small" sx={{ height: 18, fontSize: '0.6rem', fontWeight: 600, bgcolor: alpha('#ff9800', 0.1), color: '#e65100' }} />}
+                            </Box>
+                          </>
+                        ) : (
+                          <Box sx={{ textAlign: 'center', py: 1 }}>
+                            <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic', fontSize: '0.78rem', mb: 0.5 }}>
+                              No active protocol
+                            </Typography>
+                            <Typography variant="caption" color="text.disabled">
+                              {patient.treatmentStrategy?.sequence || 'Pending treatment decision'}
+                            </Typography>
+                          </Box>
+                        )}
+                      </Box>
+                    )}
+                  </Box>
+                </Paper>
+            </Grid>
+
+            <Grid item xs={12} md={3}>
+                <Paper 
+                  sx={{ 
+                    p: 0, 
+                    borderRadius: 2.5, 
+                    height: '100%',
+                    overflow: 'hidden',
+                    border: '1px solid',
+                    borderColor: alpha('#e91e63', 0.15),
+                    transition: 'box-shadow 0.2s',
+                    '&:hover': { boxShadow: `0 4px 20px ${alpha('#e91e63', 0.12)}` }
+                  }}
+                >
+                  <Box sx={{ 
+                    px: 2, py: 1.25, 
+                    bgcolor: alpha('#e91e63', 0.06),
+                    borderBottom: '1px solid',
+                    borderColor: alpha('#e91e63', 0.1),
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: 1 
+                  }}>
+                    <AssessmentIcon sx={{ fontSize: 18, color: '#e91e63' }} />
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#e91e63', fontSize: '0.75rem', letterSpacing: 0.5 }}>
+                      Disease Status
+                    </Typography>
+                  </Box>
+                  <Box sx={{ px: 2, py: 1.5 }}>
+                    {(() => {
+                      const latestResponse = patient.responseAssessments?.length 
+                        ? patient.responseAssessments[patient.responseAssessments.length - 1] 
+                        : null;
+                      const latestCycle = patient.cycleOutcomes?.length 
+                        ? patient.cycleOutcomes[patient.cycleOutcomes.length - 1] 
+                        : null;
+                      
+                      // Check if this is an adjuvant setting (no measurable disease)
+                      const isAdjuvant = latestCycle?.response?.includes('N/A') || latestCycle?.response?.includes('Adjuvant');
+                      // Check if patient is pre-treatment
+                      const isPreTreatment = !patient.currentProtocol && !latestResponse && !latestCycle;
+                      
+                      // PRE-TREATMENT / PLANNING phase
+                      if (isPreTreatment) {
+                        return (
+                          <>
+                            <Chip 
+                              label="Pre-Treatment" 
+                              size="small" 
+                              sx={{ height: 22, fontSize: '0.68rem', fontWeight: 700, mb: 1.25, bgcolor: alpha('#2196f3', 0.1), color: '#1565c0', border: '1px solid', borderColor: alpha('#2196f3', 0.25) }}
+                            />
+                            {patient.provisionalAssessment && (
+                              <>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                                  <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.68rem' }}>Diagnosis</Typography>
+                                  <Typography variant="caption" sx={{ fontWeight: 600, fontSize: '0.7rem' }}>{patient.provisionalAssessment.probableDiagnosis}</Typography>
+                                </Box>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                                  <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.68rem' }}>Stage</Typography>
+                                  <Typography variant="caption" sx={{ fontWeight: 600, fontSize: '0.7rem' }}>{patient.provisionalAssessment.tentativeStage}</Typography>
+                                </Box>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                                  <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.68rem' }}>Resectable</Typography>
+                                  <Typography variant="caption" sx={{ fontWeight: 600, fontSize: '0.7rem' }}>{patient.provisionalAssessment.resectable}</Typography>
+                                </Box>
+                              </>
+                            )}
+                            {patient.clinicalFindings && (
+                              <>
+                                <Divider sx={{ my: 1 }} />
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.25 }}>
+                                  <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.66rem' }}>Primary</Typography>
+                                  <Typography variant="caption" sx={{ fontWeight: 500, fontSize: '0.68rem' }}>{patient.clinicalFindings.primaryLesion}</Typography>
+                                </Box>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                  <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.66rem' }}>Nodes</Typography>
+                                  <Typography variant="caption" sx={{ fontWeight: 500, fontSize: '0.68rem' }}>{patient.clinicalFindings.nodes}</Typography>
+                                </Box>
+                              </>
+                            )}
+                          </>
+                        );
+                      }
+
+                      // ADJUVANT setting — no measurable disease, show marker trends if available
+                      if (isAdjuvant && !latestResponse) {
+                        return (
+                          <>
+                            <Chip 
+                              label="Adjuvant — No Measurable Disease" 
+                              size="small" 
+                              sx={{ height: 22, fontSize: '0.65rem', fontWeight: 700, mb: 1.25, bgcolor: alpha('#2196f3', 0.1), color: '#1565c0', border: '1px solid', borderColor: alpha('#2196f3', 0.25) }}
+                            />
+                            <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary', fontSize: '0.7rem', lineHeight: 1.5, mb: 1 }}>
+                              Disease surgically resected. Chemo is adjuvant — response assessment via tumor markers & surveillance imaging.
+                            </Typography>
+                            {patient.preCycleLabs?.tumorMarkers && (
+                              <>
+                                <Divider sx={{ my: 1 }} />
+                                <Typography variant="caption" sx={{ fontWeight: 600, fontSize: '0.7rem', display: 'block', mb: 0.5 }}>Tumor Markers</Typography>
+                                {patient.preCycleLabs.tumorMarkers.cea !== undefined && (
+                                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.25 }}>
+                                    <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.66rem' }}>CEA</Typography>
+                                    <Typography variant="caption" sx={{ fontWeight: 600, fontSize: '0.7rem', color: patient.preCycleLabs.tumorMarkers.cea <= 5 ? 'success.main' : 'warning.main' }}>
+                                      {patient.preCycleLabs.tumorMarkers.cea} ng/mL {patient.preCycleLabs.tumorMarkers.cea <= 5 ? '(Normal)' : '(Elevated)'}
+                                    </Typography>
+                                  </Box>
+                                )}
+                                {patient.preCycleLabs.tumorMarkers.ca125 !== undefined && (
+                                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.25 }}>
+                                    <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.66rem' }}>CA 125</Typography>
+                                    <Typography variant="caption" sx={{ fontWeight: 600, fontSize: '0.7rem' }}>
+                                      {patient.preCycleLabs.tumorMarkers.ca125} U/mL
+                                    </Typography>
+                                  </Box>
+                                )}
+                              </>
+                            )}
+                          </>
+                        );
+                      }
+
+                      // STANDARD path — has response data
+                      const responseLabel = latestResponse?.overallResponse || latestCycle?.response || 'Not assessed';
+                      const isPositive = responseLabel.includes('Partial Response') || responseLabel.includes('Complete Response') || responseLabel === 'Stable Disease' || responseLabel.includes('Stable');
+                      const isPD = responseLabel.includes('Progressive');
+                      
+                      return (
+                        <>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, mb: 1 }}>
+                            {isPD ? <TrendingUpIcon sx={{ fontSize: 20, color: 'error.main' }} /> 
+                              : isPositive ? <TrendingDownIcon sx={{ fontSize: 20, color: 'success.main' }} /> 
+                              : <TrendingFlatIcon sx={{ fontSize: 20, color: 'grey.500' }} />}
+                            <Chip 
+                              label={responseLabel}
+                              size="small"
+                              sx={{ 
+                                height: 22, fontSize: '0.7rem', fontWeight: 700,
+                                bgcolor: isPD ? alpha('#f44336', 0.1) : isPositive ? alpha('#4caf50', 0.1) : 'grey.100',
+                                color: isPD ? '#c62828' : isPositive ? '#2e7d32' : 'text.secondary',
+                                border: '1px solid',
+                                borderColor: isPD ? alpha('#f44336', 0.25) : isPositive ? alpha('#4caf50', 0.25) : 'divider',
+                              }}
+                            />
+                          </Box>
+                          
+                          {latestResponse?.scanResults?.[0] && (
+                            <>
+                              <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 0.5, fontSize: '0.68rem' }}>
+                                Last scan: {latestResponse.scanResults[0].date}
+                              </Typography>
+                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                                <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.68rem' }}>
+                                  Tumor burden change
+                                </Typography>
+                                <Typography variant="body2" sx={{ fontWeight: 700, color: latestResponse.scanResults[0].changePercent <= 0 ? 'success.main' : 'error.main', fontSize: '0.85rem' }}>
+                                  {latestResponse.scanResults[0].changePercent > 0 ? '+' : ''}{latestResponse.scanResults[0].changePercent}%
+                                </Typography>
+                              </Box>
+                              <LinearProgress 
+                                variant="determinate" 
+                                value={Math.min(100, Math.abs(latestResponse.scanResults[0].changePercent))} 
+                                sx={{ 
+                                  height: 5, borderRadius: 3, mb: 1,
+                                  bgcolor: 'grey.100',
+                                  '& .MuiLinearProgress-bar': { 
+                                    bgcolor: latestResponse.scanResults[0].changePercent <= 0 ? 'success.main' : 'error.main',
+                                    borderRadius: 3 
+                                  } 
+                                }} 
+                              />
+                            </>
+                          )}
+                          
+                          {latestResponse?.markerTrends?.slice(0, 2).map((m, i) => (
+                            <Box key={i} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.25 }}>
+                              <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.66rem' }}>{m.name}</Typography>
+                              <Typography variant="caption" sx={{ fontWeight: 600, fontSize: '0.7rem', color: m.trend === 'Falling' ? 'success.main' : m.trend === 'Rising' ? 'error.main' : 'text.primary' }}>
+                                {m.current} {m.unit} ({m.trend})
+                              </Typography>
+                            </Box>
+                          ))}
+                        </>
+                      );
+                    })()}
+                  </Box>
+                </Paper>
+            </Grid>
+
+            <Grid item xs={12} md={3}>
+                <Paper 
+                  sx={{ 
+                    p: 0, 
+                    borderRadius: 2.5, 
+                    height: '100%',
+                    overflow: 'hidden',
+                    border: '1px solid',
+                    borderColor: alpha('#009688', 0.15),
+                    transition: 'box-shadow 0.2s',
+                    '&:hover': { boxShadow: `0 4px 20px ${alpha('#009688', 0.12)}` }
+                  }}
+                >
+                  <Box sx={{ 
+                    px: 2, py: 1.25, 
+                    bgcolor: alpha('#009688', 0.06),
+                    borderBottom: '1px solid',
+                    borderColor: alpha('#009688', 0.1),
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: 1 
+                  }}>
+                    <DirectionsRunIcon sx={{ fontSize: 18, color: '#009688' }} />
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#009688', fontSize: '0.75rem', letterSpacing: 0.5 }}>
+                      ECOG Performance
+                    </Typography>
+                  </Box>
+                  <Box sx={{ px: 2, py: 1.5 }}>
+                    {/* Big ECOG Score */}
+                    <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, mb: 1 }}>
+                      <Typography variant="h3" sx={{ fontWeight: 800, color: patient.ecogStatus <= 1 ? '#009688' : patient.ecogStatus <= 2 ? '#ff9800' : '#f44336', lineHeight: 1 }}>
+                        {patient.ecogStatus}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.7rem' }}>/ 4</Typography>
+                    </Box>
+                    
+                    {/* ECOG Description */}
+                    <Typography variant="body2" sx={{ fontWeight: 500, color: 'text.primary', mb: 1.25, fontSize: '0.78rem', lineHeight: 1.4 }}>
+                      {patient.ecogStatus === 0 ? 'Fully active, no restrictions' 
+                        : patient.ecogStatus === 1 ? 'Restricted strenuous activity, ambulatory' 
+                        : patient.ecogStatus === 2 ? 'Ambulatory, capable of self-care, up >50% of waking hours' 
+                        : patient.ecogStatus === 3 ? 'Limited self-care, confined to bed/chair >50%' 
+                        : 'Completely disabled'}
+                    </Typography>
+
+                    <Divider sx={{ my: 1 }} />
+                    
+                    {/* ECOG visual scale */}
+                    <Box sx={{ display: 'flex', gap: 0.5, mb: 1 }}>
+                      {[0, 1, 2, 3, 4].map(level => (
+                        <Box 
+                          key={level} 
+                          sx={{ 
+                            flex: 1, height: 6, borderRadius: 3,
+                            bgcolor: level <= patient.ecogStatus 
+                              ? (patient.ecogStatus <= 1 ? '#009688' : patient.ecogStatus <= 2 ? '#ff9800' : '#f44336')
+                              : 'grey.200',
+                            transition: 'all 0.3s',
+                          }} 
+                        />
+                      ))}
+                    </Box>
+
+                    {/* Latest toxicity from cycle outcomes */}
+                    {patient.cycleOutcomes?.length ? (() => {
+                      const latest = patient.cycleOutcomes[patient.cycleOutcomes.length - 1];
+                      return (
+                        <Box sx={{ mt: 1 }}>
+                          <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.66rem', display: 'block' }}>Latest toxicity</Typography>
+                          <Typography variant="caption" sx={{ fontWeight: 600, fontSize: '0.7rem' }}>
+                            {latest.toxicity} — {latest.toxicityDescription}
+                          </Typography>
+                        </Box>
+                      );
+                    })() : null}
+                  </Box>
+                </Paper>
+            </Grid>
+
+            <Grid item xs={12} md={3}>
+                <Paper 
+                  sx={{ 
+                    p: 0, 
+                    borderRadius: 2.5, 
+                    height: '100%',
+                    overflow: 'hidden',
+                    border: '1px solid',
+                    borderColor: alpha('#ff9800', 0.15),
+                    transition: 'box-shadow 0.2s',
+                    '&:hover': { boxShadow: `0 4px 20px ${alpha('#ff9800', 0.12)}` }
+                  }}
+                >
+                  <Box sx={{ 
+                    px: 2, py: 1.25, 
+                    bgcolor: alpha('#ff9800', 0.06),
+                    borderBottom: '1px solid',
+                    borderColor: alpha('#ff9800', 0.1),
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: 1 
+                  }}>
+                    <BiotechIcon sx={{ fontSize: 18, color: '#ff9800' }} />
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#ff9800', fontSize: '0.75rem', letterSpacing: 0.5 }}>
+                      Recent Investigations
+                    </Typography>
+                  </Box>
+                  <Box sx={{ px: 2, py: 1.5 }}>
+                    {/* Diagnostic tracker summary */}
+                    {patient.diagnosticTracker && (
+                      <Box sx={{ mb: 1 }}>
+                        {Object.entries(patient.diagnosticTracker).map(([key, value]) => (
+                          <Box key={key} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                            <Typography variant="caption" sx={{ fontSize: '0.68rem', color: 'text.secondary', textTransform: 'capitalize' }}>
+                              {key.replace(/([A-Z])/g, ' $1').trim()}
+                            </Typography>
+                            <Chip 
+                              label={value} 
+                              size="small" 
+                              sx={{ 
+                                height: 18, fontSize: '0.6rem', fontWeight: 600,
+                                bgcolor: value === 'Confirmed' || value === 'Done' ? alpha('#4caf50', 0.1) 
+                                  : value === 'Pending' ? alpha('#ff9800', 0.1) 
+                                  : 'grey.50',
+                                color: value === 'Confirmed' || value === 'Done' ? '#2e7d32' 
+                                  : value === 'Pending' ? '#e65100' 
+                                  : 'text.secondary',
+                              }} 
+                            />
+                          </Box>
+                        ))}
+                      </Box>
+                    )}
+                    
+                    <Divider sx={{ my: 1 }} />
+                    
+                    {/* Latest scan info or pre-cycle labs */}
+                    {patient.responseAssessments?.length ? (() => {
+                      const latest = patient.responseAssessments[patient.responseAssessments.length - 1];
+                      return (
+                        <>
+                          <Typography variant="caption" sx={{ fontWeight: 600, fontSize: '0.7rem', display: 'block', mb: 0.5 }}>
+                            Last imaging
+                          </Typography>
+                          {latest.scanResults.slice(0, 2).map((scan, i) => (
+                            <Box key={i} sx={{ mb: 0.5 }}>
+                              <Typography variant="caption" sx={{ fontSize: '0.66rem', color: 'text.secondary' }}>
+                                {scan.type}
+                              </Typography>
+                              <Typography variant="caption" sx={{ display: 'block', fontSize: '0.66rem', fontWeight: 500 }}>
+                                {scan.date} — {scan.recistCategory}
+                              </Typography>
+                            </Box>
+                          ))}
+                        </>
+                      );
+                    })() : patient.preCycleLabs ? (
+                      <>
+                        <Typography variant="caption" sx={{ fontWeight: 600, fontSize: '0.7rem', display: 'block', mb: 0.75 }}>
+                          Pre-Cycle Labs ({patient.preCycleLabs.date})
+                        </Typography>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.35 }}>
+                          <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.66rem' }}>WBC</Typography>
+                          <Typography variant="caption" sx={{ fontWeight: 600, fontSize: '0.68rem', color: patient.preCycleLabs.cbc.wbc < 4 ? 'warning.main' : 'text.primary' }}>
+                            {patient.preCycleLabs.cbc.wbc} K/µL
+                          </Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.35 }}>
+                          <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.66rem' }}>Hgb</Typography>
+                          <Typography variant="caption" sx={{ fontWeight: 600, fontSize: '0.68rem', color: patient.preCycleLabs.cbc.hgb < 10 ? 'error.main' : patient.preCycleLabs.cbc.hgb < 12 ? 'warning.main' : 'text.primary' }}>
+                            {patient.preCycleLabs.cbc.hgb} g/dL
+                          </Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.35 }}>
+                          <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.66rem' }}>Platelets</Typography>
+                          <Typography variant="caption" sx={{ fontWeight: 600, fontSize: '0.68rem', color: patient.preCycleLabs.cbc.platelets < 100000 ? 'error.main' : 'text.primary' }}>
+                            {(patient.preCycleLabs.cbc.platelets / 1000).toFixed(0)}K
+                          </Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.35 }}>
+                          <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.66rem' }}>Creatinine</Typography>
+                          <Typography variant="caption" sx={{ fontWeight: 600, fontSize: '0.68rem', color: patient.preCycleLabs.chemistry.creatinine > 1.2 ? 'warning.main' : 'text.primary' }}>
+                            {patient.preCycleLabs.chemistry.creatinine} mg/dL
+                          </Typography>
+                        </Box>
+                      </>
+                    ) : (
+                      <Box>
+                        <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.72rem', display: 'block', mb: 0.5 }}>
+                          {patient.clinicalFindings ? (
+                            <>
+                              <Typography variant="caption" sx={{ fontWeight: 600, fontSize: '0.7rem', display: 'block', mb: 0.5 }}>Clinical Findings</Typography>
+                              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.35 }}>
+                                <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.66rem' }}>Primary</Typography>
+                                <Typography variant="caption" sx={{ fontWeight: 500, fontSize: '0.68rem' }}>{patient.clinicalFindings.primaryLesion}</Typography>
+                              </Box>
+                              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.35 }}>
+                                <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.66rem' }}>Nodes</Typography>
+                                <Typography variant="caption" sx={{ fontWeight: 500, fontSize: '0.68rem' }}>{patient.clinicalFindings.nodes}</Typography>
+                              </Box>
+                              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.66rem' }}>Metastasis</Typography>
+                                <Typography variant="caption" sx={{ fontWeight: 500, fontSize: '0.68rem', color: patient.clinicalFindings.suspectedMetastasis ? 'error.main' : 'success.main' }}>
+                                  {patient.clinicalFindings.suspectedMetastasis ? 'Suspected' : 'Not suspected'}
+                                </Typography>
+                              </Box>
+                            </>
+                          ) : 'No investigations assessed yet'}
+                        </Typography>
+                      </Box>
+                    )}
+                  </Box>
                 </Paper>
             </Grid>
 

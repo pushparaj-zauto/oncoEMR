@@ -17,6 +17,7 @@ export const mockOncoPatient5: OncologyPatient = {
   stage: 'IIIA',
   tnmStage: 'cT3N1M0',
   ecogStatus: 0,
+  treatmentIntent: 'Curative',
   oncoStatus: 'Treatment Planning',
   urgencyFlag: false,
 
@@ -335,6 +336,7 @@ export const mockOncoPatient4: OncologyPatient = {
     startDate: '2026-01-05',
     drugs: [
       { name: 'Gemcitabine', doseBasis: 'BSA', dose: '1000 mg/m²', day: 'D1, D8, D15', status: 'Pending D15' },
+      { name: 'Nab-Paclitaxel', doseBasis: 'BSA', dose: '125 mg/m²', day: 'D1, D8, D15', status: 'Pending D15' },
     ],
     maintenanceRationale: 'Palliative symptom control and survival extension',
     timeOnTherapy: '1 Month',
@@ -362,6 +364,94 @@ export const mockOncoPatient4: OncologyPatient = {
       other: ['Cachexia']
   },
 
+  cycleOutcomes: [
+    {
+      cycleNumber: 1,
+      response: 'Too Early',
+      toxicity: 'Grade 2',
+      toxicityDescription: 'Neutropenia (D15 held), fatigue, nausea',
+      decision: 'D15 held, resume next cycle',
+      date: '2026-01-05',
+      qolImpact: 'Worsened',
+    },
+  ],
+
+  responseAssessments: [
+    {
+      assessmentDate: '2025-12-20',
+      assessmentNumber: 1,
+      scanResults: [
+        {
+          type: 'CT Abdomen + Pelvis',
+          date: '2025-12-18',
+          site: 'Pancreatic head mass + hepatic metastases',
+          baseline: 'Pancreatic mass 4.2 cm, liver mets sum 5.8 cm',
+          current: 'Pancreatic mass 4.8 cm, liver mets sum 7.2 cm, new peritoneal nodule',
+          changePercent: 24,
+          recistCategory: 'Progressive Disease (PD)',
+        },
+        {
+          type: 'CT Chest',
+          date: '2025-12-18',
+          site: 'Lungs',
+          baseline: 'Clear',
+          current: 'No pulmonary metastases',
+          changePercent: 0,
+          recistCategory: 'Not Evaluable (NE)',
+        },
+      ],
+      markerTrends: [
+        {
+          name: 'CA 19-9',
+          baseline: 850,
+          current: 1420,
+          unit: 'U/mL',
+          trend: 'Rising',
+          normal: { min: 0, max: 37 },
+        },
+        {
+          name: 'CEA',
+          baseline: 8.5,
+          current: 14.2,
+          unit: 'ng/mL',
+          trend: 'Rising',
+          normal: { min: 0, max: 5 },
+        },
+      ],
+      overallResponse: 'Progressive Disease (PD)',
+      clinicalBenefit: false,
+      toxicitySummary: 'Progressive disease on FOLFIRINOX after 4 cycles. Worsening abdominal pain, new peritoneal deposits. Grade 3 neutropenia and intractable nausea necessitated dose reductions. Performance status declined ECOG 1→2.',
+      cumulativeToxicity: [
+        'Grade 3 neutropenia (on FOLFIRINOX)',
+        'Grade 2 nausea/vomiting (persistent)',
+        'Grade 1 peripheral neuropathy (Oxaliplatin)',
+        'Weight loss 6 kg over 3 months',
+      ],
+      doctorAssessment: 'Disease progression on FOLFIRINOX. Switch to second-line Gemcitabine + Nab-Paclitaxel. Palliative care co-management for pain and nutritional support. Goals of care discussion recommended.',
+      nextStep: 'Change Regimen',
+      nextStepDetails: 'Start Gemcitabine + Nab-Paclitaxel. Reassess after 2 cycles. Concurrent palliative care for symptom optimisation.',
+    },
+  ],
+
+  preCycleLabs: {
+    date: '2026-02-01',
+    cbc: {
+      wbc: 3.2,
+      anc: 1100,
+      hgb: 9.8,
+      platelets: 125000,
+    },
+    chemistry: {
+      creatinine: 0.8,
+      bilirubin: 2.1,
+      alt: 52,
+      ast: 48,
+    },
+    tumorMarkers: {
+      cea: 14.2,
+    },
+  },
+
   alerts: [
       {
           type: 'Severe Symptoms',
@@ -374,6 +464,8 @@ export const mockOncoPatient4: OncologyPatient = {
   ],
   
   diagnosisDate: '2025-10-15',
+  treatmentStartDate: '2025-10-28',
+  lastReviewDate: '2026-02-01',
 };
 
 // 5. Maintenance - Lung Cancer (Targeted Therapy)
